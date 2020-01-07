@@ -1,6 +1,6 @@
 declare namespace HomeCssModule {
   export interface IHomeCss {
-    root: string;
+    container: string;
   }
 }
 

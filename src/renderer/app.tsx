@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { AppContainer } from 'react-hot-loader';
 
@@ -10,6 +10,7 @@ import './app.global.css';
 
 // Create main element
 const mainElement = document.createElement('div');
+mainElement.className = 'app-root';
 document.body.appendChild(mainElement);
 
 // Render components

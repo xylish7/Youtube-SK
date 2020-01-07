@@ -1,6 +1,6 @@
 declare namespace ApplicationCssModule {
   export interface IApplicationCss {
-    root: string;
+    container: string;
   }
 }
 
