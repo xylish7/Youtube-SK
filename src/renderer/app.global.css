@@ -1,11 +1,4 @@
-@import './assets/css/argon.min.css';
-@import './assets/vendor/nucleo/css/nucleo.css';
-@import './assets/vendor/font-awesome/css/font-awesome.min.css';
-
-html,
-body {
-  height: 100%;
-}
+@import '~antd/dist/antd.css';
 
 .app-root {
   height: 100%;
