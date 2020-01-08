@@ -6,14 +6,41 @@
   background-color: #e8e8e8;
 }
 
-.icon {
+.icon-container {
   cursor: pointer;
-  font-size: 30px;
-  margin: 10px 0 15px 0;
+  text-align: center;
+  padding: 4px 0 4px 0;
+  width: 100%;
   transition: all 0.2s ease-in-out;
 }
 
-.icon:hover {
-  color: #8c8c8c;
+.icon-container:hover {
+  border-left: 3px solid #000000;
+  padding-right: 3px;
+}
+
+.icon-container:hover .icon {
+  color: #000000;
   transform: scale(1.1);
+}
+
+.icon {
+  cursor: pointer;
+  margin: 10px 0 10px 0px;
+  font-size: 30px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Ripple effect */
+.ripple {
+  background-position: center;
+  transition: background 0.8s;
+}
+.ripple:hover {
+  background: #e8e8e8 radial-gradient(circle, transparent 1%, #e8e8e8 1%) center/15000%;
+}
+.ripple:active {
+  background-color: #fafafa;
+  background-size: 100%;
+  transition: background 0s;
 }
