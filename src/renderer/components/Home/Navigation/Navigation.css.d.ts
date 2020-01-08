@@ -3,6 +3,7 @@ declare namespace NavigationCssModule {
     container: string;
     icon: string;
     iconContainer: string;
+    isActive: string;
     ripple: string;
   }
 }
