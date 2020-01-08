@@ -1,5 +1,19 @@
 .container {
+  display: flex;
+  flex-direction: column;
   width: 60px;
   height: 100%;
-  border: 1px solid black;
+  background-color: #e8e8e8;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 30px;
+  margin: 10px 0 15px 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.icon:hover {
+  color: #8c8c8c;
+  transform: scale(1.1);
 }

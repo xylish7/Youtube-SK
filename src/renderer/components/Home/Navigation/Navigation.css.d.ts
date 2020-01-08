@@ -1,6 +1,7 @@
 declare namespace NavigationCssModule {
   export interface INavigationCss {
     container: string;
+    icon: string;
   }
 }
 
