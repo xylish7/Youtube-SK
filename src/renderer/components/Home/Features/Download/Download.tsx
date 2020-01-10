@@ -3,13 +3,18 @@ import { remote, shell } from 'electron';
 const { dialog } = remote;
 
 import { Typography, Icon, Button, Card, Tooltip } from 'antd';
-
 const { Text } = Typography;
 
 import styles from './Download.css';
+import CounterContainer from '../../../../containers/CounterContainer';
 
-const Download: React.FC = () => {
-  const [savePath, setSavePath] = useState<string>('');
+type Props = {
+  savePath: string;
+  changeSavePath: (savePath: string) => void;
+};
+
+const Download: React.FC<Props> = (props: Props) => {
+  const { savePath, changeSavePath } = props;
 
   /**
    * Open a dialog to select the folder in which the files
@@ -21,7 +26,7 @@ const Download: React.FC = () => {
       properties: ['openDirectory']
     });
 
-    if (path) setSavePath(path[0]);
+    if (path) changeSavePath(path[0]);
   };
 
   /**
