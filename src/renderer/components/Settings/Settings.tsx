@@ -5,8 +5,6 @@ import { Link, useHistory } from 'react-router-dom';
 import { Layout, Menu, Icon, Button } from 'antd';
 const { Content, Sider } = Layout;
 
-import routes from '../../constants/routes';
-
 import styles from './Settings.css';
 
 const Settings: React.FC = () => {

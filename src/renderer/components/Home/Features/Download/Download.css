@@ -1,0 +1,17 @@
+.card-save-path {
+  width: 710px;
+  margin-top: 10px;
+}
+
+.path-text {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 630px;
+}
+
+.open-folder-icon {
+  font-size: 25px;
+  margin-right: 10px;
+}

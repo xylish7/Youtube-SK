@@ -11,29 +11,29 @@ const Navigation: React.FC = () => {
     <div className={styles.container}>
       {/* DOWNLOAD LINK */}
       <NavLink to={routes.DOWNLOAD} activeClassName={styles.isActive}>
-        <div className={`${styles.iconContainer} ${styles.ripple}`}>
-          <Icon twoToneColor="#993434" className={styles.icon} type="download" title="Download" />
+        <div className={`${styles.iconContainer} ${styles.ripple}`} title="Download">
+          <Icon twoToneColor="#993434" className={styles.icon} type="download" />
         </div>
       </NavLink>
 
       {/* CONVERT LINK */}
       <NavLink to={routes.CONVERT} activeClassName={styles.isActive}>
-        <div className={`${styles.iconContainer} ${styles.ripple}`}>
-          <Icon className={styles.icon} type="sync" title="Convert" />
+        <div className={`${styles.iconContainer} ${styles.ripple}`} title="Convert">
+          <Icon className={styles.icon} type="sync" />
         </div>
       </NavLink>
 
       {/* CUT LINK */}
       <NavLink to={routes.CUT} activeClassName={styles.isActive}>
-        <div className={`${styles.iconContainer} ${styles.ripple}`}>
-          <Icon className={styles.icon} type="scissor" title="Cut" />
+        <div className={`${styles.iconContainer} ${styles.ripple}`} title="Cut">
+          <Icon className={styles.icon} type="scissor" />
         </div>
       </NavLink>
 
       {/* PLAYER LINK */}
       <NavLink to={routes.PLAYER} activeClassName={styles.isActive}>
-        <div className={`${styles.iconContainer} ${styles.ripple}`}>
-          <Icon className={styles.icon} type="play-circle" title="Player" />
+        <div className={`${styles.iconContainer} ${styles.ripple}`} title="Player">
+          <Icon className={styles.icon} type="play-circle" />
         </div>
       </NavLink>
 
@@ -42,8 +42,8 @@ const Navigation: React.FC = () => {
 
       {/* SETTINGS LINK */}
       <Link to={routes.SETTINGS}>
-        <div className={`${styles.iconContainer} ${styles.ripple}`}>
-          <Icon className={styles.icon} type="setting" title="Settings" />
+        <div className={`${styles.iconContainer} ${styles.ripple}`} title="Settings">
+          <Icon className={styles.icon} type="setting" />
         </div>
       </Link>
 
