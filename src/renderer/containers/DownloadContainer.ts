@@ -3,14 +3,19 @@ import { Dispatch } from 'redux';
 
 import Download from '../components/Home/Features/Download/Download';
 import { RootState } from '../reducers';
-import { DownloadAction, changeSavePath, ChangePathAction } from '../actions/downloadActions';
+import {
+  PersistentAction,
+  changeDownloadSavePath,
+  ChangeDownloadSavePathAction
+} from '../actions/persistentAction';
 
 const mapStateToProps = (state: RootState) => ({
-  savePath: state.download.savePath
+  savePath: state.persistent.savePath
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<DownloadAction>) => ({
-  changeSavePath: (savePath: string): ChangePathAction => dispatch(changeSavePath(savePath))
+const mapDispatchToProps = (dispatch: Dispatch<PersistentAction>) => ({
+  changeSavePath: (savePath: string): ChangeDownloadSavePathAction =>
+    dispatch(changeDownloadSavePath(savePath))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Download);

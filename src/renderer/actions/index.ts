@@ -1,3 +1,3 @@
-import { DownloadAction } from './downloadActions';
+import { PersistentAction } from './persistentAction';
 
-export type RootActions = DownloadAction[keyof DownloadAction];
+export type RootActions = PersistentAction[keyof PersistentAction];

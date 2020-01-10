@@ -2,12 +2,12 @@ import { Action, ActionCreator } from 'redux';
 import LocalStore from '../utils/local-store';
 import { USER_PREFERENCES } from '../constants/persistent-data-store';
 
-export enum DownloadType {
-  CHANGE_SAVE_PATH = 'CHANGE_SAVE_PATH'
+export enum Persistent {
+  CHANGE_DOWNLOAD_SAVE_PATH = 'CHANGE_DOWNLOAD_SAVE_PATH'
 }
 
-export interface ChangePathAction extends Action {
-  type: DownloadType.CHANGE_SAVE_PATH;
+export interface ChangeDownloadSavePathAction extends Action {
+  type: Persistent.CHANGE_DOWNLOAD_SAVE_PATH;
   savePath: string;
 }
 
@@ -16,18 +16,18 @@ export interface ChangePathAction extends Action {
  *
  * @param {string} savePath
  */
-export const changeSavePath: ActionCreator<ChangePathAction> = (
+export const changeDownloadSavePath: ActionCreator<ChangeDownloadSavePathAction> = (
   savePath: string
-): ChangePathAction => {
+): ChangeDownloadSavePathAction => {
   const userPrefStore: LocalStore = new LocalStore(USER_PREFERENCES.store);
 
   // Save download path to local store
   userPrefStore.set(USER_PREFERENCES.valuesNames.downloadSavePath, savePath);
 
   return {
-    type: DownloadType.CHANGE_SAVE_PATH,
+    type: Persistent.CHANGE_DOWNLOAD_SAVE_PATH,
     savePath
   };
 };
 
-export type DownloadAction = ChangePathAction;
+export type PersistentAction = ChangeDownloadSavePathAction;

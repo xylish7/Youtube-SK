@@ -6,7 +6,6 @@ import { Typography, Icon, Button, Card, Tooltip } from 'antd';
 const { Text } = Typography;
 
 import styles from './Download.css';
-import CounterContainer from '../../../../containers/CounterContainer';
 
 type Props = {
   savePath: string;

@@ -1,14 +1,11 @@
 import { combineReducers } from 'redux';
 
-import { CounterState, counterReducer } from './counterReducer';
-import { DownloadState, downloadReducer } from './downloadReducer';
+import { PersistentState, downloadReducer } from './persistentReducer';
 
 export interface RootState {
-  counter: CounterState;
-  download: DownloadState;
+  persistent: PersistentState;
 }
 
 export const rootReducer = combineReducers<RootState | undefined>({
-  counter: counterReducer,
-  download: downloadReducer
+  persistent: downloadReducer
 });
