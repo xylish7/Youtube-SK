@@ -1,21 +1,21 @@
 const webpack = require('webpack');
-// const path = require('path');
+const path = require('path');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const baseConfig = require('./webpack.base.config');
 
-// const AntDesignThemePlugin = require('antd-theme-webpack-plugin');
+const AntDesignThemePlugin = require('antd-theme-webpack-plugin');
 
-// const options = {
-//   antDir: path.join(__dirname, './node_modules/antd'),
-//   stylesDir: path.join(__dirname, './src/renderer/styles/theme'),
-//   varFile: path.join(__dirname, './src/renderer/styles/theme/variables.less'),
-//   mainLessFile: path.join(__dirname, './src/renderer/styles/theme/index.less'),
-//   themeVariables: ['@primary-color'],
-//   indexFileName: 'index.html'
-// };
+const options = {
+  antDir: path.join(__dirname, './node_modules/antd'),
+  stylesDir: path.join(__dirname, './src/renderer/styles/theme'),
+  varFile: path.join(__dirname, './src/renderer/styles/theme/variables.less'),
+  mainLessFile: path.join(__dirname, './src/renderer/styles/theme/index.less'),
+  themeVariables: ['@primary-color'],
+  indexFileName: 'index.html'
+};
 
 module.exports = merge.smart(baseConfig, {
   target: 'electron-renderer',
@@ -81,12 +81,12 @@ module.exports = merge.smart(baseConfig, {
     ]
   },
   plugins: [
-    // new AntDesignThemePlugin(options),
     new ForkTsCheckerWebpackPlugin({
       reportFiles: ['src/renderer/**/*']
     }),
     new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin(),
+    new AntDesignThemePlugin(options),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     })
