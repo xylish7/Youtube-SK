@@ -162,7 +162,7 @@ const Download: React.FC<Props> = (props: Props) => {
         </div>
       </div>
 
-      <DownloadList convertOpt={convertOpt} handleStartDownload={handleStartDownload} />
+      <DownloadList convertOpt={convertOpt} />
     </div>
   );
 };

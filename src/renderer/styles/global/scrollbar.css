@@ -1,21 +1,3 @@
-@import '~antd/dist/antd.css';
-
-html {
-  user-select: none;
-}
-
-.app-root {
-  height: 100%;
-}
-
-.ant-message-notice:first-child {
-  margin-top: 20px;
-}
-
-.ant-list-item-meta-avatar {
-  margin-top: 14px;
-}
-
 /* Change scroll style */
 @media (min-width: 415px) {
   ::-webkit-scrollbar {
@@ -38,15 +20,4 @@ html {
   ::-webkit-scrollbar-thumb:hover {
     background: rgb(150, 149, 149);
   }
-}
-
-.switch-wrapper {
-  position: relative;
-  height: 100%;
-}
-
-.switch-wrapper > div {
-  position: absolute;
-  height: 100%;
-  width: 100%;
 }

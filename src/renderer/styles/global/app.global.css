@@ -1,0 +1,22 @@
+@import '~antd/dist/antd.css';
+@import './ant-override.css';
+@import './scrollbar.css';
+
+html {
+  user-select: none;
+}
+
+.app-root {
+  height: 100%;
+}
+
+.switch-wrapper {
+  position: relative;
+  height: 100%;
+}
+
+.switch-wrapper > div {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}

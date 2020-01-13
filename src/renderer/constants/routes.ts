@@ -5,6 +5,7 @@ interface RoutesNames {
   CONVERT: string;
   CUT: string;
   PLAYER: string;
+  INTERFACE_SETTINGS: string;
 }
 
 const routes: RoutesNames = {
@@ -13,7 +14,8 @@ const routes: RoutesNames = {
   DOWNLOAD: '/download',
   CONVERT: '/convert',
   CUT: '/cut',
-  PLAYER: '/player'
+  PLAYER: '/player',
+  INTERFACE_SETTINGS: '/interface'
 };
 
 export default routes;

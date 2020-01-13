@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Typography, Tag, Card, Progress, List, Spin, Result, Icon, Button } from 'antd';
-const { Text, Paragraph } = Typography;
+import { Typography, Tag, Card, Progress, List, Spin, Result, Icon } from 'antd';
+const { Text } = Typography;
 
 import styles from './DownloadList.css';
 
@@ -34,11 +34,10 @@ const data = [
 
 type Props = {
   convertOpt: boolean;
-  handleStartDownload: () => void;
 };
 
 const DownloadList: React.FC<Props> = (props: Props) => {
-  const { handleStartDownload, convertOpt } = props;
+  const { convertOpt } = props;
 
   // Render the list of the downloaded videos
   const _renderDownloadList = (): JSX.Element => (

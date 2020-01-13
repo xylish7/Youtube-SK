@@ -2,7 +2,6 @@ declare namespace SettingsCssModule {
   export interface ISettingsCss {
     closeButton: string;
     layout: string;
-    menuContainer: string;
   }
 }
 

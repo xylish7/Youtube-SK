@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { hot } from 'react-hot-loader/root';
 import { Titlebar, Color } from 'custom-electron-titlebar';
 
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { AnimatedSwitch } from 'react-router-transition';
 import routes from '../constants/routes';
 

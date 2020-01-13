@@ -2,13 +2,9 @@
   height: 100%;
 }
 
-.menu-container {
-  width: 170;
-  height: '100%';
-}
-
 .close-button {
   position: absolute;
+  z-index: 1;
   top: 10px;
   right: 10px;
 }
