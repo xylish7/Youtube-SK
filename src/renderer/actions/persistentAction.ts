@@ -3,7 +3,15 @@ import LocalStore from '../utils/local-store';
 import { USER_PREFERENCES } from '../constants/persistent-data-store';
 
 export enum Persistent {
+  GET_PERSISTEN_DATA = 'GET_PERSISTEN_DATA',
   CHANGE_DOWNLOAD_SAVE_PATH = 'CHANGE_DOWNLOAD_SAVE_PATH'
+}
+
+export interface GetPersistentData extends Action {
+  type: Persistent.GET_PERSISTEN_DATA;
+  persistentData: {
+    downloadSavePath: string;
+  };
 }
 
 export interface ChangeDownloadSavePathAction extends Action {
@@ -12,7 +20,25 @@ export interface ChangeDownloadSavePathAction extends Action {
 }
 
 /**
- * Change the location where the files will be saved
+ * Get persistent data from local store
+ */
+
+export const getPersistentData: ActionCreator<GetPersistentData> = (): GetPersistentData => {
+  const userPrefStore: LocalStore = new LocalStore(USER_PREFERENCES.store);
+
+  const downloadSavePath = userPrefStore.get(USER_PREFERENCES.valuesNames.downloadSavePath);
+
+  return {
+    type: Persistent.GET_PERSISTEN_DATA,
+    persistentData: {
+      downloadSavePath: downloadSavePath ? downloadSavePath : ''
+    }
+  };
+};
+
+/**
+ * Change the location where the files to be downloaded
+ *  will be saved
  *
  * @param {string} savePath
  */
@@ -30,4 +56,4 @@ export const changeDownloadSavePath: ActionCreator<ChangeDownloadSavePathAction>
   };
 };
 
-export type PersistentAction = ChangeDownloadSavePathAction;
+export type PersistentAction = ChangeDownloadSavePathAction | GetPersistentData;

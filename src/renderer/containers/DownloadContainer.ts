@@ -10,7 +10,7 @@ import {
 } from '../actions/persistentAction';
 
 const mapStateToProps = (state: RootState) => ({
-  savePath: state.persistent.savePath
+  savePath: state.persistent.downloadSavePath
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<PersistentAction>) => ({

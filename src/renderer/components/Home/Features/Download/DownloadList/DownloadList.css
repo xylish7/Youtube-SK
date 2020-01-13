@@ -1,0 +1,44 @@
+/* Download list */
+.list-titlebar {
+  display: flex;
+  /* justify-content: flex-end; */
+  margin: 15px 0 5px 0;
+}
+
+.list-titlebar-status {
+  width: 120px;
+  text-align: center;
+}
+
+.list-titlebar-convert {
+  margin-left: 44px;
+}
+
+.list-container {
+  overflow: scroll;
+  overflow-x: hidden;
+  max-height: 300px;
+}
+
+.list-status {
+  width: 80px;
+  display: flex;
+  justify-content: center;
+}
+
+.list-loading-spinner {
+  margin-right: 10px;
+}
+
+.progress-container {
+  display: flex;
+}
+
+.convert-progress {
+  margin-right: 10px;
+}
+
+/* Result */
+.result-container {
+  margin-top: 70px;
+}

@@ -12,7 +12,7 @@ const Navigation: React.FC = () => {
       {/* DOWNLOAD LINK */}
       <NavLink to={routes.DOWNLOAD} activeClassName={styles.isActive}>
         <div className={`${styles.iconContainer} ${styles.ripple}`} title="Download">
-          <Icon twoToneColor="#993434" className={styles.icon} type="download" />
+          <Icon className={styles.icon} type="download" />
         </div>
       </NavLink>
 

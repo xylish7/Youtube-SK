@@ -4,11 +4,11 @@ import { Persistent, PersistentAction } from '../actions/persistentAction';
 import updateObject from '../utils/update-object';
 
 export interface PersistentState {
-  readonly savePath: string;
+  readonly downloadSavePath: string;
 }
 
 const defaultState: PersistentState = {
-  savePath: ''
+  downloadSavePath: ''
 };
 
 export const downloadReducer: Reducer<PersistentState, PersistentAction> = (
@@ -17,7 +17,11 @@ export const downloadReducer: Reducer<PersistentState, PersistentAction> = (
 ): PersistentState => {
   switch (action.type) {
     case Persistent.CHANGE_DOWNLOAD_SAVE_PATH:
-      return updateObject(state, { savePath: action.savePath });
+      return updateObject(state, { downloadSavePath: action.savePath });
+    case Persistent.GET_PERSISTEN_DATA:
+      return updateObject(state, {
+        downloadSavePath: action.persistentData.downloadSavePath
+      });
     default:
       return state;
   }

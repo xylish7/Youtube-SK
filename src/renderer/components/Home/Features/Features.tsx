@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Switch, Redirect, Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
+import { AnimatedSwitch } from 'react-router-transition';
 
 import styles from './Features.css';
 
@@ -13,14 +14,19 @@ import Player from './Player/Player';
 const Features: React.FC = () => {
   return (
     <div className={styles.container}>
-      <Switch>
+      <AnimatedSwitch
+        atEnter={{ opacity: 0 }}
+        atLeave={{ opacity: 0 }}
+        atActive={{ opacity: 1 }}
+        className="switch-wrapper"
+      >
         <Route path={routes.DOWNLOAD} component={DownloadContainer} />
         <Route path={routes.CONVERT} component={Convert} />
         <Route path={routes.CUT} component={Cut} />
         <Route path={routes.PLAYER} component={Player} />
 
         <Redirect to={routes.DOWNLOAD} />
-      </Switch>
+      </AnimatedSwitch>
     </div>
   );
 };
