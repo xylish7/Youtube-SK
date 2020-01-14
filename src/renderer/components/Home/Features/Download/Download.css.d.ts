@@ -1,11 +1,9 @@
 declare namespace DownloadCssModule {
   export interface IDownloadCss {
-    generalStatus: string;
     inputContainer: string;
     options: string;
     pathText: string;
     selectFolderContainer: string;
-    tag: string;
   }
 }
 

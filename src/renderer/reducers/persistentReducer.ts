@@ -1,24 +1,24 @@
 import { Reducer } from 'redux';
 
-import { Persistent, PersistentAction } from '../actions/persistentAction';
+import { EPersistent, PersistentAction } from '../actions/persistentAction';
 import updateObject from '../utils/update-object';
 
-export interface PersistentState {
+export interface IPersistentState {
   readonly downloadSavePath: string;
 }
 
-const defaultState: PersistentState = {
+const defaultState: IPersistentState = {
   downloadSavePath: ''
 };
 
-export const downloadReducer: Reducer<PersistentState, PersistentAction> = (
-  state: PersistentState = defaultState,
+export const persistentReducer: Reducer<IPersistentState, PersistentAction> = (
+  state: IPersistentState = defaultState,
   action: PersistentAction
-): PersistentState => {
+): IPersistentState => {
   switch (action.type) {
-    case Persistent.CHANGE_DOWNLOAD_SAVE_PATH:
+    case EPersistent.CHANGE_DOWNLOAD_SAVE_PATH:
       return updateObject(state, { downloadSavePath: action.savePath });
-    case Persistent.GET_PERSISTEN_DATA:
+    case EPersistent.GET_PERSISTEN_DATA:
       return updateObject(state, {
         downloadSavePath: action.persistentData.downloadSavePath
       });

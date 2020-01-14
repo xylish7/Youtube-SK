@@ -4,6 +4,7 @@ import { Typography, Tag, Card, Progress, List, Spin, Result, Icon } from 'antd'
 const { Text } = Typography;
 
 import styles from './DownloadList.css';
+import { EDownloadStatus } from '../../../../../reducers/downloadReducer';
 
 const data = [
   {
@@ -34,10 +35,11 @@ const data = [
 
 type Props = {
   convertOpt: boolean;
+  downloadStatus: EDownloadStatus;
 };
 
 const DownloadList: React.FC<Props> = (props: Props) => {
-  const { convertOpt } = props;
+  const { convertOpt, downloadStatus } = props;
 
   // Render the list of the downloaded videos
   const _renderDownloadList = (): JSX.Element => (
@@ -99,7 +101,11 @@ const DownloadList: React.FC<Props> = (props: Props) => {
     <Result
       className={styles.resultContainer}
       icon={<Icon type="smile" theme="twoTone" />}
-      title="Ready to download? Just press the button!"
+      title={
+        downloadStatus === EDownloadStatus.FETCHING
+          ? 'Your download should start soon. Please wait...'
+          : 'Ready to download? Just press the button!'
+      }
     />
   );
 
@@ -113,7 +119,22 @@ const DownloadList: React.FC<Props> = (props: Props) => {
     ></Result>
   );
 
-  return <React.Fragment>{_renderStartDownload()}</React.Fragment>;
+  switch (downloadStatus) {
+    case EDownloadStatus.DOWNLOADING:
+    case EDownloadStatus.DONE:
+      return _renderDownloadList();
+
+    case EDownloadStatus.FETCHING:
+
+    case EDownloadStatus.WAITING:
+      return _renderStartDownload();
+
+    case EDownloadStatus.STOPPED:
+      return _renderDownloadFailed();
+
+    default:
+      return _renderDownloadList();
+  }
 };
 
 export default DownloadList;

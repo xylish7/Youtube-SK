@@ -6,16 +6,25 @@ import { RootState } from '../reducers';
 import {
   PersistentAction,
   changeDownloadSavePath,
-  ChangeDownloadSavePathAction
+  IChangeDownloadSavePath
 } from '../actions/persistentAction';
+import {
+  IChangeDownloadState,
+  changeDownloadState,
+  IDownloadAction
+} from '../actions/downloadAction';
+import { EDownloadStatus } from '../reducers/downloadReducer';
 
 const mapStateToProps = (state: RootState) => ({
-  savePath: state.persistent.downloadSavePath
+  savePath: state.persistent.downloadSavePath,
+  downloadStatus: state.download.downloadStatus
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<PersistentAction>) => ({
-  changeSavePath: (savePath: string): ChangeDownloadSavePathAction =>
-    dispatch(changeDownloadSavePath(savePath))
+const mapDispatchToProps = (dispatch: Dispatch<PersistentAction | IDownloadAction>) => ({
+  changeSavePath: (savePath: string): IChangeDownloadSavePath =>
+    dispatch(changeDownloadSavePath(savePath)),
+  changeDownloadState: (downloadStatus: EDownloadStatus): IChangeDownloadState =>
+    dispatch(changeDownloadState(downloadStatus))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Download);

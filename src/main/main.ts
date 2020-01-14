@@ -1,6 +1,9 @@
-import { app, BrowserWindow } from 'electron';
+require('hazardous');
+import { app, BrowserWindow, ipcMain, IpcMessageEvent } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+import downloadEventsName from '../shared/events-name/download-events-names';
+import DownloadService from './services/DownloadService';
 
 let win: BrowserWindow | null;
 
@@ -46,7 +49,15 @@ const createWindow = async () => {
   });
 };
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  // Create main window
+  createWindow();
+
+  ipcMain.on(downloadEventsName.START_DOWNLOAD, (event: IpcMessageEvent, downloadUrl: string) => {
+    const downloadService = new DownloadService(downloadUrl);
+    downloadService.download();
+  });
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

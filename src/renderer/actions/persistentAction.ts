@@ -2,20 +2,20 @@ import { Action, ActionCreator } from 'redux';
 import LocalStore from '../utils/local-store';
 import { USER_PREFERENCES } from '../constants/persistent-data-store';
 
-export enum Persistent {
+export enum EPersistent {
   GET_PERSISTEN_DATA = 'GET_PERSISTEN_DATA',
   CHANGE_DOWNLOAD_SAVE_PATH = 'CHANGE_DOWNLOAD_SAVE_PATH'
 }
 
-export interface GetPersistentData extends Action {
-  type: Persistent.GET_PERSISTEN_DATA;
+export interface IGetPersistentData extends Action {
+  type: EPersistent.GET_PERSISTEN_DATA;
   persistentData: {
     downloadSavePath: string;
   };
 }
 
-export interface ChangeDownloadSavePathAction extends Action {
-  type: Persistent.CHANGE_DOWNLOAD_SAVE_PATH;
+export interface IChangeDownloadSavePath extends Action {
+  type: EPersistent.CHANGE_DOWNLOAD_SAVE_PATH;
   savePath: string;
 }
 
@@ -23,13 +23,13 @@ export interface ChangeDownloadSavePathAction extends Action {
  * Get persistent data from local store
  */
 
-export const getPersistentData: ActionCreator<GetPersistentData> = (): GetPersistentData => {
+export const getPersistentData: ActionCreator<IGetPersistentData> = (): IGetPersistentData => {
   const userPrefStore: LocalStore = new LocalStore(USER_PREFERENCES.store);
 
   const downloadSavePath = userPrefStore.get(USER_PREFERENCES.valuesNames.downloadSavePath);
 
   return {
-    type: Persistent.GET_PERSISTEN_DATA,
+    type: EPersistent.GET_PERSISTEN_DATA,
     persistentData: {
       downloadSavePath: downloadSavePath ? downloadSavePath : ''
     }
@@ -42,18 +42,18 @@ export const getPersistentData: ActionCreator<GetPersistentData> = (): GetPersis
  *
  * @param {string} savePath
  */
-export const changeDownloadSavePath: ActionCreator<ChangeDownloadSavePathAction> = (
+export const changeDownloadSavePath: ActionCreator<IChangeDownloadSavePath> = (
   savePath: string
-): ChangeDownloadSavePathAction => {
+): IChangeDownloadSavePath => {
   const userPrefStore: LocalStore = new LocalStore(USER_PREFERENCES.store);
 
   // Save download path to local store
   userPrefStore.set(USER_PREFERENCES.valuesNames.downloadSavePath, savePath);
 
   return {
-    type: Persistent.CHANGE_DOWNLOAD_SAVE_PATH,
+    type: EPersistent.CHANGE_DOWNLOAD_SAVE_PATH,
     savePath
   };
 };
 
-export type PersistentAction = ChangeDownloadSavePathAction | GetPersistentData;
+export type PersistentAction = IChangeDownloadSavePath | IGetPersistentData;

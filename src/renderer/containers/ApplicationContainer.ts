@@ -5,11 +5,11 @@ import Application from '../components/Application';
 import {
   PersistentAction,
   getPersistentData,
-  GetPersistentData
+  IGetPersistentData
 } from '../actions/persistentAction';
 
 const mapDispatchToProps = (dispatch: Dispatch<PersistentAction>) => ({
-  getPersistentData: (): GetPersistentData => dispatch(getPersistentData())
+  getPersistentData: (): IGetPersistentData => dispatch(getPersistentData())
 });
 
 export default connect(null, mapDispatchToProps)(Application);

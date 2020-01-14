@@ -3,7 +3,7 @@ import { remote, shell } from 'electron';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 const { dialog } = remote;
 
-import { Typography, Icon, Button, Tooltip, Input, Tag, Divider, message, Checkbox } from 'antd';
+import { Typography, Icon, Button, Input, Tag, Divider, message, Checkbox } from 'antd';
 const { Text } = Typography;
 const { Search } = Input;
 
@@ -12,13 +12,20 @@ import styles from './Download.css';
 import { regExpressions, globalConst } from '../../../../constants/globals';
 import DownloadList from './DownloadList/DownloadList';
 
+import { startDownloadEvent } from '../../../../events/download-events';
+import { EDownloadStatus } from '../../../../reducers/downloadReducer';
+import GeneralStatus from './GeneralStatus/GeneralStatus';
+import DownloadButton from './DownloadButton/DownloadButton';
+
 type Props = {
   savePath: string;
+  downloadStatus: EDownloadStatus;
   changeSavePath: (savePath: string) => void;
+  changeDownloadState: (downloadStatus: EDownloadStatus) => void;
 };
 
 const Download: React.FC<Props> = (props: Props) => {
-  const { savePath, changeSavePath } = props;
+  const { savePath, downloadStatus, changeSavePath, changeDownloadState } = props;
 
   const [downloadInput, setDownloadInput] = useState<string>('');
   const [convertOpt, setConvertOpt] = useState<boolean>(false);
@@ -67,8 +74,18 @@ const Download: React.FC<Props> = (props: Props) => {
   /**
    * Handle the press of the downlaod button
    */
-  const handleStartDownload = (): void => {
-    isValid();
+  const handleDownloadButton = (): void => {
+    if (downloadStatus !== EDownloadStatus.DOWNLOADING) {
+      if (isValid()) {
+        changeDownloadState(EDownloadStatus.FETCHING);
+        setTimeout(() => changeDownloadState(EDownloadStatus.DOWNLOADING), 3000);
+        setTimeout(() => changeDownloadState(EDownloadStatus.DONE), 6000);
+      }
+    }
+    if (downloadStatus === EDownloadStatus.DOWNLOADING) {
+      changeDownloadState(EDownloadStatus.STOPPED);
+    }
+    // startDownloadEvent(downloadInput);
   };
 
   /**
@@ -135,26 +152,15 @@ const Download: React.FC<Props> = (props: Props) => {
 
       {/* GENERAL STATUS */}
       <div>
-        <div className={styles.generalStatus}>
-          <Text strong>General status:</Text>
-          <Tag className={styles.tag} color="blue">
-            Waiting to start
-          </Tag>
-        </div>
+        <GeneralStatus downloadStatus={downloadStatus} />
 
         {/* INPUT CONTAINER */}
         <div className={styles.inputContainer}>
           <Search
-            onSearch={handleStartDownload}
+            onSearch={handleDownloadButton}
             value={downloadInput}
-            enterButton={
-              <Text style={{ color: 'white' }}>
-                <Icon type="download" style={{ marginRight: 8 }} />
-                Download
-              </Text>
-            }
-            allowClear
-            // size="large"
+            disabled={downloadStatus === EDownloadStatus.FETCHING}
+            enterButton={<DownloadButton downloadStatus={downloadStatus} />}
             placeholder="Double click to paste the url"
             onChange={e => setDownloadInput(e.target.value)}
             onDoubleClick={copyUrlFromClipboard}
@@ -162,7 +168,7 @@ const Download: React.FC<Props> = (props: Props) => {
         </div>
       </div>
 
-      <DownloadList convertOpt={convertOpt} />
+      <DownloadList convertOpt={convertOpt} downloadStatus={downloadStatus} />
     </div>
   );
 };
