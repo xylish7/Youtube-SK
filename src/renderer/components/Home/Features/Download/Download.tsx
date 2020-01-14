@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { remote, shell } from 'electron';
+import React, { useState, useEffect } from 'react';
+import { remote, shell, ipcRenderer } from 'electron';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 const { dialog } = remote;
 
@@ -16,6 +16,7 @@ import { startDownloadEvent } from '../../../../events/download-events';
 import { EDownloadStatus } from '../../../../reducers/downloadReducer';
 import GeneralStatus from './GeneralStatus/GeneralStatus';
 import DownloadButton from './DownloadButton/DownloadButton';
+import EDownloadEventsName from '../../../../../shared/events-name/download-events-names';
 
 type Props = {
   savePath: string;
@@ -30,6 +31,17 @@ const Download: React.FC<Props> = (props: Props) => {
   const [downloadInput, setDownloadInput] = useState<string>('');
   const [convertOpt, setConvertOpt] = useState<boolean>(false);
   const [keepOriginalOpt, setKeepOriginalOpt] = useState<boolean>(false);
+
+  useEffect(() => {
+    ipcRenderer.on(EDownloadEventsName.DOWNLOAD_PROGRESS, (event: any, progress: any) => {
+      if (downloadStatus !== EDownloadStatus.DOWNLOADING)
+        changeDownloadState(EDownloadStatus.DOWNLOADING);
+    });
+
+    ipcRenderer.on(EDownloadEventsName.DOWNLOAD_FINISHED, () => {
+      changeDownloadState(EDownloadStatus.DONE);
+    });
+  }, []);
 
   /**
    * Open a dialog to select the folder in which the files
@@ -75,17 +87,14 @@ const Download: React.FC<Props> = (props: Props) => {
    * Handle the press of the downlaod button
    */
   const handleDownloadButton = (): void => {
-    if (downloadStatus !== EDownloadStatus.DOWNLOADING) {
+    if (downloadStatus !== EDownloadStatus.DOWNLOADING)
       if (isValid()) {
         changeDownloadState(EDownloadStatus.FETCHING);
-        setTimeout(() => changeDownloadState(EDownloadStatus.DOWNLOADING), 3000);
-        setTimeout(() => changeDownloadState(EDownloadStatus.DONE), 6000);
+        startDownloadEvent(downloadInput);
       }
-    }
-    if (downloadStatus === EDownloadStatus.DOWNLOADING) {
+
+    if (downloadStatus === EDownloadStatus.DOWNLOADING)
       changeDownloadState(EDownloadStatus.STOPPED);
-    }
-    // startDownloadEvent(downloadInput);
   };
 
   /**

@@ -24,7 +24,7 @@ const GeneralStatus: React.FC<Props> = (props: Props) => {
       case EDownloadStatus.STOPPED:
         return 'Canceled';
       case EDownloadStatus.DONE:
-        return 'Done';
+        return 'Download complete';
       default:
         return 'Waiting to start';
     }

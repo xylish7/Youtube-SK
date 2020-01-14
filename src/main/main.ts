@@ -54,7 +54,7 @@ app.on('ready', () => {
   createWindow();
 
   ipcMain.on(downloadEventsName.START_DOWNLOAD, (event: IpcMessageEvent, downloadUrl: string) => {
-    const downloadService = new DownloadService(downloadUrl);
+    const downloadService = new DownloadService(event, downloadUrl);
     downloadService.download();
   });
 });

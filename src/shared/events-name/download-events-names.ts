@@ -1,9 +1,7 @@
-interface IDownloadEvents {
-  START_DOWNLOAD: string;
+enum EDownloadEventsName {
+  START_DOWNLOAD = 'start-download',
+  DOWNLOAD_PROGRESS = 'download-progress',
+  DOWNLOAD_FINISHED = 'download-finished'
 }
 
-const downloadEventsName: IDownloadEvents = {
-  START_DOWNLOAD: 'start-download'
-};
-
-export default downloadEventsName;
+export default EDownloadEventsName;
