@@ -17,7 +17,13 @@ import CutSettings from './CutSettings/CutSettings';
 import ConvertSettings from './ConvertSettings/ConvertSettings';
 import PlayerSettings from './PlayerSettings/PlayerSettings';
 
-const Settings: React.FC = () => {
+type Props = {
+  mainRoute: string;
+};
+
+const Settings: React.FC<Props> = (props: Props) => {
+  const { mainRoute } = props;
+
   let history = useHistory();
   let { path } = useRouteMatch();
 
@@ -32,7 +38,7 @@ const Settings: React.FC = () => {
           className={styles.closeButton}
           icon="close"
           shape="circle"
-          onClick={() => history.goBack()}
+          onClick={() => history.push(mainRoute)}
         />
         <AnimatedSwitch
           atEnter={{ opacity: 0 }}

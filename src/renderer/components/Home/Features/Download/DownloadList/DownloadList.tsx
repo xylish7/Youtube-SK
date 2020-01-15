@@ -34,7 +34,7 @@ const data = [
 ];
 
 type Props = {
-  convertOpt: boolean;
+  convertOpt?: boolean;
   downloadStatus: EDownloadStatus;
 };
 

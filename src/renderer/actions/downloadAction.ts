@@ -1,24 +1,35 @@
 import { Action, ActionCreator } from 'redux';
-import { EDownloadStatus } from '../reducers/downloadReducer';
+import { EDownloadStatus, IDownloadOpts } from '../reducers/downloadReducer';
 
 export enum EDownload {
-  CHANGE_DOWNLOAD_STATE = 'CHANGE_DOWNLOAD_STATE'
+  CHANGE_DOWNLOAD_STATUS = 'CHANGE_DOWNLOAD_STATUS',
+  CHANGE_DOWNLOAD_OPTS = 'CHANGE_DOWNLOAD_OPTS'
 }
 
-export interface IChangeDownloadState extends Action {
-  type: EDownload.CHANGE_DOWNLOAD_STATE;
+export interface IChangeDownloadStatus extends Action {
+  type: EDownload.CHANGE_DOWNLOAD_STATUS;
   downloadStatus: EDownloadStatus;
+}
+
+export interface IChangeDownloadOpts extends Action {
+  type: EDownload.CHANGE_DOWNLOAD_OPTS;
+  options: IDownloadOpts;
 }
 
 /**
  * Get persistent data from local store
  */
 
-export const changeDownloadState: ActionCreator<IChangeDownloadState> = (
+export const changeDownloadStatus: ActionCreator<IChangeDownloadStatus> = (
   downloadStatus: EDownloadStatus
 ) => ({
-  type: EDownload.CHANGE_DOWNLOAD_STATE,
+  type: EDownload.CHANGE_DOWNLOAD_STATUS,
   downloadStatus
 });
 
-export type IDownloadAction = IChangeDownloadState;
+export const changeDownloadOpts: ActionCreator<IChangeDownloadOpts> = (options: IDownloadOpts) => ({
+  type: EDownload.CHANGE_DOWNLOAD_OPTS,
+  options
+});
+
+export type IDownloadAction = IChangeDownloadStatus | IChangeDownloadOpts;

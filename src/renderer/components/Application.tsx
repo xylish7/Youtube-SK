@@ -9,7 +9,7 @@ import routes from '../constants/routes';
 import styles from './Application.css';
 
 import Home from './Home/Home';
-import Settings from './Settings/Settings';
+import SettingsContainer from '../containers/SettingsContainer';
 
 type Props = {
   getPersistentData: () => void;
@@ -39,7 +39,7 @@ const Application: React.FC<Props> = (props: Props) => {
         atActive={{ opacity: 1 }}
         className="switch-wrapper"
       >
-        <Route path={routes.SETTINGS} component={Settings} />
+        <Route path={routes.SETTINGS} component={SettingsContainer} />
         <Route path={routes.HOME} component={Home} />
 
         <Redirect to={routes.HOME} />
