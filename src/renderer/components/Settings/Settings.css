@@ -12,3 +12,7 @@
 .close-button > i {
   line-height: 23px !important;
 }
+
+.settings-content {
+  padding: 15px;
+}

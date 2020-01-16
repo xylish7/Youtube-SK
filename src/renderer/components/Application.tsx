@@ -12,11 +12,11 @@ import Home from './Home/Home';
 import SettingsContainer from '../containers/SettingsContainer';
 
 type Props = {
-  getPersistentData: () => void;
+  getAllPersistentData: () => void;
 };
 
 const Application: React.FC<Props> = (props: Props) => {
-  const { getPersistentData } = props;
+  const { getAllPersistentData } = props;
 
   useEffect(() => {
     const titlebar = new Titlebar({
@@ -24,7 +24,7 @@ const Application: React.FC<Props> = (props: Props) => {
       maximizable: false
     });
 
-    getPersistentData();
+    getAllPersistentData();
 
     return () => {
       titlebar.dispose();

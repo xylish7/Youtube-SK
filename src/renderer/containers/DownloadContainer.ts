@@ -5,8 +5,8 @@ import Download from '../components/Home/Features/Download/Download';
 import { RootState } from '../reducers';
 import {
   PersistentAction,
-  changeDownloadSavePath,
-  IChangeDownloadSavePath
+  changePersistentValues,
+  IChangePersistentValues
 } from '../actions/persistentAction';
 import {
   IChangeDownloadStatus,
@@ -16,6 +16,7 @@ import {
   changeDownloadOpts
 } from '../actions/downloadAction';
 import { EDownloadStatus, IDownloadOpts } from '../reducers/downloadReducer';
+import { IChangedValues } from '../constants/persistent-data-store';
 
 const mapStateToProps = (state: RootState) => ({
   savePath: state.persistent.downloadSavePath,
@@ -24,8 +25,8 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<PersistentAction | IDownloadAction>) => ({
-  changeSavePath: (savePath: string): IChangeDownloadSavePath =>
-    dispatch(changeDownloadSavePath(savePath)),
+  changePersistentValues: (changedValues: IChangedValues): IChangePersistentValues =>
+    dispatch(changePersistentValues(changedValues)),
   changeDownloadStatus: (downloadStatus: EDownloadStatus): IChangeDownloadStatus =>
     dispatch(changeDownloadStatus(downloadStatus)),
   changeDownloadOpts: (downloadOpts: IDownloadOpts): IChangeDownloadOpts =>

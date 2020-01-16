@@ -13,7 +13,31 @@ const options = {
   stylesDir: path.join(__dirname, './src/renderer/styles/theme'),
   varFile: path.join(__dirname, './src/renderer/styles/theme/variables.less'),
   mainLessFile: path.join(__dirname, './src/renderer/styles/theme/index.less'),
-  themeVariables: ['@primary-color'],
+  themeVariables: [
+    '@body-background',
+    '@component-background',
+    '@icon-color-hover',
+    '@heading-color',
+    '@text-color',
+    '@text-color-secondary',
+    '@border-color-base',
+    '@border-style-base',
+    '@layout-body-background',
+    '@layout-header-background',
+    '@layout-sider-background',
+    '@layout-trigger-background',
+    '@disabled-color',
+    '@disabled-color-dark',
+    '@outline-blur-size',
+    '@background-color-light',
+    '@background-color-base',
+    '@item-hover-bg',
+    '@shadow-color',
+    '@badge-text-color',
+    '@card-actions-background',
+    '@card-shadow',
+    '@avatar-bg'
+  ],
   indexFileName: 'index.html'
 };
 

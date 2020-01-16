@@ -31,7 +31,7 @@ class LocalStore {
 
   // ...and this will set it
   set(key: string, val: string) {
-    this.data[key] = val;
+    if (key) this.data[key] = val;
 
     fs.writeFileSync(this.path, JSON.stringify(this.data));
   }

@@ -1,37 +1,45 @@
 import { Action, ActionCreator } from 'redux';
 import LocalStore from '../utils/local-store';
-import { USER_PREFERENCES } from '../constants/persistent-data-store';
+import {
+  USER_PREFERENCES,
+  EUserPrefStore,
+  IChangedValues,
+  ThemeMode
+} from '../constants/persistent-data-store';
 
 export enum EPersistent {
-  GET_PERSISTEN_DATA = 'GET_PERSISTEN_DATA',
-  CHANGE_DOWNLOAD_SAVE_PATH = 'CHANGE_DOWNLOAD_SAVE_PATH'
+  GET_PERSISTENT_DATA = 'GET_PERSISTENT_DATA',
+  CHANGE_PERSISTENT_VALUES = 'CHANGE_PERSISTENT_VALUES'
 }
 
 export interface IGetPersistentData extends Action {
-  type: EPersistent.GET_PERSISTEN_DATA;
+  type: EPersistent.GET_PERSISTENT_DATA;
   persistentData: {
     downloadSavePath: string;
+    themeMode: string;
   };
 }
 
-export interface IChangeDownloadSavePath extends Action {
-  type: EPersistent.CHANGE_DOWNLOAD_SAVE_PATH;
-  savePath: string;
+export interface IChangePersistentValues extends Action {
+  type: EPersistent.CHANGE_PERSISTENT_VALUES;
+  changedValuesObj: IChangedValues;
 }
 
 /**
  * Get persistent data from local store
  */
 
-export const getPersistentData: ActionCreator<IGetPersistentData> = (): IGetPersistentData => {
+export const getAllPersistentData: ActionCreator<IGetPersistentData> = (): IGetPersistentData => {
   const userPrefStore: LocalStore = new LocalStore(USER_PREFERENCES.store);
 
-  const downloadSavePath = userPrefStore.get(USER_PREFERENCES.valuesNames.downloadSavePath);
+  const downloadSavePath = userPrefStore.get(EUserPrefStore.DOWNLOAD_SAVE_PATH);
+  const themeMode = userPrefStore.get(EUserPrefStore.THEME_MODE);
 
   return {
-    type: EPersistent.GET_PERSISTEN_DATA,
+    type: EPersistent.GET_PERSISTENT_DATA,
     persistentData: {
-      downloadSavePath: downloadSavePath ? downloadSavePath : ''
+      downloadSavePath: downloadSavePath ? downloadSavePath : '',
+      themeMode: themeMode ? themeMode : ThemeMode.LIGHT
     }
   };
 };
@@ -42,18 +50,20 @@ export const getPersistentData: ActionCreator<IGetPersistentData> = (): IGetPers
  *
  * @param {string} savePath
  */
-export const changeDownloadSavePath: ActionCreator<IChangeDownloadSavePath> = (
-  savePath: string
-): IChangeDownloadSavePath => {
+export const changePersistentValues: ActionCreator<IChangePersistentValues> = (
+  changedValuesObj: IChangedValues
+): IChangePersistentValues => {
   const userPrefStore: LocalStore = new LocalStore(USER_PREFERENCES.store);
 
   // Save download path to local store
-  userPrefStore.set(USER_PREFERENCES.valuesNames.downloadSavePath, savePath);
+  for (let [key, value] of Object.entries(changedValuesObj)) {
+    userPrefStore.set(key, value);
+  }
 
   return {
-    type: EPersistent.CHANGE_DOWNLOAD_SAVE_PATH,
-    savePath
+    type: EPersistent.CHANGE_PERSISTENT_VALUES,
+    changedValuesObj
   };
 };
 
-export type PersistentAction = IChangeDownloadSavePath | IGetPersistentData;
+export type PersistentAction = IChangePersistentValues | IGetPersistentData;

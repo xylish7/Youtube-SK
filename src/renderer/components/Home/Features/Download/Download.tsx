@@ -3,7 +3,7 @@ import { remote, shell, ipcRenderer } from 'electron';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 const { dialog } = remote;
 
-import { Typography, Icon, Button, Input, Tag, Divider, message, Checkbox } from 'antd';
+import { Typography, Icon, Button, Input, Divider, message, Checkbox } from 'antd';
 const { Text } = Typography;
 const { Search } = Input;
 
@@ -17,12 +17,13 @@ import { EDownloadStatus, IDownloadOpts } from '../../../../reducers/downloadRed
 import GeneralStatus from './GeneralStatus/GeneralStatus';
 import DownloadButton from './DownloadButton/DownloadButton';
 import EDownloadEventsName from '../../../../../shared/events-name/download-events-names';
+import { EUserPrefStore, IChangedValues } from '../../../../constants/persistent-data-store';
 
 type Props = {
   savePath: string;
   downloadStatus: EDownloadStatus;
   downloadOpts: IDownloadOpts;
-  changeSavePath: (savePath: string) => void;
+  changePersistentValues: (changedValues: IChangedValues) => void;
   changeDownloadStatus: (downloadStatus: EDownloadStatus) => void;
   changeDownloadOpts: (downloadOpts: IDownloadOpts) => void;
 };
@@ -32,7 +33,7 @@ const Download: React.FC<Props> = (props: Props) => {
     savePath,
     downloadStatus,
     downloadOpts,
-    changeSavePath,
+    changePersistentValues,
     changeDownloadStatus,
     changeDownloadOpts
   } = props;
@@ -64,7 +65,10 @@ const Download: React.FC<Props> = (props: Props) => {
       properties: ['openDirectory']
     });
 
-    if (path) changeSavePath(path[0]);
+    if (path)
+      changePersistentValues({
+        [EUserPrefStore.DOWNLOAD_SAVE_PATH]: path[0]
+      });
   };
 
   /**

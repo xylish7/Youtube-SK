@@ -4,12 +4,12 @@ import { Dispatch } from 'redux';
 import Application from '../components/Application';
 import {
   PersistentAction,
-  getPersistentData,
+  getAllPersistentData,
   IGetPersistentData
 } from '../actions/persistentAction';
 
 const mapDispatchToProps = (dispatch: Dispatch<PersistentAction>) => ({
-  getPersistentData: (): IGetPersistentData => dispatch(getPersistentData())
+  getAllPersistentData: (): IGetPersistentData => dispatch(getAllPersistentData())
 });
 
 export default connect(null, mapDispatchToProps)(Application);
