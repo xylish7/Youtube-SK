@@ -10,25 +10,28 @@ import styles from './Application.css';
 
 import Home from './Home/Home';
 import SettingsContainer from '../containers/SettingsContainer';
+import { ThemeMode } from '../constants/persistent-data-store';
 
 type Props = {
+  themeMode: string;
   getAllPersistentData: () => void;
 };
 
 const Application: React.FC<Props> = (props: Props) => {
-  const { getAllPersistentData } = props;
+  const { themeMode, getAllPersistentData } = props;
 
   useEffect(() => {
     const titlebar = new Titlebar({
-      backgroundColor: Color.fromHex('#e8e8e8'),
+      backgroundColor: Color.fromHex(themeMode === ThemeMode.LIGHT ? '#e8e8e8' : '#000000'),
       maximizable: false
     });
-
-    getAllPersistentData();
-
     return () => {
       titlebar.dispose();
     };
+  }, [themeMode]);
+
+  useEffect(() => {
+    getAllPersistentData();
   }, []);
 
   return (

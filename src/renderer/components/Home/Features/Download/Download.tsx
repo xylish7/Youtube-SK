@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { remote, shell, ipcRenderer } from 'electron';
+import { remote, shell, ipcRenderer, IpcMessageEvent } from 'electron';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 const { dialog } = remote;
 
@@ -10,13 +10,18 @@ const { Search } = Input;
 import styles from './Download.css';
 
 import { regExpressions, globalConst } from '../../../../constants/globals';
-import DownloadList from './DownloadList/DownloadList';
+import DownloadListContainer from '../../../../containers/DownloadListContainer';
 
 import { startDownloadEvent } from '../../../../events/download-events';
 import { EDownloadStatus, IDownloadOpts } from '../../../../reducers/downloadReducer';
 import GeneralStatus from './GeneralStatus/GeneralStatus';
 import DownloadButton from './DownloadButton/DownloadButton';
-import EDownloadEventsName from '../../../../../shared/events-name/download-events-names';
+import {
+  EDownloadEventsName,
+  IDownloadInfo,
+  IFileInfo,
+  IFileProgress
+} from '../../../../../shared/events-name/download-events-names';
 import { EUserPrefStore, IChangedValues } from '../../../../constants/persistent-data-store';
 
 type Props = {
@@ -26,6 +31,7 @@ type Props = {
   changePersistentValues: (changedValues: IChangedValues) => void;
   changeDownloadStatus: (downloadStatus: EDownloadStatus) => void;
   changeDownloadOpts: (downloadOpts: IDownloadOpts) => void;
+  updateMediaFiles: (mediaFile: IFileInfo) => void;
 };
 
 const Download: React.FC<Props> = (props: Props) => {
@@ -35,25 +41,43 @@ const Download: React.FC<Props> = (props: Props) => {
     downloadOpts,
     changePersistentValues,
     changeDownloadStatus,
-    changeDownloadOpts
+    changeDownloadOpts,
+    updateMediaFiles
   } = props;
 
   const [downloadInput, setDownloadInput] = useState<string>('');
 
   useEffect(() => {
-    ipcRenderer.on(EDownloadEventsName.DOWNLOAD_PROGRESS, (event: any, progress: any) => {
-      if (downloadStatus !== EDownloadStatus.DOWNLOADING)
-        changeDownloadStatus(EDownloadStatus.DOWNLOADING);
-    });
+    ipcRenderer.on(
+      EDownloadEventsName.DOWNLOAD_PROGRESS,
+      (event: IpcMessageEvent, progress: IFileProgress) => {
+        if (downloadStatus !== EDownloadStatus.DOWNLOADING)
+          changeDownloadStatus(EDownloadStatus.DOWNLOADING);
+        console.log(progress);
+      }
+    );
     ipcRenderer.on(EDownloadEventsName.DOWNLOAD_FINISHED, () => {
       changeDownloadStatus(EDownloadStatus.DONE);
+    });
+
+    ipcRenderer.on(
+      EDownloadEventsName.DOWNLOAD_INFO,
+      (event: IpcMessageEvent, downloadInfo: IDownloadInfo) => {
+        console.log('TCL: downloadInfo', downloadInfo);
+      }
+    );
+
+    ipcRenderer.on(EDownloadEventsName.FILE_INFO, (event: IpcMessageEvent, fileInfo: IFileInfo) => {
+      updateMediaFiles(fileInfo);
     });
 
     return () => {
       ipcRenderer.removeAllListeners(EDownloadEventsName.DOWNLOAD_PROGRESS);
       ipcRenderer.removeAllListeners(EDownloadEventsName.DOWNLOAD_FINISHED);
+      ipcRenderer.removeAllListeners(EDownloadEventsName.DOWNLOAD_INFO);
+      ipcRenderer.removeAllListeners(EDownloadEventsName.FILE_INFO);
     };
-  }, []);
+  }, [downloadStatus]);
 
   /**
    * Open a dialog to select the folder in which the files
@@ -191,7 +215,7 @@ const Download: React.FC<Props> = (props: Props) => {
         </div>
       </div>
 
-      <DownloadList convertOpt={downloadOpts.convert} downloadStatus={downloadStatus} />
+      <DownloadListContainer convertOpt={downloadOpts.convert} downloadStatus={downloadStatus} />
     </div>
   );
 };

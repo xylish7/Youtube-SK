@@ -7,9 +7,14 @@ import {
   getAllPersistentData,
   IGetPersistentData
 } from '../actions/persistentAction';
+import { RootState } from '../reducers';
+
+const mapStateToProps = (state: RootState) => ({
+  themeMode: state.persistent.themeMode
+});
 
 const mapDispatchToProps = (dispatch: Dispatch<PersistentAction>) => ({
   getAllPersistentData: (): IGetPersistentData => dispatch(getAllPersistentData())
 });
 
-export default connect(null, mapDispatchToProps)(Application);
+export default connect(mapStateToProps, mapDispatchToProps)(Application);

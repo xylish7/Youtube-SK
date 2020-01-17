@@ -5,41 +5,16 @@ const { Text } = Typography;
 
 import styles from './DownloadList.css';
 import { EDownloadStatus } from '../../../../../reducers/downloadReducer';
-
-const data = [
-  {
-    title: 'Ant Design Title 1'
-  },
-  {
-    title: 'Ant Design Title 2'
-  },
-  {
-    title: 'Ant Design Title 3'
-  },
-  {
-    title: 'Ant Design Title 4'
-  },
-  {
-    title: 'Ant Design Title 1'
-  }
-  // {
-  //   title: 'Ant Design Title 2'
-  // },
-  // {
-  //   title: 'Ant Design Title 3'
-  // },
-  // {
-  //   title: 'Ant Design Title 4'
-  // }
-];
+import { IFileInfo } from '../../../../../../shared/events-name/download-events-names';
 
 type Props = {
   convertOpt?: boolean;
   downloadStatus: EDownloadStatus;
+  mediaFiles: Array<IFileInfo>;
 };
 
 const DownloadList: React.FC<Props> = (props: Props) => {
-  const { convertOpt, downloadStatus } = props;
+  const { convertOpt, downloadStatus, mediaFiles } = props;
 
   // Render the list of the downloaded videos
   const _renderDownloadList = (): JSX.Element => (
@@ -62,21 +37,17 @@ const DownloadList: React.FC<Props> = (props: Props) => {
         <Card>
           <List
             itemLayout="horizontal"
-            dataSource={data}
+            dataSource={mediaFiles}
             renderItem={item => (
               <List.Item>
                 <List.Item.Meta
                   avatar={
                     <div className={styles.listStatus}>
-                      {item.title === 'Ant Design Title 3' ? (
-                        <Tag color="orange">PENDING</Tag>
-                      ) : (
-                        <Spin className={styles.listLoadingSpinner} />
-                      )}
+                      <Spin className={styles.listLoadingSpinner} />
                     </div>
                   }
                   title={item.title}
-                  description="Ant Design, a design language "
+                  description={item.duration}
                 />
                 <div className={styles.progressContainer}>
                   <div style={{ marginRight: convertOpt ? 72 : 26 }}>

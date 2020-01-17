@@ -26,7 +26,7 @@ export interface IChangePersistentValues extends Action {
 }
 
 /**
- * Get persistent data from local store
+ * Get all persistent data from local store
  */
 
 export const getAllPersistentData: ActionCreator<IGetPersistentData> = (): IGetPersistentData => {
@@ -45,8 +45,7 @@ export const getAllPersistentData: ActionCreator<IGetPersistentData> = (): IGetP
 };
 
 /**
- * Change the location where the files to be downloaded
- *  will be saved
+ * Change persistent data values
  *
  * @param {string} savePath
  */

@@ -2,7 +2,7 @@ require('hazardous');
 import { app, BrowserWindow, ipcMain, IpcMessageEvent } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
-import downloadEventsName from '../shared/events-name/download-events-names';
+import { EDownloadEventsName } from '../shared/events-name/download-events-names';
 import DownloadService from './services/DownloadService';
 
 let win: BrowserWindow | null;
@@ -53,9 +53,9 @@ app.on('ready', () => {
   // Create main window
   createWindow();
 
-  ipcMain.on(downloadEventsName.START_DOWNLOAD, (event: IpcMessageEvent, downloadUrl: string) => {
-    const downloadService = new DownloadService(event, downloadUrl);
-    downloadService.download();
+  ipcMain.on(EDownloadEventsName.START_DOWNLOAD, (event: IpcMessageEvent, downloadUrl: string) => {
+    const downloadService = new DownloadService(event);
+    downloadService.download(downloadUrl);
   });
 });
 
