@@ -1,11 +1,12 @@
 import { Action, ActionCreator } from 'redux';
 import { EDownloadStatus, IDownloadOpts } from '../reducers/downloadReducer';
-import { IFileInfo } from '../../shared/events-name/download-events-names';
+import { IFileInfo, IFileProgress } from '../../shared/events-name/download-events-names';
 
 export enum EDownload {
   CHANGE_DOWNLOAD_STATUS = 'CHANGE_DOWNLOAD_STATUS',
   CHANGE_DOWNLOAD_OPTS = 'CHANGE_DOWNLOAD_OPTS',
-  UPDATE_MEDIA_FILES = 'UPDATE_MEDIA_FILES'
+  UPDATE_MEDIA_FILES = 'UPDATE_MEDIA_FILES',
+  UPDATE_FILE_PROGRESS = 'UPDATE_FILE_PROGRESS'
 }
 
 export interface IChangeDownloadStatus extends Action {
@@ -20,8 +21,14 @@ export interface IChangeDownloadOpts extends Action {
 
 export interface IUpdateMediaFile extends Action {
   type: EDownload.UPDATE_MEDIA_FILES;
-  mediaFile: IFileInfo;
+  mediaFile: Array<IFileInfo>;
 }
+
+export interface IUpdateFileProgress extends Action {
+  type: EDownload.UPDATE_FILE_PROGRESS;
+  fileProgress: IFileProgress;
+}
+
 /**
  * Get persistent data from local store
  */
@@ -49,9 +56,23 @@ export const changeDownloadOpts: ActionCreator<IChangeDownloadOpts> = (options: 
  *
  * @param mediaFile
  */
-export const updateMediaFiles: ActionCreator<IUpdateMediaFile> = (mediaFile: IFileInfo) => ({
+export const updateMediaFiles: ActionCreator<IUpdateMediaFile> = (mediaFile: Array<IFileInfo>) => ({
   type: EDownload.UPDATE_MEDIA_FILES,
   mediaFile
 });
 
-export type IDownloadAction = IChangeDownloadStatus | IChangeDownloadOpts | IUpdateMediaFile;
+/**
+ * Update the progres of the file being downloaded
+ */
+export const updateFileProgress: ActionCreator<IUpdateFileProgress> = (
+  fileProgress: IFileProgress
+) => ({
+  type: EDownload.UPDATE_FILE_PROGRESS,
+  fileProgress
+});
+
+export type IDownloadAction =
+  | IChangeDownloadStatus
+  | IChangeDownloadOpts
+  | IUpdateMediaFile
+  | IUpdateFileProgress;

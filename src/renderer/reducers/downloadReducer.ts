@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 
 import { EDownload, IDownloadAction } from '../actions/downloadAction';
 import updateObject from '../utils/update-object';
-import { IFileInfo } from '../../shared/events-name/download-events-names';
+import { IFileInfo, IFileProgress } from '../../shared/events-name/download-events-names';
 
 export interface IDownloadOpts {
   convert?: boolean;
@@ -21,12 +21,14 @@ export interface IDownloadState {
   readonly status: EDownloadStatus;
   readonly options: IDownloadOpts;
   readonly mediaFiles: Array<IFileInfo>;
+  readonly filesProgress: any;
 }
 
 const defaultState: IDownloadState = {
   status: EDownloadStatus.WAITING,
   options: { convert: false, audioAndVideo: false },
-  mediaFiles: []
+  mediaFiles: [],
+  filesProgress: {}
 };
 
 export const downloadReducer: Reducer<IDownloadState, IDownloadAction> = (
@@ -47,7 +49,16 @@ export const downloadReducer: Reducer<IDownloadState, IDownloadAction> = (
 
     case EDownload.UPDATE_MEDIA_FILES:
       return updateObject(state, {
-        mediaFiles: [...state.mediaFiles, action.mediaFile]
+        mediaFiles: action.mediaFile.length === 0 ? [] : [...state.mediaFiles, ...action.mediaFile]
+      });
+
+    case EDownload.UPDATE_FILE_PROGRESS:
+      const entryNr: number = action.fileProgress.entry_nr;
+      return updateObject(state, {
+        filesProgress: {
+          ...state.filesProgress,
+          [entryNr]: action.fileProgress.progress
+        }
       });
     default:
       return state;

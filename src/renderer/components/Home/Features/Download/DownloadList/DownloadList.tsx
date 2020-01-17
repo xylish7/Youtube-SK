@@ -8,13 +8,14 @@ import { EDownloadStatus } from '../../../../../reducers/downloadReducer';
 import { IFileInfo } from '../../../../../../shared/events-name/download-events-names';
 
 type Props = {
-  convertOpt?: boolean;
+  convertOpt: boolean;
   downloadStatus: EDownloadStatus;
   mediaFiles: Array<IFileInfo>;
+  filesProgress: any;
 };
 
 const DownloadList: React.FC<Props> = (props: Props) => {
-  const { convertOpt, downloadStatus, mediaFiles } = props;
+  const { convertOpt, downloadStatus, mediaFiles, filesProgress } = props;
 
   // Render the list of the downloaded videos
   const _renderDownloadList = (): JSX.Element => (
@@ -38,29 +39,37 @@ const DownloadList: React.FC<Props> = (props: Props) => {
           <List
             itemLayout="horizontal"
             dataSource={mediaFiles}
-            renderItem={item => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={
-                    <div className={styles.listStatus}>
-                      <Spin className={styles.listLoadingSpinner} />
+            renderItem={item => {
+              const fileProgress = item.entry_nr ? filesProgress[item.entry_nr] : 0;
+
+              return (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={
+                      <div className={styles.listStatus}>
+                        {fileProgress === 100 ? (
+                          <Tag>Done</Tag>
+                        ) : (
+                          <Spin className={styles.listLoadingSpinner} />
+                        )}
+                      </div>
+                    }
+                    title={item.title}
+                    description={item.duration}
+                  />
+                  <div className={styles.progressContainer}>
+                    <div style={{ marginRight: convertOpt ? 72 : 26, marginLeft: 30 }}>
+                      <Progress type="circle" percent={fileProgress} width={30} />
                     </div>
-                  }
-                  title={item.title}
-                  description={item.duration}
-                />
-                <div className={styles.progressContainer}>
-                  <div style={{ marginRight: convertOpt ? 72 : 26 }}>
-                    <Progress type="circle" percent={0} width={30} />
+                    {convertOpt && mediaFiles.length !== 0 && (
+                      <div className={styles.convertProgress}>
+                        <Progress type="circle" percent={0} width={30} />
+                      </div>
+                    )}
                   </div>
-                  {convertOpt && (
-                    <div className={styles.convertProgress}>
-                      <Progress type="circle" percent={0} width={30} />
-                    </div>
-                  )}
-                </div>
-              </List.Item>
-            )}
+                </List.Item>
+              );
+            }}
           />
         </Card>
       </div>
@@ -96,7 +105,6 @@ const DownloadList: React.FC<Props> = (props: Props) => {
       return _renderDownloadList();
 
     case EDownloadStatus.FETCHING:
-
     case EDownloadStatus.WAITING:
       return _renderStartDownload();
 

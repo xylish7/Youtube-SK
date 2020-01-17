@@ -5,7 +5,8 @@ import DownloadList from '../components/Home/Features/Download/DownloadList/Down
 import { RootState } from '../reducers';
 
 const mapStateToProps = (state: RootState) => ({
-  mediaFiles: state.download.mediaFiles
+  mediaFiles: state.download.mediaFiles,
+  filesProgress: state.download.filesProgress
 });
 
 export default connect(mapStateToProps, null)(DownloadList);

@@ -15,11 +15,13 @@ import {
   IChangeDownloadOpts,
   changeDownloadOpts,
   IUpdateMediaFile,
-  updateMediaFiles
+  updateMediaFiles,
+  IUpdateFileProgress,
+  updateFileProgress
 } from '../actions/downloadAction';
 import { EDownloadStatus, IDownloadOpts } from '../reducers/downloadReducer';
 import { IChangedValues } from '../constants/persistent-data-store';
-import { IFileInfo } from '../../shared/events-name/download-events-names';
+import { IFileInfo, IFileProgress } from '../../shared/events-name/download-events-names';
 
 const mapStateToProps = (state: RootState) => ({
   savePath: state.persistent.downloadSavePath,
@@ -34,8 +36,10 @@ const mapDispatchToProps = (dispatch: Dispatch<PersistentAction | IDownloadActio
     dispatch(changeDownloadStatus(downloadStatus)),
   changeDownloadOpts: (downloadOpts: IDownloadOpts): IChangeDownloadOpts =>
     dispatch(changeDownloadOpts(downloadOpts)),
-  updateMediaFiles: (mediaFile: IFileInfo): IUpdateMediaFile =>
-    dispatch(updateMediaFiles(mediaFile))
+  updateMediaFiles: (mediaFile: Array<IFileInfo>): IUpdateMediaFile =>
+    dispatch(updateMediaFiles(mediaFile)),
+  updateFileProgress: (fileProgress: IFileProgress): IUpdateFileProgress =>
+    dispatch(updateFileProgress(fileProgress))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Download);

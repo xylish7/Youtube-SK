@@ -31,7 +31,8 @@ type Props = {
   changePersistentValues: (changedValues: IChangedValues) => void;
   changeDownloadStatus: (downloadStatus: EDownloadStatus) => void;
   changeDownloadOpts: (downloadOpts: IDownloadOpts) => void;
-  updateMediaFiles: (mediaFile: IFileInfo) => void;
+  updateMediaFiles: (mediaFile: Array<IFileInfo>) => void;
+  updateFileProgress: (fileProgress: IFileProgress) => void;
 };
 
 const Download: React.FC<Props> = (props: Props) => {
@@ -42,7 +43,8 @@ const Download: React.FC<Props> = (props: Props) => {
     changePersistentValues,
     changeDownloadStatus,
     changeDownloadOpts,
-    updateMediaFiles
+    updateMediaFiles,
+    updateFileProgress
   } = props;
 
   const [downloadInput, setDownloadInput] = useState<string>('');
@@ -50,10 +52,10 @@ const Download: React.FC<Props> = (props: Props) => {
   useEffect(() => {
     ipcRenderer.on(
       EDownloadEventsName.DOWNLOAD_PROGRESS,
-      (event: IpcMessageEvent, progress: IFileProgress) => {
+      (event: IpcMessageEvent, fileProgress: IFileProgress) => {
         if (downloadStatus !== EDownloadStatus.DOWNLOADING)
           changeDownloadStatus(EDownloadStatus.DOWNLOADING);
-        console.log(progress);
+        updateFileProgress(fileProgress);
       }
     );
     ipcRenderer.on(EDownloadEventsName.DOWNLOAD_FINISHED, () => {
@@ -62,13 +64,11 @@ const Download: React.FC<Props> = (props: Props) => {
 
     ipcRenderer.on(
       EDownloadEventsName.DOWNLOAD_INFO,
-      (event: IpcMessageEvent, downloadInfo: IDownloadInfo) => {
-        console.log('TCL: downloadInfo', downloadInfo);
-      }
+      (event: IpcMessageEvent, downloadInfo: IDownloadInfo) => {}
     );
 
     ipcRenderer.on(EDownloadEventsName.FILE_INFO, (event: IpcMessageEvent, fileInfo: IFileInfo) => {
-      updateMediaFiles(fileInfo);
+      updateMediaFiles([fileInfo]);
     });
 
     return () => {
@@ -103,13 +103,24 @@ const Download: React.FC<Props> = (props: Props) => {
   };
 
   /**
-   * Handle conver to audio checkbox
+   * Handle convert to audio checkbox
    */
   const handleConvertCheckbox = (e: CheckboxChangeEvent) => {
     if (e.target.checked) changeDownloadOpts({ convert: true });
     else {
       changeDownloadOpts({ convert: false, audioAndVideo: false });
     }
+
+    if (downloadStatus !== EDownloadStatus.WAITING) changeDownloadStatus(EDownloadStatus.WAITING);
+  };
+
+  /**
+   * Handle save both audio and video checkbox
+   */
+
+  const handleAudioAndVideoCheckbox = (e: CheckboxChangeEvent) => {
+    changeDownloadOpts({ audioAndVideo: e.target.checked });
+    if (downloadStatus !== EDownloadStatus.WAITING) changeDownloadStatus(EDownloadStatus.WAITING);
   };
 
   /**
@@ -128,6 +139,7 @@ const Download: React.FC<Props> = (props: Props) => {
     if (downloadStatus !== EDownloadStatus.DOWNLOADING)
       if (isValid()) {
         changeDownloadStatus(EDownloadStatus.FETCHING);
+        updateMediaFiles([]);
         startDownloadEvent(downloadInput);
       }
 
@@ -182,14 +194,25 @@ const Download: React.FC<Props> = (props: Props) => {
 
       {/* CHECKBOX OPTIONS */}
       <div className={styles.options}>
-        <Checkbox checked={downloadOpts.convert} onChange={e => handleConvertCheckbox(e)}>
+        <Checkbox
+          checked={downloadOpts.convert}
+          disabled={
+            downloadStatus === EDownloadStatus.DOWNLOADING ||
+            downloadStatus === EDownloadStatus.FETCHING
+          }
+          onChange={e => handleConvertCheckbox(e)}
+        >
           Convert to audio
         </Checkbox>
         <br />
         <Checkbox
           checked={downloadOpts.audioAndVideo}
-          disabled={!downloadOpts.convert}
-          onChange={e => changeDownloadOpts({ audioAndVideo: e.target.checked })}
+          disabled={
+            !downloadOpts.convert ||
+            downloadStatus === EDownloadStatus.DOWNLOADING ||
+            downloadStatus === EDownloadStatus.FETCHING
+          }
+          onChange={e => handleAudioAndVideoCheckbox(e)}
         >
           Save both video an audio
         </Checkbox>
@@ -215,7 +238,12 @@ const Download: React.FC<Props> = (props: Props) => {
         </div>
       </div>
 
-      <DownloadListContainer convertOpt={downloadOpts.convert} downloadStatus={downloadStatus} />
+      {/* 
+      // @ts-ignore */}
+      <DownloadListContainer
+        convertOpt={downloadOpts.convert ? downloadOpts.convert : false}
+        downloadStatus={downloadStatus}
+      />
     </div>
   );
 };

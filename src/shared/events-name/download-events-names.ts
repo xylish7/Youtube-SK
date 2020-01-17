@@ -18,6 +18,6 @@ export interface IFileInfo {
 }
 
 export interface IFileProgress {
-  entry_nr?: number;
-  progress?: number;
+  entry_nr: number;
+  progress: number;
 }

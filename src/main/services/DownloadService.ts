@@ -12,15 +12,7 @@ import {
 } from '../../shared/events-name/download-events-names';
 import isEmpty from '../../renderer/utils/is-empty';
 
-interface IDownloadService {
-  event: IpcMessageEvent;
-  downloadSavePath: string;
-  downloadInfo: IDownloadInfo;
-  fileInfo: IFileInfo;
-  download: (url: string) => void;
-}
-
-export default class DownloadService implements IDownloadService {
+export default class DownloadService {
   event: IpcMessageEvent;
   downloadSavePath: string;
   downloadInfo: IDownloadInfo;
