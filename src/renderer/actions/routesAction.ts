@@ -1,21 +1,24 @@
 import { Action, ActionCreator } from 'redux';
+import { ISelectedRoute } from '../reducers/routeReducer';
 
 export enum ERoute {
-  CHANGE_MAIN_ROUTE = 'CHANGE_MAIN_ROUTE'
+  CHANGE_SELECTED_ROUTE = 'CHANGE_SELECTED_ROUTE'
 }
 
-export interface IChangeMainRoute extends Action {
-  type: ERoute.CHANGE_MAIN_ROUTE;
-  route: string;
+export interface IChangeSelectedRoute extends Action {
+  type: ERoute.CHANGE_SELECTED_ROUTE;
+  route: ISelectedRoute;
 }
 
 /**
  * Get persistent data from local store
  */
 
-export const changeMainRoute: ActionCreator<IChangeMainRoute> = (route: string) => ({
-  type: ERoute.CHANGE_MAIN_ROUTE,
+export const changeSelectedRoute: ActionCreator<IChangeSelectedRoute> = (
+  route: ISelectedRoute
+) => ({
+  type: ERoute.CHANGE_SELECTED_ROUTE,
   route
 });
 
-export type IRouteAction = IChangeMainRoute;
+export type IRouteAction = IChangeSelectedRoute;

@@ -24,7 +24,7 @@ export default class DownloadService {
     this.downloadInfo = {};
     this.fileInfo = {};
 
-    this.setCustomYtdlPath();
+    if (process.env.NODE_ENV === 'production') this.setCustomYtdlPath();
   }
 
   /**
@@ -82,6 +82,8 @@ export default class DownloadService {
     const customBinaryPath = path.resolve(
       __dirname,
       '..',
+      '..',
+      'app.asar.unpacked',
       'node_modules',
       'youtube-dl',
       'bin',

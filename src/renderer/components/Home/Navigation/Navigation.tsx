@@ -5,20 +5,22 @@ import routes from '../../../constants/routes';
 
 import styles from './Navigation.css';
 import { Icon } from 'antd';
+import { ISelectedRoute } from '../../../reducers/routeReducer';
 
 type Props = {
-  changeMainRoute: (route: string) => void;
+  settingsRoute: string;
+  changeSelectedRoute: (route: ISelectedRoute) => void;
 };
 
 const Navigation: React.FC<Props> = (props: Props) => {
-  const { changeMainRoute } = props;
+  const { settingsRoute, changeSelectedRoute } = props;
 
   return (
     <div className={styles.container}>
       {/* DOWNLOAD LINK */}
       <NavLink to={routes.DOWNLOAD} activeClassName={styles.isActive}>
         <div
-          onClick={() => changeMainRoute(routes.DOWNLOAD)}
+          onClick={() => changeSelectedRoute({ mainRoute: routes.DOWNLOAD })}
           className={`${styles.iconContainer} ${styles.ripple}`}
           title="Download"
         >
@@ -29,7 +31,7 @@ const Navigation: React.FC<Props> = (props: Props) => {
       {/* CONVERT LINK */}
       <NavLink to={routes.CONVERT} activeClassName={styles.isActive}>
         <div
-          onClick={() => changeMainRoute(routes.CONVERT)}
+          onClick={() => changeSelectedRoute({ mainRoute: routes.CONVERT })}
           className={`${styles.iconContainer} ${styles.ripple}`}
           title="Convert"
         >
@@ -39,7 +41,7 @@ const Navigation: React.FC<Props> = (props: Props) => {
 
       {/* CUT LINK */}
       <NavLink
-        onClick={() => changeMainRoute(routes.CUT)}
+        onClick={() => changeSelectedRoute({ mainRoute: routes.CUT })}
         to={routes.CUT}
         activeClassName={styles.isActive}
       >
@@ -50,7 +52,7 @@ const Navigation: React.FC<Props> = (props: Props) => {
 
       {/* PLAYER LINK */}
       <NavLink
-        onClick={() => changeMainRoute(routes.PLAYER)}
+        onClick={() => changeSelectedRoute({ mainRoute: routes.PLAYER })}
         to={routes.PLAYER}
         activeClassName={styles.isActive}
       >
@@ -63,7 +65,7 @@ const Navigation: React.FC<Props> = (props: Props) => {
       <div style={{ height: '100%' }} />
 
       {/* SETTINGS LINK */}
-      <Link to={routes.SETTINGS}>
+      <Link to={settingsRoute}>
         <div className={`${styles.iconContainer} ${styles.ripple}`} title="Settings">
           <Icon className={styles.icon} type="setting" />
         </div>

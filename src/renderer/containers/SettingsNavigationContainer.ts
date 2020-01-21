@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import Navigation from '../components/Home/Navigation/Navigation';
+import SettingsNavigation from '../components/Settings/SettingsNavigation/SettingsNavigation';
 
 import { IRouteAction, IChangeSelectedRoute, changeSelectedRoute } from '../actions/routesAction';
 import { ISelectedRoute } from '../reducers/routeReducer';
@@ -16,4 +16,4 @@ const mapDispatchToProps = (dispatch: Dispatch<IRouteAction>) => ({
     dispatch(changeSelectedRoute(route))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navigation);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsNavigation);

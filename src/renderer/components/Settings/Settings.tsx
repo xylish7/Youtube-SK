@@ -10,7 +10,7 @@ const { Content } = Layout;
 
 import styles from './Settings.css';
 
-import SettingsNavigation from './SettingsNavigation/SettingsNavigation';
+import SettingsNavigationContainer from '../../containers/SettingsNavigationContainer';
 import InterfaceSettingsContainer from '../../containers/InterfaceSettingsContainer';
 import DownloadSettings from './DownloadSettings/DownloadSettings';
 import CutSettings from './CutSettings/CutSettings';
@@ -30,7 +30,7 @@ const Settings: React.FC<Props> = (props: Props) => {
   return (
     <Layout className={styles.layout}>
       {/* SETTINGS NAVIGATION COMPONENT */}
-      <SettingsNavigation />
+      <SettingsNavigationContainer />
 
       <Content className={styles.settingsContent}>
         {/* Close settings link */}

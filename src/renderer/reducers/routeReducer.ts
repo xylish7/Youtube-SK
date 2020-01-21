@@ -3,12 +3,19 @@ import { Reducer } from 'redux';
 import updateObject from '../utils/update-object';
 import { IRouteAction, ERoute } from '../actions/routesAction';
 
+export interface ISelectedRoute {
+  mainRoute?: string;
+  settingsRoute?: string;
+}
+
 export interface IRouteState {
   readonly mainRoute: string;
+  readonly settingsRoute: string;
 }
 
 const defaultState: IRouteState = {
-  mainRoute: '/'
+  mainRoute: '/',
+  settingsRoute: '/settings/interface'
 };
 
 export const routeReducer: Reducer<IRouteState, IRouteAction> = (
@@ -16,9 +23,8 @@ export const routeReducer: Reducer<IRouteState, IRouteAction> = (
   action: IRouteAction
 ): IRouteState => {
   switch (action.type) {
-    case ERoute.CHANGE_MAIN_ROUTE:
-      return updateObject(state, { mainRoute: action.route });
-
+    case ERoute.CHANGE_SELECTED_ROUTE:
+      return updateObject(state, { ...action.route });
     default:
       return state;
   }

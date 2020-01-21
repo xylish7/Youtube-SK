@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 
 import { EDownload, IDownloadAction } from '../actions/downloadAction';
 import updateObject from '../utils/update-object';
-import { IFileInfo, IFileProgress } from '../../shared/events-name/download-events-names';
+import { IFileInfo } from '../../shared/events-name/download-events-names';
 
 export interface IDownloadOpts {
   convert?: boolean;
