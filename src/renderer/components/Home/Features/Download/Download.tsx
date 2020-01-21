@@ -8,6 +8,7 @@ const { Text } = Typography;
 const { Search } = Input;
 
 import styles from './Download.css';
+import { FaGlobe } from 'react-icons/fa';
 
 import { regExpressions, globalConst } from '../../../../constants/globals';
 import DownloadListContainer from '../../../../containers/DownloadListContainer';
@@ -235,6 +236,7 @@ const Download: React.FC<Props> = (props: Props) => {
           <Search
             onSearch={handleDownloadButton}
             value={downloadInput}
+            prefix={<Icon component={FaGlobe} style={{ color: '#cccccc' }} />}
             disabled={downloadStatus === EDownloadStatus.FETCHING}
             enterButton={<DownloadButton downloadStatus={downloadStatus} />}
             placeholder="Double click to paste the url"

@@ -10,6 +10,8 @@ import {
 import ChangeColorButton from './ChangeColorButton/ChangeColorButton';
 const { Title, Paragraph, Text } = Typography;
 
+import { FaTint, FaMoon, FaSun } from 'react-icons/fa';
+
 import styles from './InterfaceSettings.css';
 
 declare global {
@@ -21,11 +23,12 @@ window.less = window.less || {};
 
 type Props = {
   themeMode: ThemeMode;
+  appColor: EAppColor;
   changePersistentValues: (changedValues: IChangedValues) => void;
 };
 
 const InterfaceSettings: React.FC<Props> = (props: Props) => {
-  const { themeMode, changePersistentValues } = props;
+  const { themeMode, appColor, changePersistentValues } = props;
 
   const changeThemeMode = (): void => {
     changePersistentValues({
@@ -45,16 +48,23 @@ const InterfaceSettings: React.FC<Props> = (props: Props) => {
 
   return (
     <React.Fragment>
-      <Title level={4}>Theme mode </Title>
-      <Paragraph>Toggle between light and dark theme</Paragraph>
-      <Button onClick={changeThemeMode}>
-        {themeMode === ThemeMode.LIGHT ? 'DARK THEME ' : 'LIGHT THEME'}
-      </Button>
-
-      <Divider />
-
       <Title level={4}>
-        Application color <Icon type="exclamation-circle" />
+        <Icon
+          component={themeMode === ThemeMode.DARK ? FaMoon : FaSun}
+          style={{ color: '#fadb14' }}
+        />{' '}
+        Theme mode
+      </Title>
+      <Paragraph>
+        Toggle between light and dark theme. At the moment only the titlebar is changing its color,
+        but in future release there will be a complete dark mode
+      </Paragraph>
+      <Button onClick={changeThemeMode} style={{ marginLeft: 25 }}>
+        {themeMode === ThemeMode.LIGHT ? 'SWITCH TO DARK THEME ' : 'SWITCH TO LIGHT THEME'}
+      </Button>
+      <Divider />
+      <Title level={4}>
+        <Icon component={FaTint} style={{ color: appColor }} /> Application color
       </Title>
       <Paragraph>Primary color of the application</Paragraph>
       <div className={styles.colorPaletteContainer}>
@@ -83,6 +93,7 @@ const InterfaceSettings: React.FC<Props> = (props: Props) => {
           </Text>
         </Tooltip>
       </div>
+      <Divider />
     </React.Fragment>
   );
 };

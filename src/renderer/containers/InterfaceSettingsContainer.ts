@@ -12,7 +12,8 @@ import {
 import { IChangedValues } from '../constants/persistent-data-store';
 
 const mapStateToProps = (state: RootState) => ({
-  themeMode: state.persistent.themeMode
+  themeMode: state.persistent.themeMode,
+  appColor: state.persistent.appColor
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<PersistentAction>) => ({
