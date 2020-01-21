@@ -2,16 +2,18 @@ import { Reducer } from 'redux';
 
 import { EPersistent, PersistentAction } from '../actions/persistentAction';
 import updateObject from '../utils/update-object';
-import { ThemeMode } from '../constants/persistent-data-store';
+import { ThemeMode, EAppColor } from '../constants/persistent-data-store';
 
 export interface IPersistentState {
   readonly downloadSavePath: string;
-  readonly themeMode: string;
+  readonly themeMode: ThemeMode;
+  readonly appColor: EAppColor;
 }
 
 const defaultState: IPersistentState = {
   downloadSavePath: '',
-  themeMode: ThemeMode.LIGHT
+  themeMode: ThemeMode.LIGHT,
+  appColor: EAppColor.BLUE
 };
 
 export const persistentReducer: Reducer<IPersistentState, PersistentAction> = (

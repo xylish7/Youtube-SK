@@ -6,16 +6,18 @@ const { Text } = Typography;
 import styles from './DownloadList.css';
 import { EDownloadStatus } from '../../../../../reducers/downloadReducer';
 import { IFileInfo } from '../../../../../../shared/events-name/download-events-names';
+import { EAppColor } from '../../../../../constants/persistent-data-store';
 
 type Props = {
   convertOpt: boolean;
   downloadStatus: EDownloadStatus;
   mediaFiles: Array<IFileInfo>;
   filesProgress: any;
+  appColor: EAppColor;
 };
 
 const DownloadList: React.FC<Props> = (props: Props) => {
-  const { convertOpt, downloadStatus, mediaFiles, filesProgress } = props;
+  const { convertOpt, downloadStatus, mediaFiles, filesProgress, appColor } = props;
 
   // Render the list of the downloaded videos
   const _renderDownloadList = (): JSX.Element => (
@@ -80,7 +82,7 @@ const DownloadList: React.FC<Props> = (props: Props) => {
   const _renderStartDownload = (): JSX.Element => (
     <Result
       className={styles.resultContainer}
-      icon={<Icon type="smile" theme="twoTone" />}
+      icon={<Icon type="smile" theme="twoTone" twoToneColor={appColor} />}
       title={
         downloadStatus === EDownloadStatus.FETCHING
           ? 'Your download should start soon. Please wait...'
@@ -93,7 +95,7 @@ const DownloadList: React.FC<Props> = (props: Props) => {
   const _renderDownloadFailed = (): JSX.Element => (
     <Result
       className={styles.resultContainer}
-      icon={<Icon type="frown" theme="twoTone" />}
+      icon={<Icon type="frown" theme="twoTone" twoToneColor={appColor} />}
       status="error"
       title="Oops! It seems like your download has stopped"
     ></Result>

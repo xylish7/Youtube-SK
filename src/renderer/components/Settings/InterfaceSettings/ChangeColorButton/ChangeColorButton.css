@@ -1,0 +1,54 @@
+.button-container {
+  outline: 0;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  width: 50px;
+  height: 50px;
+  border: 5px solid;
+  border-radius: 7px;
+  transition: all 0.2s ease-in-out;
+}
+
+.button-container:hover {
+  transform: scale(1.1);
+}
+
+/* Ripple effect */
+.button-container::after {
+  display: none;
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.2);
+
+  width: 100px;
+  height: 100px;
+  margin-top: -50px;
+  margin-left: -50px;
+
+  /* Center the ripple */
+  top: 50%;
+  left: 50%;
+
+  animation: ripple 1s;
+  opacity: 0;
+}
+.button-container:focus {
+  transform: scale(1.1);
+}
+
+.button-container:focus:not(:active)::after {
+  display: block;
+}
+
+@keyframes ripple {
+  from {
+    opacity: 1;
+    transform: scale(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(10);
+  }
+}

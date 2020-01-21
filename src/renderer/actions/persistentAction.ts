@@ -4,7 +4,8 @@ import {
   USER_PREFERENCES,
   EUserPrefStore,
   IChangedValues,
-  ThemeMode
+  ThemeMode,
+  EAppColor
 } from '../constants/persistent-data-store';
 
 export enum EPersistent {
@@ -17,6 +18,7 @@ export interface IGetPersistentData extends Action {
   persistentData: {
     downloadSavePath: string;
     themeMode: string;
+    appColor: string;
   };
 }
 
@@ -34,12 +36,14 @@ export const getAllPersistentData: ActionCreator<IGetPersistentData> = (): IGetP
 
   const downloadSavePath = userPrefStore.get(EUserPrefStore.DOWNLOAD_SAVE_PATH);
   const themeMode = userPrefStore.get(EUserPrefStore.THEME_MODE);
+  const appColor = userPrefStore.get(EUserPrefStore.APP_COLOR);
 
   return {
     type: EPersistent.GET_PERSISTENT_DATA,
     persistentData: {
       downloadSavePath: downloadSavePath ? downloadSavePath : '',
-      themeMode: themeMode ? themeMode : ThemeMode.LIGHT
+      themeMode: themeMode ? themeMode : ThemeMode.LIGHT,
+      appColor: appColor ? appColor : EAppColor.BLUE
     }
   };
 };

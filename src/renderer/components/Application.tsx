@@ -10,25 +10,39 @@ import styles from './Application.css';
 
 import Home from './Home/Home';
 import SettingsContainer from '../containers/SettingsContainer';
-import { ThemeMode } from '../constants/persistent-data-store';
+import { ThemeMode, EAppColor } from '../constants/persistent-data-store';
+
+declare global {
+  interface Window {
+    less: any;
+  }
+}
+window.less = window.less || {};
 
 type Props = {
-  themeMode: string;
+  themeMode: ThemeMode;
+  appColor: EAppColor;
   getAllPersistentData: () => void;
 };
 
 const Application: React.FC<Props> = (props: Props) => {
-  const { themeMode, getAllPersistentData } = props;
+  const { themeMode, appColor, getAllPersistentData } = props;
 
   useEffect(() => {
+    // Set titlebar color
     const titlebar = new Titlebar({
       backgroundColor: Color.fromHex(themeMode === ThemeMode.LIGHT ? '#e8e8e8' : '#000000'),
       maximizable: false
     });
+
+    // Set app color
+    window.less.modifyVars({
+      '@primary-color': appColor
+    });
     return () => {
       titlebar.dispose();
     };
-  }, [themeMode]);
+  }, [themeMode, appColor]);
 
   useEffect(() => {
     getAllPersistentData();

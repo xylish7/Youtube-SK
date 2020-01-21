@@ -1,24 +1,45 @@
 import React from 'react';
 
-import { Typography, Button, Divider } from 'antd';
+import { Typography, Button, Divider, Icon, Tooltip } from 'antd';
 import {
   IChangedValues,
   ThemeMode,
-  EUserPrefStore
+  EUserPrefStore,
+  EAppColor
 } from '../../../constants/persistent-data-store';
-const { Title, Paragraph } = Typography;
+import ChangeColorButton from './ChangeColorButton/ChangeColorButton';
+const { Title, Paragraph, Text } = Typography;
+
+import styles from './InterfaceSettings.css';
+
+declare global {
+  interface Window {
+    less: any;
+  }
+}
+window.less = window.less || {};
 
 type Props = {
-  themeMode: string;
+  themeMode: ThemeMode;
   changePersistentValues: (changedValues: IChangedValues) => void;
 };
 
 const InterfaceSettings: React.FC<Props> = (props: Props) => {
   const { themeMode, changePersistentValues } = props;
 
-  const changeThemeMode = () => {
+  const changeThemeMode = (): void => {
     changePersistentValues({
       [EUserPrefStore.THEME_MODE]: themeMode === ThemeMode.LIGHT ? ThemeMode.DARK : ThemeMode.LIGHT
+    });
+  };
+
+  const changeAppColor = (colorCode: EAppColor): void => {
+    window.less.modifyVars({
+      '@primary-color': colorCode
+    });
+
+    changePersistentValues({
+      [EUserPrefStore.APP_COLOR]: colorCode
     });
   };
 
@@ -29,9 +50,39 @@ const InterfaceSettings: React.FC<Props> = (props: Props) => {
       <Button onClick={changeThemeMode}>
         {themeMode === ThemeMode.LIGHT ? 'DARK THEME ' : 'LIGHT THEME'}
       </Button>
+
       <Divider />
-      <Title level={4}>Application color</Title>
+
+      <Title level={4}>
+        Application color <Icon type="exclamation-circle" />
+      </Title>
       <Paragraph>Primary color of the application</Paragraph>
+      <div className={styles.colorPaletteContainer}>
+        <Tooltip placement="bottom" title={'Blue'}>
+          <Text>
+            <ChangeColorButton
+              color={EAppColor.BLUE}
+              onClick={() => changeAppColor(EAppColor.BLUE)}
+            />
+          </Text>
+        </Tooltip>
+        <Tooltip placement="bottom" title="Turquoise">
+          <Text>
+            <ChangeColorButton
+              color={EAppColor.TURQUOISE}
+              onClick={() => changeAppColor(EAppColor.TURQUOISE)}
+            />
+          </Text>
+        </Tooltip>
+        <Tooltip placement="bottom" title="Red">
+          <Text>
+            <ChangeColorButton
+              color={EAppColor.RED}
+              onClick={() => changeAppColor(EAppColor.RED)}
+            />
+          </Text>
+        </Tooltip>
+      </div>
     </React.Fragment>
   );
 };

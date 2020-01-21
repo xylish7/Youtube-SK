@@ -26,7 +26,8 @@ import { IFileInfo, IFileProgress } from '../../shared/events-name/download-even
 const mapStateToProps = (state: RootState) => ({
   savePath: state.persistent.downloadSavePath,
   downloadStatus: state.download.status,
-  downloadOpts: state.download.options
+  downloadOpts: state.download.options,
+  appColor: state.persistent.appColor
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<PersistentAction | IDownloadAction>) => ({

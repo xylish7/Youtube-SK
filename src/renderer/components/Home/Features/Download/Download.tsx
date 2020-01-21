@@ -22,12 +22,17 @@ import {
   IFileInfo,
   IFileProgress
 } from '../../../../../shared/events-name/download-events-names';
-import { EUserPrefStore, IChangedValues } from '../../../../constants/persistent-data-store';
+import {
+  EUserPrefStore,
+  IChangedValues,
+  EAppColor
+} from '../../../../constants/persistent-data-store';
 
 type Props = {
   savePath: string;
   downloadStatus: EDownloadStatus;
   downloadOpts: IDownloadOpts;
+  appColor: EAppColor;
   changePersistentValues: (changedValues: IChangedValues) => void;
   changeDownloadStatus: (downloadStatus: EDownloadStatus) => void;
   changeDownloadOpts: (downloadOpts: IDownloadOpts) => void;
@@ -40,6 +45,7 @@ const Download: React.FC<Props> = (props: Props) => {
     savePath,
     downloadStatus,
     downloadOpts,
+    appColor,
     changePersistentValues,
     changeDownloadStatus,
     changeDownloadOpts,
@@ -222,7 +228,7 @@ const Download: React.FC<Props> = (props: Props) => {
 
       {/* GENERAL STATUS */}
       <div>
-        <GeneralStatus downloadStatus={downloadStatus} />
+        <GeneralStatus downloadStatus={downloadStatus} appColor={appColor} />
 
         {/* INPUT CONTAINER */}
         <div className={styles.inputContainer}>

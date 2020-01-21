@@ -14,6 +14,7 @@ const options = {
   varFile: path.join(__dirname, './src/renderer/styles/theme/variables.less'),
   mainLessFile: path.join(__dirname, './src/renderer/styles/theme/index.less'),
   themeVariables: [
+    '@primary-color',
     '@body-background',
     '@component-background',
     '@icon-color-hover',

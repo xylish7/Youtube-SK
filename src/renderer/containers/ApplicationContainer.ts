@@ -10,7 +10,8 @@ import {
 import { RootState } from '../reducers';
 
 const mapStateToProps = (state: RootState) => ({
-  themeMode: state.persistent.themeMode
+  themeMode: state.persistent.themeMode,
+  appColor: state.persistent.appColor
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<PersistentAction>) => ({
