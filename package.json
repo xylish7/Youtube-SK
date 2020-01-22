@@ -62,8 +62,14 @@
     "linux": {
       "target": "deb"
     },
+    "nsis": {
+      "installerIcon": "assets/youtube-sk.ico",
+      "uninstallerIcon": "assets/youtube-sk.ico",
+      "uninstallDisplayName": "Youtube-SK"
+    },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "assets/youtube-sk.ico"
     }
   },
   "repository": {

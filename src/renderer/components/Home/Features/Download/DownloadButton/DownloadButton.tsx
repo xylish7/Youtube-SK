@@ -4,13 +4,15 @@ import { Typography, Icon } from 'antd';
 const { Text } = Typography;
 
 import { EDownloadStatus } from '../../../../../reducers/downloadReducer';
+import { EAppColor } from '../../../../../constants/persistent-data-store';
 
 type Props = {
   downloadStatus: EDownloadStatus;
+  appColor: EAppColor;
 };
 
 const DownloadButton: React.FC<Props> = (props: Props) => {
-  const { downloadStatus } = props;
+  const { downloadStatus, appColor } = props;
 
   const _renderDownloadButtonText = (): JSX.Element => {
     switch (downloadStatus) {
@@ -23,7 +25,7 @@ const DownloadButton: React.FC<Props> = (props: Props) => {
         );
 
       case EDownloadStatus.FETCHING:
-        return <Icon type="loading" style={{ color: '#1890ff' }} />;
+        return <Icon type="loading" style={{ color: appColor }} />;
 
       case EDownloadStatus.DOWNLOADING:
         return (

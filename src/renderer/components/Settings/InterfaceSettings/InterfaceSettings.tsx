@@ -56,8 +56,8 @@ const InterfaceSettings: React.FC<Props> = (props: Props) => {
         Theme mode
       </Title>
       <Paragraph>
-        Toggle between light and dark theme. At the moment only the titlebar is changing its color,
-        but in future release there will be a complete dark mode
+        Toggle between light and dark theme.<Text strong> At the moment only the titlebar</Text> is
+        changing its color, but in future release there will be a complete dark mode.
       </Paragraph>
       <Button onClick={changeThemeMode} style={{ marginLeft: 25 }}>
         {themeMode === ThemeMode.LIGHT ? 'SWITCH TO DARK THEME ' : 'SWITCH TO LIGHT THEME'}

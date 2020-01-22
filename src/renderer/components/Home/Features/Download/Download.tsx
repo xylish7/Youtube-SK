@@ -238,7 +238,7 @@ const Download: React.FC<Props> = (props: Props) => {
             value={downloadInput}
             prefix={<Icon component={FaGlobe} style={{ color: '#cccccc' }} />}
             disabled={downloadStatus === EDownloadStatus.FETCHING}
-            enterButton={<DownloadButton downloadStatus={downloadStatus} />}
+            enterButton={<DownloadButton downloadStatus={downloadStatus} appColor={appColor} />}
             placeholder="Double click to paste the url"
             onChange={e => setDownloadInput(e.target.value)}
             onDoubleClick={copyUrlFromClipboard}

@@ -12,6 +12,8 @@ import Home from './Home/Home';
 import SettingsContainer from '../containers/SettingsContainer';
 import { ThemeMode, EAppColor } from '../constants/persistent-data-store';
 
+const appIcon = require('../../../assets/youtube-sk.png');
+
 declare global {
   interface Window {
     less: any;
@@ -32,7 +34,8 @@ const Application: React.FC<Props> = (props: Props) => {
     // Set titlebar color
     const titlebar = new Titlebar({
       backgroundColor: Color.fromHex(themeMode === ThemeMode.LIGHT ? '#e8e8e8' : '#000000'),
-      maximizable: false
+      maximizable: false,
+      icon: appIcon
     });
 
     // Set app color
