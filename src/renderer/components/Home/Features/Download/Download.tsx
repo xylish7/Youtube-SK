@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { remote, shell, ipcRenderer, IpcMessageEvent } from 'electron';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 const { dialog } = remote;
 
-import { Typography, Icon, Button, Input, Divider, message, Checkbox } from 'antd';
+import { Typography, Icon, Button, Input, Divider, message, Radio, notification } from 'antd';
 const { Text } = Typography;
 const { Search } = Input;
 
@@ -13,7 +12,7 @@ import { FaGlobe } from 'react-icons/fa';
 import { regExpressions, globalConst } from '../../../../constants/globals';
 import DownloadListContainer from '../../../../containers/DownloadListContainer';
 
-import { startDownloadEvent } from '../../../../events/download-events';
+import { startDownloadEvent, checkYtdlForUpdatesEvent } from '../../../../events/download-events';
 import { EDownloadStatus, IDownloadOpts } from '../../../../reducers/downloadReducer';
 import GeneralStatus from './GeneralStatus/GeneralStatus';
 import DownloadButton from './DownloadButton/DownloadButton';
@@ -56,6 +55,12 @@ const Download: React.FC<Props> = (props: Props) => {
 
   const [downloadInput, setDownloadInput] = useState<string>('');
 
+  // Check to see if there are any updates available for youtube-dl
+  useEffect(() => {
+    checkYtdlForUpdatesEvent();
+    changeDownloadStatus(EDownloadStatus.UPDATING);
+  }, []);
+
   useEffect(() => {
     ipcRenderer.on(
       EDownloadEventsName.DOWNLOAD_PROGRESS,
@@ -65,17 +70,39 @@ const Download: React.FC<Props> = (props: Props) => {
         updateFileProgress(fileProgress);
       }
     );
+
     ipcRenderer.on(EDownloadEventsName.DOWNLOAD_FINISHED, () => {
       changeDownloadStatus(EDownloadStatus.DONE);
     });
 
     ipcRenderer.on(
       EDownloadEventsName.DOWNLOAD_INFO,
-      (event: IpcMessageEvent, downloadInfo: IDownloadInfo) => {}
+      (event: IpcMessageEvent, downloadInfo: IDownloadInfo) => {
+        console.log(downloadInfo);
+      }
     );
 
     ipcRenderer.on(EDownloadEventsName.FILE_INFO, (event: IpcMessageEvent, fileInfo: IFileInfo) => {
       updateMediaFiles([fileInfo]);
+    });
+
+    ipcRenderer.on(
+      EDownloadEventsName.DOWNLOAD_ERROR,
+      (event: IpcMessageEvent, errorMessage: string) => {
+        changeDownloadStatus(EDownloadStatus.ERROR);
+        notification['error']({
+          message: 'Download error',
+          description: errorMessage,
+          placement: 'bottomRight',
+          duration: 0
+        });
+        console.log(errorMessage);
+      }
+    );
+
+    ipcRenderer.on(EDownloadEventsName.UPDATE_SUCCESS, (event: IpcMessageEvent) => {
+      changeDownloadStatus(EDownloadStatus.WAITING);
+      message.success('Update complete!', globalConst.MESSAGE_DURATION);
     });
 
     return () => {
@@ -83,6 +110,8 @@ const Download: React.FC<Props> = (props: Props) => {
       ipcRenderer.removeAllListeners(EDownloadEventsName.DOWNLOAD_FINISHED);
       ipcRenderer.removeAllListeners(EDownloadEventsName.DOWNLOAD_INFO);
       ipcRenderer.removeAllListeners(EDownloadEventsName.FILE_INFO);
+      ipcRenderer.removeAllListeners(EDownloadEventsName.DOWNLOAD_ERROR);
+      ipcRenderer.removeAllListeners(EDownloadEventsName.UPDATE_SUCCESS);
     };
   }, [downloadStatus]);
 
@@ -110,24 +139,13 @@ const Download: React.FC<Props> = (props: Props) => {
   };
 
   /**
-   * Handle convert to audio checkbox
+   * Handle radio button selection
    */
-  const handleConvertCheckbox = (e: CheckboxChangeEvent) => {
-    if (e.target.checked) changeDownloadOpts({ convert: true });
-    else {
-      changeDownloadOpts({ convert: false, audioAndVideo: false });
-    }
+  const handleDownloadType = (downloadType: 'audio' | 'video') => {
+    changeDownloadOpts({ downloadType });
 
-    if (downloadStatus !== EDownloadStatus.WAITING) changeDownloadStatus(EDownloadStatus.WAITING);
-  };
-
-  /**
-   * Handle save both audio and video checkbox
-   */
-
-  const handleAudioAndVideoCheckbox = (e: CheckboxChangeEvent) => {
-    changeDownloadOpts({ audioAndVideo: e.target.checked });
-    if (downloadStatus !== EDownloadStatus.WAITING) changeDownloadStatus(EDownloadStatus.WAITING);
+    if (downloadStatus !== EDownloadStatus.WAITING && downloadStatus !== EDownloadStatus.UPDATING)
+      changeDownloadStatus(EDownloadStatus.WAITING);
   };
 
   /**
@@ -140,7 +158,7 @@ const Download: React.FC<Props> = (props: Props) => {
   };
 
   /**
-   * Handle the press of the downlaod button
+   * Handle the press of the download button
    */
   const handleDownloadButton = (): void => {
     if (downloadStatus !== EDownloadStatus.DOWNLOADING)
@@ -162,12 +180,12 @@ const Download: React.FC<Props> = (props: Props) => {
     const urlRegex = new RegExp(regExpressions.URL);
 
     if (savePath === '') {
-      message.warning('Please select a folder', globalConst.MESSAGE_DURATION);
+      message.info('Please select a folder', globalConst.MESSAGE_DURATION);
       return false;
     }
 
     if (downloadInput === '') {
-      message.warning('Please enter an url', globalConst.MESSAGE_DURATION);
+      message.info('Please enter an url', globalConst.MESSAGE_DURATION);
       return false;
     }
     if (!urlRegex.test(downloadInput.toString())) {
@@ -201,28 +219,28 @@ const Download: React.FC<Props> = (props: Props) => {
 
       {/* CHECKBOX OPTIONS */}
       <div className={styles.options}>
-        <Checkbox
-          checked={downloadOpts.convert}
-          disabled={
-            downloadStatus === EDownloadStatus.DOWNLOADING ||
-            downloadStatus === EDownloadStatus.FETCHING
-          }
-          onChange={e => handleConvertCheckbox(e)}
-        >
-          Convert to audio
-        </Checkbox>
-        <br />
-        <Checkbox
-          checked={downloadOpts.audioAndVideo}
-          disabled={
-            !downloadOpts.convert ||
-            downloadStatus === EDownloadStatus.DOWNLOADING ||
-            downloadStatus === EDownloadStatus.FETCHING
-          }
-          onChange={e => handleAudioAndVideoCheckbox(e)}
-        >
-          Save both video an audio
-        </Checkbox>
+        <Radio.Group value={downloadOpts.downloadType}>
+          <Radio
+            value="audio"
+            disabled={
+              downloadStatus === EDownloadStatus.DOWNLOADING ||
+              downloadStatus === EDownloadStatus.FETCHING
+            }
+            onChange={() => handleDownloadType('audio')}
+          >
+            Audio
+          </Radio>
+          <Radio
+            value="video"
+            disabled={
+              downloadStatus === EDownloadStatus.DOWNLOADING ||
+              downloadStatus === EDownloadStatus.FETCHING
+            }
+            onChange={() => handleDownloadType('video')}
+          >
+            Video
+          </Radio>
+        </Radio.Group>
       </div>
 
       <Divider />
@@ -237,7 +255,10 @@ const Download: React.FC<Props> = (props: Props) => {
             onSearch={handleDownloadButton}
             value={downloadInput}
             prefix={<Icon component={FaGlobe} style={{ color: '#cccccc' }} />}
-            disabled={downloadStatus === EDownloadStatus.FETCHING}
+            disabled={
+              downloadStatus === EDownloadStatus.FETCHING ||
+              downloadStatus === EDownloadStatus.UPDATING
+            }
             enterButton={<DownloadButton downloadStatus={downloadStatus} appColor={appColor} />}
             placeholder="Double click to paste the url"
             onChange={e => setDownloadInput(e.target.value)}
@@ -248,10 +269,7 @@ const Download: React.FC<Props> = (props: Props) => {
 
       {/* 
       // @ts-ignore */}
-      <DownloadListContainer
-        convertOpt={downloadOpts.convert ? downloadOpts.convert : false}
-        downloadStatus={downloadStatus}
-      />
+      <DownloadListContainer downloadStatus={downloadStatus} />
     </div>
   );
 };

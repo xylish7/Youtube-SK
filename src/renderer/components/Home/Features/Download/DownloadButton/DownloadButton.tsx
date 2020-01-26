@@ -25,6 +25,7 @@ const DownloadButton: React.FC<Props> = (props: Props) => {
         );
 
       case EDownloadStatus.FETCHING:
+      case EDownloadStatus.UPDATING:
         return <Icon type="loading" style={{ color: appColor }} />;
 
       case EDownloadStatus.DOWNLOADING:

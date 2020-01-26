@@ -9,7 +9,6 @@ import { IFileInfo } from '../../../../../../shared/events-name/download-events-
 import { EAppColor } from '../../../../../constants/persistent-data-store';
 
 type Props = {
-  convertOpt: boolean;
   downloadStatus: EDownloadStatus;
   mediaFiles: Array<IFileInfo>;
   filesProgress: any;
@@ -17,7 +16,7 @@ type Props = {
 };
 
 const DownloadList: React.FC<Props> = (props: Props) => {
-  const { convertOpt, downloadStatus, mediaFiles, filesProgress, appColor } = props;
+  const { downloadStatus, mediaFiles, filesProgress, appColor } = props;
 
   // Render the list of the downloaded videos
   const _renderDownloadList = (): JSX.Element => (
@@ -27,13 +26,8 @@ const DownloadList: React.FC<Props> = (props: Props) => {
           Status
         </Text>
         <Text strong>Title</Text>
-        <div style={{ width: convertOpt ? '371px' : '459px' }} />
-        <Text strong>Download</Text>
-        {convertOpt && (
-          <Text className={styles.listTitlebarConvert} strong>
-            Convert
-          </Text>
-        )}
+        <div className={styles.titleProgressSpacer} />
+        <Text strong>Progress</Text>
       </div>
 
       <div className={styles.listContainer}>
@@ -60,14 +54,7 @@ const DownloadList: React.FC<Props> = (props: Props) => {
                     description={item.duration}
                   />
                   <div className={styles.progressContainer}>
-                    <div style={{ marginRight: convertOpt ? 72 : 26, marginLeft: 30 }}>
-                      <Progress type="circle" percent={fileProgress} width={30} />
-                    </div>
-                    {convertOpt && mediaFiles.length !== 0 && (
-                      <div className={styles.convertProgress}>
-                        <Progress type="circle" percent={0} width={30} />
-                      </div>
-                    )}
+                    <Progress type="circle" percent={fileProgress} width={40} />
                   </div>
                 </List.Item>
               );
@@ -91,6 +78,15 @@ const DownloadList: React.FC<Props> = (props: Props) => {
     />
   );
 
+  // Render component which tells that the app checks for updates
+  const _renderCheckUpdates = (): JSX.Element => (
+    <Result
+      className={styles.resultContainer}
+      icon={<Icon type="smile" theme="twoTone" twoToneColor={appColor} />}
+      title="You should be able to start downloading in a blink of an eye"
+    />
+  );
+
   // Render component with the message that the download failed
   const _renderDownloadFailed = (): JSX.Element => (
     <Result
@@ -111,7 +107,11 @@ const DownloadList: React.FC<Props> = (props: Props) => {
       return _renderStartDownload();
 
     case EDownloadStatus.STOPPED:
+    case EDownloadStatus.ERROR:
       return _renderDownloadFailed();
+
+    case EDownloadStatus.UPDATING:
+      return _renderCheckUpdates();
 
     default:
       return _renderDownloadList();

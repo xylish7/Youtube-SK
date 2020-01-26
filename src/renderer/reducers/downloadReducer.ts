@@ -5,8 +5,7 @@ import updateObject from '../utils/update-object';
 import { IFileInfo } from '../../shared/events-name/download-events-names';
 
 export interface IDownloadOpts {
-  convert?: boolean;
-  audioAndVideo?: boolean;
+  downloadType: 'video' | 'audio';
 }
 
 export enum EDownloadStatus {
@@ -14,7 +13,9 @@ export enum EDownloadStatus {
   FETCHING = 'FETCHING',
   DOWNLOADING = 'DOWNLOADING',
   DONE = 'DONE',
-  STOPPED = 'STOPPED'
+  STOPPED = 'STOPPED',
+  ERROR = 'ERROR',
+  UPDATING = 'UPDATING'
 }
 
 export interface IDownloadState {
@@ -26,8 +27,14 @@ export interface IDownloadState {
 
 const defaultState: IDownloadState = {
   status: EDownloadStatus.WAITING,
-  options: { convert: false, audioAndVideo: false },
-  mediaFiles: [],
+  options: { downloadType: 'audio' },
+  mediaFiles: [
+    // {
+    //   title: 'Test',
+    //   duration: '03:40',
+    //   entry_nr: 1
+    // }
+  ],
   filesProgress: {}
 };
 

@@ -1,4 +1,6 @@
 import youtubedl from 'youtube-dl';
+import ytdlDownloader from 'youtube-dl/lib/downloader';
+
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -17,14 +19,14 @@ export default class DownloadService {
   downloadSavePath: string;
   downloadInfo: IDownloadInfo;
   fileInfo: IFileInfo;
+  ytdlExecPath: string;
 
   constructor(event: IpcMessageEvent) {
     this.event = event;
     this.downloadSavePath = this.setDownloadPath();
     this.downloadInfo = {};
     this.fileInfo = {};
-
-    if (process.env.NODE_ENV === 'production') this.setCustomYtdlPath();
+    this.ytdlExecPath = this.setCustomYtdlPath();
   }
 
   /**
@@ -34,8 +36,8 @@ export default class DownloadService {
     const video = youtubedl(url);
 
     // Handle error
-    video.on('error', function error(err: any) {
-      console.log('error 2:', err);
+    video.on('error', (err: any) => {
+      this.event.sender.send(EDownloadEventsName.DOWNLOAD_ERROR, err.stderr);
     });
 
     // Handle video information
@@ -75,22 +77,33 @@ export default class DownloadService {
     video.on('next', this.download);
   };
 
+  checkForUpdates = () => {
+    ytdlDownloader(`${this.ytdlExecPath}/../`, (err: any, done: any) => {
+      if (err) throw err;
+      else this.event.sender.send(EDownloadEventsName.UPDATE_SUCCESS);
+    });
+  };
+
   /**
    * Set the path to the youtube-dl executable
    */
-  private setCustomYtdlPath(): void {
-    const customBinaryPath = path.resolve(
-      __dirname,
-      '..',
-      '..',
-      'app.asar.unpacked',
-      'node_modules',
-      'youtube-dl',
-      'bin',
-      'youtube-dl.exe'
-    );
+  private setCustomYtdlPath(): string {
+    let customBinaryPath: string;
+    if (process.env.NODE_ENV === 'production')
+      customBinaryPath = path.resolve(
+        __dirname,
+        '..',
+        '..',
+        'app.asar.unpacked',
+        'node_modules',
+        'youtube-dl',
+        'bin',
+        'youtube-dl.exe'
+      );
+    else customBinaryPath = path.resolve(__dirname, '..', 'bin', 'youtube-dl.exe');
 
     youtubedl.setYtdlBinary(customBinaryPath);
+    return customBinaryPath;
   }
 
   /**

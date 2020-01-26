@@ -63,6 +63,11 @@ app.on('ready', () => {
     const downloadService = new DownloadService(event);
     downloadService.download(downloadUrl);
   });
+
+  ipcMain.on(EDownloadEventsName.CHECk_FOR_UPDATES, (event: IpcMessageEvent) => {
+    const downloadService = new DownloadService(event);
+    downloadService.checkForUpdates();
+  });
 });
 
 app.on('window-all-closed', () => {

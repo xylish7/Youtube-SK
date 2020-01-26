@@ -10,6 +10,10 @@
   text-align: center;
 }
 
+.title-progress-spacer {
+  width: 486px;
+}
+
 .list-titlebar-convert {
   margin-left: 44px;
 }
@@ -31,7 +35,7 @@
 }
 
 .progress-container {
-  display: flex;
+  margin-left: 30px;
 }
 
 .convert-progress {

@@ -9,6 +9,7 @@ declare namespace DownloadListCssModule {
     listTitlebarStatus: string;
     progressContainer: string;
     resultContainer: string;
+    titleProgressSpacer: string;
   }
 }
 
