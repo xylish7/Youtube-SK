@@ -19,6 +19,10 @@ export interface IGetPersistentData extends Action {
     downloadSavePath: string;
     themeMode: string;
     appColor: string;
+    downloadAudioQuality: string;
+    downloadAudioFormat: string;
+    downloadVideoQuality: string;
+    downloadVideoFormat: string;
   };
 }
 
@@ -37,13 +41,21 @@ export const getAllPersistentData: ActionCreator<IGetPersistentData> = (): IGetP
   const downloadSavePath = userPrefStore.get(EUserPrefStore.DOWNLOAD_SAVE_PATH);
   const themeMode = userPrefStore.get(EUserPrefStore.THEME_MODE);
   const appColor = userPrefStore.get(EUserPrefStore.APP_COLOR);
+  const downloadAudioQuality = userPrefStore.get(EUserPrefStore.DOWNLOAD_AUDIO_QUALITY);
+  const downloadAudioFormat = userPrefStore.get(EUserPrefStore.DOWNLOAD_AUDIO_FORMAT);
+  const downloadVideoQuality = userPrefStore.get(EUserPrefStore.DOWNLOAD_VIDEO_QUALITY);
+  const downloadVideoFormat = userPrefStore.get(EUserPrefStore.DOWNLOAD_VIDEO_FORMAT);
 
   return {
     type: EPersistent.GET_PERSISTENT_DATA,
     persistentData: {
       downloadSavePath: downloadSavePath ? downloadSavePath : '',
       themeMode: themeMode ? themeMode : ThemeMode.LIGHT,
-      appColor: appColor ? appColor : EAppColor.BLUE
+      appColor: appColor ? appColor : EAppColor.BLUE,
+      downloadAudioQuality: downloadAudioQuality ? downloadAudioQuality : 'best',
+      downloadAudioFormat: downloadAudioFormat ? downloadAudioFormat : 'mp3',
+      downloadVideoQuality: downloadVideoQuality ? downloadVideoQuality : 'best',
+      downloadVideoFormat: downloadVideoFormat ? downloadVideoFormat : 'mp4'
     }
   };
 };

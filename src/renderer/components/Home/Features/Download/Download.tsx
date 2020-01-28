@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { remote, shell, ipcRenderer, IpcMessageEvent } from 'electron';
+import React, { useState } from 'react';
+import { remote, shell } from 'electron';
 const { dialog } = remote;
 
-import { Typography, Icon, Button, Input, Divider, message, Radio, notification } from 'antd';
+import { Typography, Icon, Button, Input, Divider, message, Radio } from 'antd';
 const { Text } = Typography;
 const { Search } = Input;
 
@@ -12,16 +12,11 @@ import { FaGlobe } from 'react-icons/fa';
 import { regExpressions, globalConst } from '../../../../constants/globals';
 import DownloadListContainer from '../../../../containers/DownloadListContainer';
 
-import { startDownloadEvent, checkYtdlForUpdatesEvent } from '../../../../events/download-events';
+import { startDownloadEvent } from '../../../../events/download-events';
 import { EDownloadStatus, IDownloadOpts } from '../../../../reducers/downloadReducer';
 import GeneralStatus from './GeneralStatus/GeneralStatus';
 import DownloadButton from './DownloadButton/DownloadButton';
-import {
-  EDownloadEventsName,
-  IDownloadInfo,
-  IFileInfo,
-  IFileProgress
-} from '../../../../../shared/events-name/download-events-names';
+import { IFileInfo } from '../../../../../shared/events-name/download-events-names';
 import {
   EUserPrefStore,
   IChangedValues,
@@ -37,7 +32,6 @@ type Props = {
   changeDownloadStatus: (downloadStatus: EDownloadStatus) => void;
   changeDownloadOpts: (downloadOpts: IDownloadOpts) => void;
   updateMediaFiles: (mediaFile: Array<IFileInfo>) => void;
-  updateFileProgress: (fileProgress: IFileProgress) => void;
 };
 
 const Download: React.FC<Props> = (props: Props) => {
@@ -49,71 +43,10 @@ const Download: React.FC<Props> = (props: Props) => {
     changePersistentValues,
     changeDownloadStatus,
     changeDownloadOpts,
-    updateMediaFiles,
-    updateFileProgress
+    updateMediaFiles
   } = props;
 
   const [downloadInput, setDownloadInput] = useState<string>('');
-
-  // Check to see if there are any updates available for youtube-dl
-  useEffect(() => {
-    checkYtdlForUpdatesEvent();
-    changeDownloadStatus(EDownloadStatus.UPDATING);
-  }, []);
-
-  useEffect(() => {
-    ipcRenderer.on(
-      EDownloadEventsName.DOWNLOAD_PROGRESS,
-      (event: IpcMessageEvent, fileProgress: IFileProgress) => {
-        if (downloadStatus !== EDownloadStatus.DOWNLOADING)
-          changeDownloadStatus(EDownloadStatus.DOWNLOADING);
-        updateFileProgress(fileProgress);
-      }
-    );
-
-    ipcRenderer.on(EDownloadEventsName.DOWNLOAD_FINISHED, () => {
-      changeDownloadStatus(EDownloadStatus.DONE);
-    });
-
-    ipcRenderer.on(
-      EDownloadEventsName.DOWNLOAD_INFO,
-      (event: IpcMessageEvent, downloadInfo: IDownloadInfo) => {
-        console.log(downloadInfo);
-      }
-    );
-
-    ipcRenderer.on(EDownloadEventsName.FILE_INFO, (event: IpcMessageEvent, fileInfo: IFileInfo) => {
-      updateMediaFiles([fileInfo]);
-    });
-
-    ipcRenderer.on(
-      EDownloadEventsName.DOWNLOAD_ERROR,
-      (event: IpcMessageEvent, errorMessage: string) => {
-        changeDownloadStatus(EDownloadStatus.ERROR);
-        notification['error']({
-          message: 'Download error',
-          description: errorMessage,
-          placement: 'bottomRight',
-          duration: 0
-        });
-        console.log(errorMessage);
-      }
-    );
-
-    ipcRenderer.on(EDownloadEventsName.UPDATE_SUCCESS, (event: IpcMessageEvent) => {
-      changeDownloadStatus(EDownloadStatus.WAITING);
-      message.success('Update complete!', globalConst.MESSAGE_DURATION);
-    });
-
-    return () => {
-      ipcRenderer.removeAllListeners(EDownloadEventsName.DOWNLOAD_PROGRESS);
-      ipcRenderer.removeAllListeners(EDownloadEventsName.DOWNLOAD_FINISHED);
-      ipcRenderer.removeAllListeners(EDownloadEventsName.DOWNLOAD_INFO);
-      ipcRenderer.removeAllListeners(EDownloadEventsName.FILE_INFO);
-      ipcRenderer.removeAllListeners(EDownloadEventsName.DOWNLOAD_ERROR);
-      ipcRenderer.removeAllListeners(EDownloadEventsName.UPDATE_SUCCESS);
-    };
-  }, [downloadStatus]);
 
   /**
    * Open a dialog to select the folder in which the files
@@ -219,6 +152,7 @@ const Download: React.FC<Props> = (props: Props) => {
 
       {/* CHECKBOX OPTIONS */}
       <div className={styles.options}>
+        <Text style={{ marginRight: 20 }}>Select which type of file do you want to download </Text>
         <Radio.Group value={downloadOpts.downloadType}>
           <Radio
             value="audio"

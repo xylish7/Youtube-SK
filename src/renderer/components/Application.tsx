@@ -11,6 +11,14 @@ import styles from './Application.css';
 import Home from './Home/Home';
 import SettingsContainer from '../containers/SettingsContainer';
 import { ThemeMode, EAppColor } from '../constants/persistent-data-store';
+import {
+  checkYtdlForUpdatesEvent,
+  initDownloadEvents,
+  clearDownloadEvents
+} from '../events/download-events';
+import { EDownloadStatus } from '../reducers/downloadReducer';
+
+import { IFileProgress, IFileInfo } from '../../shared/events-name/download-events-names';
 
 const appIcon = require('../../../assets/youtube-sk.png');
 
@@ -24,11 +32,46 @@ window.less = window.less || {};
 type Props = {
   themeMode: ThemeMode;
   appColor: EAppColor;
+  downloadStatus: EDownloadStatus;
   getAllPersistentData: () => void;
+  changeDownloadStatus: (downloadStatus: EDownloadStatus) => void;
+  updateMediaFiles: (mediaFile: Array<IFileInfo>) => void;
+  updateFileProgress: (fileProgress: IFileProgress) => void;
 };
 
 const Application: React.FC<Props> = (props: Props) => {
-  const { themeMode, appColor, getAllPersistentData } = props;
+  const {
+    themeMode,
+    appColor,
+    downloadStatus,
+    getAllPersistentData,
+    changeDownloadStatus,
+    updateMediaFiles,
+    updateFileProgress
+  } = props;
+
+  useEffect(() => {
+    // Get persistent data from the local store
+    getAllPersistentData();
+
+    // Check if youtube-dl for updates
+    checkYtdlForUpdatesEvent();
+    changeDownloadStatus(EDownloadStatus.UPDATING);
+  }, []);
+
+  // Listen to download events
+  useEffect(() => {
+    initDownloadEvents({
+      downloadStatus,
+      changeDownloadStatus,
+      updateMediaFiles,
+      updateFileProgress
+    });
+
+    return () => {
+      clearDownloadEvents();
+    };
+  }, [downloadStatus]);
 
   useEffect(() => {
     // Set titlebar color
@@ -46,10 +89,6 @@ const Application: React.FC<Props> = (props: Props) => {
       titlebar.dispose();
     };
   }, [themeMode, appColor]);
-
-  useEffect(() => {
-    getAllPersistentData();
-  }, []);
 
   return (
     <div className={styles.container}>

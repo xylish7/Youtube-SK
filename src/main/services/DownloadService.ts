@@ -33,7 +33,10 @@ export default class DownloadService {
    * Function to download the videos
    */
   download = (url: string) => {
-    const video = youtubedl(url);
+    const video = youtubedl(
+      url
+      // ['-f', '[height<=500]']
+    );
 
     // Handle error
     video.on('error', (err: any) => {
@@ -157,3 +160,5 @@ export default class DownloadService {
     return title.replace(/[\\/|":*?<>']/g, '');
   };
 }
+
+// ./youtube-dl.exe --ffmpeg-location 'C:\Users\FilipFrincu\Documents\personal_projects\YouTube-SK\bin' -f bestvideo['height>=1080']+bestaudio[ext=m4a] https://www.youtube.com/watch?v=9Yam5B_iasY

@@ -12,7 +12,7 @@ import styles from './Settings.css';
 
 import SettingsNavigationContainer from '../../containers/SettingsNavigationContainer';
 import InterfaceSettingsContainer from '../../containers/InterfaceSettingsContainer';
-import DownloadSettings from './DownloadSettings/DownloadSettings';
+import DownloadSettingsContainer from '../../containers/DownloadSettingsContainer';
 import CutSettings from './CutSettings/CutSettings';
 import ConvertSettings from './ConvertSettings/ConvertSettings';
 import PlayerSettings from './PlayerSettings/PlayerSettings';
@@ -50,7 +50,7 @@ const Settings: React.FC<Props> = (props: Props) => {
             path={`${path}${routes.INTERFACE_SETTINGS}`}
             component={InterfaceSettingsContainer}
           />
-          <Route path={`${path}${routes.DOWNLOAD}`} component={DownloadSettings} />
+          <Route path={`${path}${routes.DOWNLOAD}`} component={DownloadSettingsContainer} />
           <Route path={`${path}${routes.CONVERT}`} component={ConvertSettings} />
           <Route path={`${path}${routes.CUT}`} component={CutSettings} />
           <Route path={`${path}${routes.PLAYER}`} component={PlayerSettings} />

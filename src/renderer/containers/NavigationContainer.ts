@@ -8,6 +8,7 @@ import { ISelectedRoute } from '../reducers/routeReducer';
 import { RootState } from '../reducers';
 
 const mapStateToProps = (state: RootState) => ({
+  appColor: state.persistent.appColor,
   settingsRoute: state.route.settingsRoute
 });
 

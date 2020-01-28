@@ -2,18 +2,33 @@ import { Reducer } from 'redux';
 
 import { EPersistent, PersistentAction } from '../actions/persistentAction';
 import updateObject from '../utils/update-object';
-import { ThemeMode, EAppColor } from '../constants/persistent-data-store';
+import {
+  ThemeMode,
+  EAppColor,
+  IAudioQuality,
+  IAudioFormat,
+  IVideoQuality,
+  IVideoFormat
+} from '../constants/persistent-data-store';
 
 export interface IPersistentState {
   readonly downloadSavePath: string;
   readonly themeMode: ThemeMode;
   readonly appColor: EAppColor;
+  readonly downloadAudioQuality: IAudioQuality;
+  readonly downloadAudioFormat: IAudioFormat;
+  readonly downloadVideoQuality: IVideoQuality;
+  readonly downloadVideoFormat: IVideoFormat;
 }
 
 const defaultState: IPersistentState = {
   downloadSavePath: '',
   themeMode: ThemeMode.LIGHT,
-  appColor: EAppColor.BLUE
+  appColor: EAppColor.BLUE,
+  downloadAudioQuality: 'best',
+  downloadAudioFormat: 'mp3',
+  downloadVideoQuality: 'best',
+  downloadVideoFormat: 'mp4'
 };
 
 export const persistentReducer: Reducer<IPersistentState, PersistentAction> = (

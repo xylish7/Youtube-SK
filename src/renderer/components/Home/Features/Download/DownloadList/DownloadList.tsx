@@ -114,7 +114,7 @@ const DownloadList: React.FC<Props> = (props: Props) => {
       return _renderCheckUpdates();
 
     default:
-      return _renderDownloadList();
+      return _renderStartDownload();
   }
 };
 

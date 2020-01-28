@@ -6,19 +6,26 @@ import routes from '../../../constants/routes';
 import styles from './Navigation.css';
 import { Icon } from 'antd';
 import { ISelectedRoute } from '../../../reducers/routeReducer';
+import { EAppColor } from '../../../constants/persistent-data-store';
 
 type Props = {
+  appColor: EAppColor;
   settingsRoute: string;
   changeSelectedRoute: (route: ISelectedRoute) => void;
 };
 
 const Navigation: React.FC<Props> = (props: Props) => {
-  const { settingsRoute, changeSelectedRoute } = props;
+  const { appColor, settingsRoute, changeSelectedRoute } = props;
 
   return (
     <div className={styles.container}>
       {/* DOWNLOAD LINK */}
-      <NavLink to={routes.DOWNLOAD} activeClassName={styles.isActive}>
+      <NavLink
+        style={{ color: '#555555' }}
+        activeStyle={{ color: appColor }}
+        to={routes.DOWNLOAD}
+        activeClassName={styles.isActive}
+      >
         <div
           onClick={() => changeSelectedRoute({ mainRoute: routes.DOWNLOAD })}
           className={`${styles.iconContainer} ${styles.ripple}`}
@@ -29,7 +36,12 @@ const Navigation: React.FC<Props> = (props: Props) => {
       </NavLink>
 
       {/* CONVERT LINK */}
-      <NavLink to={routes.CONVERT} activeClassName={styles.isActive}>
+      <NavLink
+        style={{ color: '#555555' }}
+        activeStyle={{ color: appColor }}
+        to={routes.CONVERT}
+        activeClassName={styles.isActive}
+      >
         <div
           onClick={() => changeSelectedRoute({ mainRoute: routes.CONVERT })}
           className={`${styles.iconContainer} ${styles.ripple}`}
@@ -41,6 +53,8 @@ const Navigation: React.FC<Props> = (props: Props) => {
 
       {/* CUT LINK */}
       <NavLink
+        style={{ color: '#555555' }}
+        activeStyle={{ color: appColor }}
         onClick={() => changeSelectedRoute({ mainRoute: routes.CUT })}
         to={routes.CUT}
         activeClassName={styles.isActive}
@@ -52,6 +66,8 @@ const Navigation: React.FC<Props> = (props: Props) => {
 
       {/* PLAYER LINK */}
       <NavLink
+        style={{ color: '#555555' }}
+        activeStyle={{ color: appColor }}
         onClick={() => changeSelectedRoute({ mainRoute: routes.PLAYER })}
         to={routes.PLAYER}
         activeClassName={styles.isActive}
@@ -65,7 +81,7 @@ const Navigation: React.FC<Props> = (props: Props) => {
       <div style={{ height: '100%' }} />
 
       {/* SETTINGS LINK */}
-      <Link to={settingsRoute}>
+      <Link style={{ color: '#555555' }} to={settingsRoute}>
         <div className={`${styles.iconContainer} ${styles.ripple}`} title="Settings">
           <Icon className={styles.icon} type="setting" />
         </div>
