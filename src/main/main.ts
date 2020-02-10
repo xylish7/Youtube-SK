@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as url from 'url';
 import { EDownloadEventsName } from '../shared/events-name/download-events-names';
 import DownloadService from './services/DownloadService';
+import AppUpdater from './services/AppUpdater';
 
 let win: BrowserWindow | null;
 
@@ -68,6 +69,9 @@ app.on('ready', () => {
     const downloadService = new DownloadService(event);
     downloadService.checkForUpdates();
   });
+
+  // Check for updates
+  new AppUpdater();
 });
 
 app.on('window-all-closed', () => {
