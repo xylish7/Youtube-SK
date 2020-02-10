@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { remote, shell } from 'electron';
 const { dialog } = remote;
 
-import { Typography, Icon, Button, Input, Divider, message, Radio } from 'antd';
+import { Typography, Icon, Button, Input, Divider, Radio } from 'antd';
 const { Text } = Typography;
 const { Search } = Input;
 
@@ -17,6 +17,7 @@ import { EDownloadStatus, IDownloadOpts } from '../../../../reducers/downloadRed
 import GeneralStatus from './GeneralStatus/GeneralStatus';
 import DownloadButton from './DownloadButton/DownloadButton';
 import { IFileInfo } from '../../../../../shared/events-name/download-events-names';
+import messages from '../../../../notifications/messages';
 import {
   EUserPrefStore,
   IChangedValues,
@@ -113,20 +114,20 @@ const Download: React.FC<Props> = (props: Props) => {
     const urlRegex = new RegExp(regExpressions.URL);
 
     if (savePath === '') {
-      message.info('Please select a folder', globalConst.MESSAGE_DURATION);
+      messages.selectFolder();
       return false;
     }
 
     if (downloadInput === '') {
-      message.info('Please enter an url', globalConst.MESSAGE_DURATION);
+      messages.enterUrl();
       return false;
     }
     if (!urlRegex.test(downloadInput.toString())) {
-      message.warning('Please enter a valid youtube url', globalConst.MESSAGE_DURATION);
+      messages.youtubeUrl();
       return false;
     }
 
-    message.success('Download started!', globalConst.MESSAGE_DURATION);
+    messages.downloadStarted();
     return true;
   };
 

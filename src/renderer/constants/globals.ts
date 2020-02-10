@@ -4,6 +4,8 @@ interface RegExpression {
 
 interface GlobalConst {
   MESSAGE_DURATION: number;
+  NOTIFICATION_DURATION: number;
+  NOTIFICATION_PLACEMENT: 'bottomRight' | 'topLeft' | 'topRight' | 'bottomLeft';
 }
 
 export const regExpressions: RegExpression = {
@@ -11,5 +13,7 @@ export const regExpressions: RegExpression = {
 };
 
 export const globalConst: GlobalConst = {
-  MESSAGE_DURATION: 3
+  MESSAGE_DURATION: 3,
+  NOTIFICATION_DURATION: 0,
+  NOTIFICATION_PLACEMENT: 'bottomRight'
 };

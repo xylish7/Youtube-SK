@@ -5,9 +5,11 @@ import {
   IDownloadInfo
 } from '../../shared/events-name/download-events-names';
 import { ipcRenderer, IpcMessageEvent } from 'electron';
-import { globalConst } from '../constants/globals';
-import { message, notification } from 'antd';
 import { EDownloadStatus } from '../reducers/downloadReducer';
+
+import systemNotifications from '../notifications/system-notifications';
+import inAppNotifications from '../notifications/in-app-notifications';
+import messages from '../notifications/messages';
 
 /**
  * Event: emited when the download starts
@@ -49,6 +51,7 @@ export const initDownloadEvents = (props: IinitDownloadEvents) => {
 
   ipcRenderer.on(EDownloadEventsName.DOWNLOAD_FINISHED, () => {
     changeDownloadStatus(EDownloadStatus.DONE);
+    systemNotifications.download.downloadFinished();
   });
 
   ipcRenderer.on(
@@ -66,19 +69,14 @@ export const initDownloadEvents = (props: IinitDownloadEvents) => {
     EDownloadEventsName.DOWNLOAD_ERROR,
     (event: IpcMessageEvent, errorMessage: string) => {
       changeDownloadStatus(EDownloadStatus.ERROR);
-      notification['error']({
-        message: 'Download error',
-        description: errorMessage,
-        placement: 'bottomRight',
-        duration: 0
-      });
-      console.log(errorMessage);
+      systemNotifications.download.downloadError();
+      inAppNotifications.download.downloadError(errorMessage);
     }
   );
 
   ipcRenderer.on(EDownloadEventsName.UPDATE_SUCCESS, (event: IpcMessageEvent) => {
     changeDownloadStatus(EDownloadStatus.WAITING);
-    message.success('Update complete!', globalConst.MESSAGE_DURATION);
+    messages.downloadUpdateComplete();
   });
 };
 
