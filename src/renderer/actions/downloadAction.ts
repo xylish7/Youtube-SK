@@ -30,7 +30,8 @@ export interface IUpdateFileProgress extends Action {
 }
 
 /**
- * Get persistent data from local store
+ * Change the status of the downlaod process
+ * @param {EDownloadStatus} downloadStatus - tells in which state is the download
  */
 
 export const changeDownloadStatus: ActionCreator<IChangeDownloadStatus> = (
@@ -42,8 +43,7 @@ export const changeDownloadStatus: ActionCreator<IChangeDownloadStatus> = (
 
 /**
  * Change the values of the downlod options
- *
- * @param options
+ * @param {IDownloadOpts} options
  */
 export const changeDownloadOpts: ActionCreator<IChangeDownloadOpts> = (options: IDownloadOpts) => ({
   type: EDownload.CHANGE_DOWNLOAD_OPTS,
@@ -52,7 +52,7 @@ export const changeDownloadOpts: ActionCreator<IChangeDownloadOpts> = (options: 
 
 /**
  * With every file that is being downloaded, add it to
- * the array which containes the files downloaded
+ * the array which containes the downloaded files
  *
  * @param mediaFile
  */

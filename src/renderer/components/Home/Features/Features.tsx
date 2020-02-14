@@ -1,15 +1,14 @@
 import React from 'react';
-
 import { Redirect, Route } from 'react-router-dom';
 import { AnimatedSwitch } from 'react-router-transition';
 
-import styles from './Features.css';
-
-import routes from '../../../constants/routes';
 import DownloadContainer from '../../../containers/DownloadContainer';
 import Convert from './Convert/Convert';
 import Cut from './Cut/Cut';
 import Player from './Player/Player';
+
+import routes from '../../../constants/routes';
+import styles from './Features.css';
 
 const Features: React.FC = () => {
   return (

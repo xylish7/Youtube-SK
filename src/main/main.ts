@@ -60,12 +60,14 @@ app.on('ready', () => {
   // Create main window
   createWindow();
 
+  // Event which listen when user starts a download
   ipcMain.on(EDownloadEventsName.START_DOWNLOAD, (event: IpcMessageEvent, downloadUrl: string) => {
     const downloadService = new DownloadService(event);
     downloadService.download(downloadUrl);
   });
 
-  ipcMain.on(EDownloadEventsName.CHECk_FOR_UPDATES, (event: IpcMessageEvent) => {
+  // Event which triggers the update checks for yt-dl.exe
+  ipcMain.on(EDownloadEventsName.CHECK_FOR_UPDATES, (event: IpcMessageEvent) => {
     const downloadService = new DownloadService(event);
     downloadService.checkForUpdates();
   });

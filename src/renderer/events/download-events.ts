@@ -23,7 +23,7 @@ export const startDownloadEvent = (url: string) => {
  * Event: emited when cheking updates for youtube-dl
  */
 export const checkYtdlForUpdatesEvent = () => {
-  ipcRenderer.send(EDownloadEventsName.CHECk_FOR_UPDATES);
+  ipcRenderer.send(EDownloadEventsName.CHECK_FOR_UPDATES);
 };
 
 type IinitDownloadEvents = {

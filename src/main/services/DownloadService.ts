@@ -1,9 +1,8 @@
 import youtubedl from 'youtube-dl';
 import ytdlDownloader from 'youtube-dl/lib/downloader';
-
 import * as path from 'path';
 import * as fs from 'fs';
-
+import isEmpty from '../../renderer/utils/is-empty';
 import LocalStore from '../../renderer/utils/local-store';
 import { USER_PREFERENCES, EUserPrefStore } from '../../renderer/constants/persistent-data-store';
 import { IpcMessageEvent } from 'electron';
@@ -12,8 +11,10 @@ import {
   IDownloadInfo,
   IFileInfo
 } from '../../shared/events-name/download-events-names';
-import isEmpty from '../../renderer/utils/is-empty';
 
+/**
+ * Class used to download video/audio files from youtube
+ */
 export default class DownloadService {
   event: IpcMessageEvent;
   downloadSavePath: string;
@@ -21,6 +22,10 @@ export default class DownloadService {
   fileInfo: IFileInfo;
   ytdlExecPath: string;
 
+  /**
+   * Initialize values
+   * @param {IpcMessageEvent} event - message event used to send back data
+   */
   constructor(event: IpcMessageEvent) {
     this.event = event;
     this.downloadSavePath = this.setDownloadPath();
@@ -30,7 +35,8 @@ export default class DownloadService {
   }
 
   /**
-   * Function to download the videos
+   * Download video/audio by providing the link to it
+   * @param {string} url - url to file
    */
   download = (url: string) => {
     const video = youtubedl(
@@ -38,12 +44,12 @@ export default class DownloadService {
       // ['-f', '[height<=500]']
     );
 
-    // Handle error
+    // Handle errors on download of the file
     video.on('error', (err: any) => {
       this.event.sender.send(EDownloadEventsName.DOWNLOAD_ERROR, err.stderr);
     });
 
-    // Handle video information
+    // Handle video information at the start of the file download
     let size: number = 0;
     video.on('info', (info: any) => {
       this.sendDownloadAndFileInfo(info);
@@ -53,14 +59,16 @@ export default class DownloadService {
       video.pipe(fs.createWriteStream(filePath));
     });
 
-    // Handle incoming data
+    // Handle downloaded chunks from file
     let pos: number = 0;
     let lastPercentValue: number = 0;
+
     video.on('data', (chunk: any) => {
       pos += chunk.length;
-      // `size` should not be 0 here.
       if (size) {
+        // Convert percentage to rounded number. Ex: 24%
         let percent: number = parseInt(((pos / size) * 100).toFixed(0));
+        // Send values to renderer process only if [percent] % === 0. Ex: 0, 4, 8, ...
         if (percent % 4 === 0 && lastPercentValue !== percent) {
           lastPercentValue = percent;
           this.event.sender.send(EDownloadEventsName.DOWNLOAD_PROGRESS, {
@@ -76,10 +84,13 @@ export default class DownloadService {
       this.downloadFinished();
     });
 
-    // Downlaod next video
+    // Downlaod next file if a playlist is downloaded
     video.on('next', this.download);
   };
 
+  /**
+   * Check if there are new updates for yt-dl.exe file
+   */
   checkForUpdates = () => {
     ytdlDownloader(`${this.ytdlExecPath}/../`, (err: any, done: any) => {
       if (err) throw err;
@@ -110,7 +121,7 @@ export default class DownloadService {
   }
 
   /**
-   * Set the the path to where the files will be save
+   * Set the the path to where the files will be saved
    */
   private setDownloadPath(): string {
     const userPrefStore: LocalStore = new LocalStore(USER_PREFERENCES.store);
@@ -143,18 +154,23 @@ export default class DownloadService {
   };
 
   /**
-   * Send event when the download is finished
+   * Event which tolds that the download is finished
    */
   private downloadFinished = (): void => {
+    // if the url is not a playlist, when the download is finished
+    // send the event
     if (!this.downloadInfo.isPlaylist)
       this.event.sender.send(EDownloadEventsName.DOWNLOAD_FINISHED);
+    // if the url is a playlist send the event when the number of downloaded
+    //  files is equal to the number of files of the playlist
     else if (this.downloadInfo.nr_entries === this.fileInfo.entry_nr)
       this.event.sender.send(EDownloadEventsName.DOWNLOAD_FINISHED);
   };
 
   /**
    * Remove any unsupported characters from the title
-   * of the file
+   * of the file so it can be saved in a folded on the
+   * user station
    */
   private trimBadChars = (title: string): string => {
     return title.replace(/[\\/|":*?<>']/g, '');

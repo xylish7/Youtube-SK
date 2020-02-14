@@ -4,17 +4,22 @@ import { Typography, Tag } from 'antd';
 const { Text } = Typography;
 
 import { EDownloadStatus } from '../../../../../reducers/downloadReducer';
+import { EAppColor } from '../../../../../constants/persistent-data-store';
 
 import styles from './GeneralStatus.css';
-import { EAppColor } from '../../../../../constants/persistent-data-store';
 
 type Props = {
   downloadStatus: EDownloadStatus;
   appColor: EAppColor;
 };
+
 const GeneralStatus: React.FC<Props> = (props: Props) => {
   const { downloadStatus, appColor } = props;
 
+  /**
+   * Return the text which should be rendered in the tag component
+   * taking in consideration the [downloadStatus]
+   */
   const _renderGeneralStatusText = (): string => {
     switch (downloadStatus) {
       case EDownloadStatus.WAITING:
@@ -36,6 +41,7 @@ const GeneralStatus: React.FC<Props> = (props: Props) => {
     }
   };
 
+  // Set the tag color whenever the app color is changed from the settings
   let tagColor: string = 'blue';
   switch (appColor) {
     case EAppColor.BLUE:

@@ -40,7 +40,7 @@ class LocalStore {
 /**
  * Returns the data stored in the store
  *
- * @param {String} filePath the path to the file wich contains the store
+ * @param {string} filePath the path to the file wich contains the store
  * @param {Object} defaults defalut params of the store
  * @returns an object wich contains the params that were set in the store
  */

@@ -30,9 +30,11 @@ const DownloadSettings: React.FC<Props> = (props: Props) => {
 
   return (
     <React.Fragment>
+      {/* AUDIO SETTINGS */}
       <Title level={4}>
         <Icon component={FaVolumeUp} style={{ color: appColor }} /> Audio
       </Title>
+      {/* AUDIO QUALITY SETTING */}
       <Paragraph>
         Change the audio quality and format of the downloaded file. <Text strong>best</Text> it's
         the recommended value for a good <Text strong>quality/size ratio and faster download</Text>.
@@ -62,6 +64,7 @@ const DownloadSettings: React.FC<Props> = (props: Props) => {
             <Select.Option value="320">320 kbps</Select.Option>
           </Select>
         </div>
+        {/* AUDIO FORMAT SETTING */}
         <div>
           <Text style={{ color: appColor }}>Format </Text>
           <Select
@@ -79,10 +82,14 @@ const DownloadSettings: React.FC<Props> = (props: Props) => {
           </Select>
         </div>
       </div>
+
       <Divider />
+
+      {/* VIDEO SETTINGS */}
       <Title level={4}>
         <Icon component={FaVideo} style={{ color: appColor }} /> Video
       </Title>
+      {/* VIDEO QUALITY SETTING */}
       <Paragraph>
         Change the video quality and format of the downloaded file. <Text strong>best</Text> it's
         the recommended value for a good <Text strong>quality/size ratio and faster download</Text>.
@@ -120,6 +127,7 @@ const DownloadSettings: React.FC<Props> = (props: Props) => {
             </Select.Option>
           </Select>
         </div>
+        {/* VIDEO FORMAT SETTING */}
         <div>
           <Text style={{ color: appColor }}>Format </Text>
           <Select

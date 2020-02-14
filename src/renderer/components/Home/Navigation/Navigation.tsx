@@ -1,12 +1,12 @@
 import React from 'react';
-
 import { Link, NavLink } from 'react-router-dom';
-import routes from '../../../constants/routes';
 
-import styles from './Navigation.css';
 import { Icon } from 'antd';
 import { ISelectedRoute } from '../../../reducers/routeReducer';
 import { EAppColor } from '../../../constants/persistent-data-store';
+
+import routes from '../../../constants/routes';
+import styles from './Navigation.css';
 
 type Props = {
   appColor: EAppColor;

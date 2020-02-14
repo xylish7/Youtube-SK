@@ -34,7 +34,6 @@ export interface IChangePersistentValues extends Action {
 /**
  * Get all persistent data from local store
  */
-
 export const getAllPersistentData: ActionCreator<IGetPersistentData> = (): IGetPersistentData => {
   const userPrefStore: LocalStore = new LocalStore(USER_PREFERENCES.store);
 
@@ -61,9 +60,10 @@ export const getAllPersistentData: ActionCreator<IGetPersistentData> = (): IGetP
 };
 
 /**
- * Change persistent data values
+ * Change persistent data values in the stores
  *
- * @param {string} savePath
+ * @param {IChangedValues} changedValuesObj - key - value pairs which should be changes
+ *                                            in the store
  */
 export const changePersistentValues: ActionCreator<IChangePersistentValues> = (
   changedValuesObj: IChangedValues

@@ -18,15 +18,21 @@ type Props = {
 const DownloadList: React.FC<Props> = (props: Props) => {
   const { downloadStatus, mediaFiles, filesProgress, appColor } = props;
 
-  // Render the list of the downloaded videos
+  /**
+   * Render the list of the files whih are being downloaded
+   */
   const _renderDownloadList = (): JSX.Element => (
     <React.Fragment>
+      {/* PROGRESS LIST HEADER */}
       <div className={styles.listTitlebar}>
+        {/* STATUS TEXT */}
         <Text className={styles.listTitlebarStatus} strong>
           Status
         </Text>
+        {/* TITLE TEXT */}
         <Text strong>Title</Text>
         <div className={styles.titleProgressSpacer} />
+        {/* PROGRESS TEXT */}
         <Text strong>Progress</Text>
       </div>
 
@@ -44,8 +50,10 @@ const DownloadList: React.FC<Props> = (props: Props) => {
                     avatar={
                       <div className={styles.listStatus}>
                         {fileProgress === 100 ? (
+                          // Show a tag with done when the download of the file is finished
                           <Tag>Done</Tag>
                         ) : (
+                          // Show a spinner if the file is being downloaded
                           <Spin className={styles.listLoadingSpinner} />
                         )}
                       </div>
@@ -53,6 +61,7 @@ const DownloadList: React.FC<Props> = (props: Props) => {
                     title={item.title}
                     description={item.duration}
                   />
+                  {/* DOWNLOAD PROGRESS OF THE FILE */}
                   <div className={styles.progressContainer}>
                     <Progress type="circle" percent={fileProgress} width={40} />
                   </div>
@@ -65,7 +74,10 @@ const DownloadList: React.FC<Props> = (props: Props) => {
     </React.Fragment>
   );
 
-  // Render component with the message to start the download
+  /**
+   * Render component with the message which tells that
+   * the download can start
+   */
   const _renderStartDownload = (): JSX.Element => (
     <Result
       className={styles.resultContainer}
@@ -78,7 +90,10 @@ const DownloadList: React.FC<Props> = (props: Props) => {
     />
   );
 
-  // Render component which tells that the app checks for updates
+  /**
+   * Render component which tells that the app is checking if
+   * yt-dl.exe has any updates
+   */
   const _renderCheckUpdates = (): JSX.Element => (
     <Result
       className={styles.resultContainer}
@@ -87,7 +102,10 @@ const DownloadList: React.FC<Props> = (props: Props) => {
     />
   );
 
-  // Render component with the message that the download failed
+  /**
+   * Render component which tells a messages that the app encountered
+   * an error while trying to download the files
+   */
   const _renderDownloadFailed = (): JSX.Element => (
     <Result
       className={styles.resultContainer}

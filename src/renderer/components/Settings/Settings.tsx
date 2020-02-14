@@ -3,12 +3,8 @@ import React from 'react';
 import { Route, Redirect, useHistory, useRouteMatch } from 'react-router-dom';
 import { AnimatedSwitch } from 'react-router-transition';
 
-import routes from '../../constants/routes';
-
 import { Layout, Button } from 'antd';
 const { Content } = Layout;
-
-import styles from './Settings.css';
 
 import SettingsNavigationContainer from '../../containers/SettingsNavigationContainer';
 import InterfaceSettingsContainer from '../../containers/InterfaceSettingsContainer';
@@ -16,6 +12,9 @@ import DownloadSettingsContainer from '../../containers/DownloadSettingsContaine
 import CutSettings from './CutSettings/CutSettings';
 import ConvertSettings from './ConvertSettings/ConvertSettings';
 import PlayerSettings from './PlayerSettings/PlayerSettings';
+
+import routes from '../../constants/routes';
+import styles from './Settings.css';
 
 type Props = {
   mainRoute: string;
@@ -33,7 +32,7 @@ const Settings: React.FC<Props> = (props: Props) => {
       <SettingsNavigationContainer />
 
       <Content className={styles.settingsContent}>
-        {/* Close settings link */}
+        {/* CLOSE SETTINGS BUTTON */}
         <Button
           className={styles.closeButton}
           icon="close"

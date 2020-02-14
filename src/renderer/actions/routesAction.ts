@@ -11,9 +11,10 @@ export interface IChangeSelectedRoute extends Action {
 }
 
 /**
- * Get persistent data from local store
+ * Change the route in the redux store when the user navigates
+ * to another route
+ * @param {ISelectedRoute} route
  */
-
 export const changeSelectedRoute: ActionCreator<IChangeSelectedRoute> = (
   route: ISelectedRoute
 ) => ({

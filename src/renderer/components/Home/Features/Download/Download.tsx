@@ -5,17 +5,10 @@ const { dialog } = remote;
 import { Typography, Icon, Button, Input, Divider, Radio } from 'antd';
 const { Text } = Typography;
 const { Search } = Input;
-
-import styles from './Download.css';
 import { FaGlobe } from 'react-icons/fa';
-
-import { regExpressions, globalConst } from '../../../../constants/globals';
-import DownloadListContainer from '../../../../containers/DownloadListContainer';
 
 import { startDownloadEvent } from '../../../../events/download-events';
 import { EDownloadStatus, IDownloadOpts } from '../../../../reducers/downloadReducer';
-import GeneralStatus from './GeneralStatus/GeneralStatus';
-import DownloadButton from './DownloadButton/DownloadButton';
 import { IFileInfo } from '../../../../../shared/events-name/download-events-names';
 import messages from '../../../../notifications/messages';
 import {
@@ -23,6 +16,13 @@ import {
   IChangedValues,
   EAppColor
 } from '../../../../constants/persistent-data-store';
+
+import DownloadListContainer from '../../../../containers/DownloadListContainer';
+import GeneralStatus from './GeneralStatus/GeneralStatus';
+import DownloadButton from './DownloadButton/DownloadButton';
+
+import { regExpressions } from '../../../../constants/globals';
+import styles from './Download.css';
 
 type Props = {
   savePath: string;

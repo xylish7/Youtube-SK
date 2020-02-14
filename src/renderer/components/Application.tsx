@@ -54,8 +54,10 @@ const Application: React.FC<Props> = (props: Props) => {
     // Get persistent data from the local store
     getAllPersistentData();
 
-    // Check if youtube-dl for updates
+    // Check if yt-dl.exe has any updates
     checkYtdlForUpdatesEvent();
+
+    // Set the status to updating while the update checks takes place
     changeDownloadStatus(EDownloadStatus.UPDATING);
   }, []);
 
@@ -74,7 +76,7 @@ const Application: React.FC<Props> = (props: Props) => {
   }, [downloadStatus]);
 
   useEffect(() => {
-    // Set titlebar color
+    // Set titlebar color taking in consideration the theme of the App
     const titlebar = new Titlebar({
       backgroundColor: Color.fromHex(themeMode === ThemeMode.LIGHT ? '#e8e8e8' : '#000000'),
       maximizable: false,

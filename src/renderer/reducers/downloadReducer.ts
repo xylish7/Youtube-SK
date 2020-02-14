@@ -28,28 +28,7 @@ export interface IDownloadState {
 const defaultState: IDownloadState = {
   status: EDownloadStatus.WAITING,
   options: { downloadType: 'audio' },
-  mediaFiles: [
-    {
-      title: 'Test',
-      duration: '03:40',
-      entry_nr: 1
-    },
-    {
-      title: 'Test',
-      duration: '03:40',
-      entry_nr: 2
-    },
-    {
-      title: 'Test',
-      duration: '03:40',
-      entry_nr: 3
-    },
-    {
-      title: 'Test',
-      duration: '03:40',
-      entry_nr: 4
-    }
-  ],
+  mediaFiles: [],
   filesProgress: {}
 };
 

@@ -19,6 +19,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
 
   let { url } = useRouteMatch();
 
+  // Set which route is selected (required for <Menu> component)
   let defaultSelectedKeys: string = '1';
   switch (settingsRoute) {
     case `/settings${routes.INTERFACE_SETTINGS}`:
@@ -44,6 +45,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
     <Sider width={170} theme="light">
       <div className={styles.menuContainer}>
         <Menu defaultSelectedKeys={[defaultSelectedKeys]} mode="inline">
+          {/* INTERFACE SETTINGS */}
           <Menu.Item key="1">
             <Link
               onClick={() =>
@@ -56,6 +58,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
             </Link>
           </Menu.Item>
 
+          {/* DOWNLOAD SETTINGS */}
           <Menu.Item key="2">
             <Link
               onClick={() => changeSelectedRoute({ settingsRoute: `/settings${routes.DOWNLOAD}` })}
@@ -66,6 +69,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
             </Link>
           </Menu.Item>
 
+          {/* CONVERT SETTINGS */}
           <Menu.Item key="3">
             <Link
               onClick={() => changeSelectedRoute({ settingsRoute: `/settings${routes.CONVERT}` })}
@@ -76,6 +80,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
             </Link>
           </Menu.Item>
 
+          {/* CUT SETTINGS */}
           <Menu.Item key="4">
             <Link
               onClick={() => changeSelectedRoute({ settingsRoute: `/settings${routes.CUT}` })}
@@ -86,6 +91,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
             </Link>
           </Menu.Item>
 
+          {/* PLAYER SETTINGS */}
           <Menu.Item key="5">
             <Link
               onClick={() => changeSelectedRoute({ settingsRoute: `/settings${routes.PLAYER}` })}
