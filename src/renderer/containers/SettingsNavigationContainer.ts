@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import SettingsNavigation from '../components/Settings/SettingsNavigation/SettingsNavigation';
@@ -16,4 +16,7 @@ const mapDispatchToProps = (dispatch: Dispatch<IRouteAction>) => ({
     dispatch(changeSelectedRoute(route))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsNavigation);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(SettingsNavigation);

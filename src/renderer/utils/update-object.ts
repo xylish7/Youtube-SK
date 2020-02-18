@@ -6,7 +6,7 @@
  * @param {Object} oldObject the old object
  * @param {Object} updatedProperties properties to be updated
  */
-const updateObject = (oldObject: Object, updatedProperties: Object): any => ({
+const updateObject = (oldObject: Object, updatedProperties: Object | undefined): any => ({
   ...oldObject,
   ...updatedProperties
 });

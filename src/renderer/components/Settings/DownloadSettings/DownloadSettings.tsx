@@ -3,30 +3,22 @@ import React from 'react';
 import { Typography, Divider, Icon, Select } from 'antd';
 import { FaVideo, FaVolumeUp } from 'react-icons/fa';
 import {
-  EAppColor,
-  IChangedValues,
   IAudioFormat,
   IAudioQuality,
   IVideoQuality,
-  IVideoFormat
+  IVideoFormat,
+  EUserPrefStore
 } from '../../../constants/persistent-data-store';
 const { Title, Text, Paragraph } = Typography;
 
 import styles from './DownloadSettings.css';
 
-type Props = {
-  appColor: EAppColor;
-  downloadSettings: {
-    downloadAudioQuality: IAudioQuality;
-    downloadAudioFormat: IAudioFormat;
-    downloadVideoQuality: IVideoQuality;
-    downloadVideoFormat: IVideoFormat;
-  };
-  changePersistentValues: (changedValues: IChangedValues) => void;
-};
+import { PropsFromRedux } from '../../../containers/DownloadSettingsContainer';
+
+type Props = PropsFromRedux;
 
 const DownloadSettings: React.FC<Props> = (props: Props) => {
-  const { appColor, downloadSettings, changePersistentValues } = props;
+  const { appColor, downloadSettings, setPersistentDownloadData } = props;
 
   return (
     <React.Fragment>
@@ -45,11 +37,18 @@ const DownloadSettings: React.FC<Props> = (props: Props) => {
         <div>
           <Text style={{ color: appColor }}>Quality </Text>
           <Select
-            defaultValue={downloadSettings.downloadAudioQuality}
-            value={downloadSettings.downloadAudioQuality}
+            defaultValue={downloadSettings.audioQuality}
+            value={downloadSettings.audioQuality}
             style={{ width: 100 }}
             onChange={(value: IAudioQuality) =>
-              changePersistentValues({ downloadAudioQuality: value })
+              setPersistentDownloadData(
+                {
+                  settings: {
+                    audioQuality: value
+                  }
+                },
+                { [EUserPrefStore.DOWNLOAD_AUDIO_QUALITY]: value }
+              )
             }
           >
             <Select.Option value="best">best</Select.Option>
@@ -68,11 +67,14 @@ const DownloadSettings: React.FC<Props> = (props: Props) => {
         <div>
           <Text style={{ color: appColor }}>Format </Text>
           <Select
-            defaultValue={downloadSettings.downloadAudioFormat}
-            value={downloadSettings.downloadAudioFormat}
+            defaultValue={downloadSettings.audioFormat}
+            value={downloadSettings.audioFormat}
             style={{ width: 100 }}
             onChange={(value: IAudioFormat) =>
-              changePersistentValues({ downloadAudioFormat: value })
+              setPersistentDownloadData(
+                { settings: { audioFormat: value } },
+                { [EUserPrefStore.DOWNLOAD_AUDIO_FORMAT]: value }
+              )
             }
           >
             <Select.Option value="mp3">mp3</Select.Option>
@@ -101,11 +103,14 @@ const DownloadSettings: React.FC<Props> = (props: Props) => {
         <div>
           <Text style={{ color: appColor }}>Quality </Text>
           <Select
-            defaultValue={downloadSettings.downloadVideoQuality}
-            value={downloadSettings.downloadVideoQuality}
+            defaultValue={downloadSettings.videoQuality}
+            value={downloadSettings.videoQuality}
             style={{ width: 100 }}
             onChange={(value: IVideoQuality) =>
-              changePersistentValues({ downloadVideoQuality: value })
+              setPersistentDownloadData(
+                { settings: { videoQuality: value } },
+                { [EUserPrefStore.DOWNLOAD_VIDEO_QUALITY]: value }
+              )
             }
           >
             <Select.Option value="best">best</Select.Option>
@@ -131,11 +136,18 @@ const DownloadSettings: React.FC<Props> = (props: Props) => {
         <div>
           <Text style={{ color: appColor }}>Format </Text>
           <Select
-            defaultValue={downloadSettings.downloadVideoFormat}
-            value={downloadSettings.downloadVideoFormat}
+            defaultValue={downloadSettings.videoFormat}
+            value={downloadSettings.videoFormat}
             style={{ width: 100 }}
             onChange={(value: IVideoFormat) =>
-              changePersistentValues({ downloadVideoFormat: value })
+              setPersistentDownloadData(
+                {
+                  settings: {
+                    videoFormat: value
+                  }
+                },
+                { [EUserPrefStore.DOWNLOAD_VIDEO_FORMAT]: value }
+              )
             }
           >
             <Select.Option value="mp4">mp4</Select.Option>

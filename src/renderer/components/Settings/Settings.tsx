@@ -16,9 +16,9 @@ import PlayerSettings from './PlayerSettings/PlayerSettings';
 import routes from '../../constants/routes';
 import styles from './Settings.css';
 
-type Props = {
-  mainRoute: string;
-};
+import { PropsFromRedux } from '../../containers/SettingsContainer';
+
+type Props = PropsFromRedux;
 
 const Settings: React.FC<Props> = (props: Props) => {
   const { mainRoute } = props;

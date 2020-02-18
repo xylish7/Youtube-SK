@@ -1,3 +1,5 @@
+import { IChangedValues } from '../constants/persistent-data-store';
+
 // @flow
 const electron = require('electron');
 const path = require('path');
@@ -34,6 +36,20 @@ class LocalStore {
     if (key) this.data[key] = val;
 
     fs.writeFileSync(this.path, JSON.stringify(this.data));
+  }
+
+  /**
+   * Change multiple values from the store
+   * @param storeOptions the options of the store
+   * @param changedValues values the should be changed
+   */
+  static setValues(storeOptions: StoreOptions, changedValues: IChangedValues) {
+    const store: LocalStore = new LocalStore(storeOptions);
+
+    // Save download path to local store
+    for (let [key, value] of Object.entries(changedValues)) {
+      store.set(key, value);
+    }
   }
 }
 

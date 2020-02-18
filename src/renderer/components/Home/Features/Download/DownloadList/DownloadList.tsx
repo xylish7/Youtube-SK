@@ -5,14 +5,11 @@ const { Text } = Typography;
 
 import styles from './DownloadList.css';
 import { EDownloadStatus } from '../../../../../reducers/downloadReducer';
-import { IFileInfo } from '../../../../../../shared/events-name/download-events-names';
-import { EAppColor } from '../../../../../constants/persistent-data-store';
 
-type Props = {
+import { PropsFromRedux } from '../../../../../containers/DownloadListContainer';
+
+type Props = PropsFromRedux & {
   downloadStatus: EDownloadStatus;
-  mediaFiles: Array<IFileInfo>;
-  filesProgress: any;
-  appColor: EAppColor;
 };
 
 const DownloadList: React.FC<Props> = (props: Props) => {

@@ -1,29 +1,24 @@
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import DownloadSettings from '../components/Settings/DownloadSettings/DownloadSettings';
 import { RootState } from '../reducers';
-import {
-  PersistentAction,
-  changePersistentValues,
-  IChangePersistentValues
-} from '../actions/persistentAction';
 
 import { IChangedValues } from '../constants/persistent-data-store';
+import { setPersistentDownloadData, IDownloadPersistentData } from '../actions/downloadAction';
 
 const mapStateToProps = (state: RootState) => ({
-  appColor: state.persistent.appColor,
-  downloadSettings: {
-    downloadAudioQuality: state.persistent.downloadAudioQuality,
-    downloadAudioFormat: state.persistent.downloadAudioFormat,
-    downloadVideoQuality: state.persistent.downloadVideoQuality,
-    downloadVideoFormat: state.persistent.downloadVideoFormat
-  }
+  appColor: state.generalSettings.appColor,
+  downloadSettings: state.download.settings
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<PersistentAction>) => ({
-  changePersistentValues: (changedValues: IChangedValues): IChangePersistentValues =>
-    dispatch(changePersistentValues(changedValues))
+const mapDispatchToProps = (dispatch: any) => ({
+  setPersistentDownloadData: (
+    persistentData: IDownloadPersistentData,
+    changedValues: IChangedValues
+  ): IDownloadPersistentData => dispatch(setPersistentDownloadData(persistentData, changedValues))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DownloadSettings);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(DownloadSettings);

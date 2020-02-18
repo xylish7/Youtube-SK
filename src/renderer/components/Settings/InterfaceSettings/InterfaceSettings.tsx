@@ -1,18 +1,15 @@
 import React from 'react';
 
 import { Typography, Button, Divider, Icon, Tooltip } from 'antd';
-import {
-  IChangedValues,
-  ThemeMode,
-  EUserPrefStore,
-  EAppColor
-} from '../../../constants/persistent-data-store';
+import { ThemeMode, EUserPrefStore, EAppColor } from '../../../constants/persistent-data-store';
 import ChangeColorButton from './ChangeColorButton/ChangeColorButton';
 const { Title, Paragraph, Text } = Typography;
 
 import { FaTint, FaMoon, FaSun } from 'react-icons/fa';
 
 import styles from './InterfaceSettings.css';
+
+import { PropsFromRedux } from '../../../containers/InterfaceSettingsContainer';
 
 declare global {
   interface Window {
@@ -21,19 +18,21 @@ declare global {
 }
 window.less = window.less || {};
 
-type Props = {
-  themeMode: ThemeMode;
-  appColor: EAppColor;
-  changePersistentValues: (changedValues: IChangedValues) => void;
-};
+type Props = PropsFromRedux;
 
 const InterfaceSettings: React.FC<Props> = (props: Props) => {
-  const { themeMode, appColor, changePersistentValues } = props;
+  const { themeMode, appColor, setPersistentGeneralSettingsData } = props;
 
   const changeThemeMode = (): void => {
-    changePersistentValues({
-      [EUserPrefStore.THEME_MODE]: themeMode === ThemeMode.LIGHT ? ThemeMode.DARK : ThemeMode.LIGHT
-    });
+    setPersistentGeneralSettingsData(
+      {
+        themeMode: ThemeMode.LIGHT ? ThemeMode.DARK : ThemeMode.LIGHT
+      },
+      {
+        [EUserPrefStore.THEME_MODE]:
+          themeMode === ThemeMode.LIGHT ? ThemeMode.DARK : ThemeMode.LIGHT
+      }
+    );
   };
 
   const changeAppColor = (colorCode: EAppColor): void => {
@@ -41,9 +40,15 @@ const InterfaceSettings: React.FC<Props> = (props: Props) => {
       '@primary-color': colorCode
     });
 
-    changePersistentValues({
-      [EUserPrefStore.APP_COLOR]: colorCode
-    });
+    setPersistentGeneralSettingsData(
+      {
+        appColor: colorCode
+      },
+
+      {
+        [EUserPrefStore.APP_COLOR]: colorCode
+      }
+    );
   };
 
   return (

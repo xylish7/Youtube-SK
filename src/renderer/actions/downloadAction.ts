@@ -1,12 +1,26 @@
 import { Action, ActionCreator } from 'redux';
-import { EDownloadStatus, IDownloadOpts } from '../reducers/downloadReducer';
+import { EDownloadStatus, IDownloadSettings, IDownloadType } from '../reducers/downloadReducer';
 import { IFileInfo, IFileProgress } from '../../shared/events-name/download-events-names';
+import LocalStore from '../utils/local-store';
+import { USER_PREFERENCES, IChangedValues } from '../constants/persistent-data-store';
+import isEmpty from '../utils/is-empty';
 
 export enum EDownload {
+  SET_DOWNLOAD_PERSISTENT_DATA = 'SET_DOWNLOAD_PERSISTENT_DATA',
   CHANGE_DOWNLOAD_STATUS = 'CHANGE_DOWNLOAD_STATUS',
-  CHANGE_DOWNLOAD_OPTS = 'CHANGE_DOWNLOAD_OPTS',
+  CHANGE_DOWNLOAD_TYPE = 'CHANGE_DOWNLOAD_TYPE',
   UPDATE_MEDIA_FILES = 'UPDATE_MEDIA_FILES',
   UPDATE_FILE_PROGRESS = 'UPDATE_FILE_PROGRESS'
+}
+
+export type IDownloadPersistentData = {
+  savePath?: string;
+  settings?: IDownloadSettings;
+};
+
+export interface ISetDownloadPersistentData extends Action {
+  type: EDownload.SET_DOWNLOAD_PERSISTENT_DATA;
+  persistentData: IDownloadPersistentData;
 }
 
 export interface IChangeDownloadStatus extends Action {
@@ -15,8 +29,8 @@ export interface IChangeDownloadStatus extends Action {
 }
 
 export interface IChangeDownloadOpts extends Action {
-  type: EDownload.CHANGE_DOWNLOAD_OPTS;
-  options: IDownloadOpts;
+  type: EDownload.CHANGE_DOWNLOAD_TYPE;
+  downloadType: IDownloadType;
 }
 
 export interface IUpdateMediaFile extends Action {
@@ -29,11 +43,22 @@ export interface IUpdateFileProgress extends Action {
   fileProgress: IFileProgress;
 }
 
+export const setPersistentDownloadData: ActionCreator<ISetDownloadPersistentData> = (
+  persistentData: IDownloadPersistentData,
+  changedValues: IChangedValues
+) => {
+  if (!isEmpty(changedValues)) LocalStore.setValues(USER_PREFERENCES.store, changedValues);
+
+  return {
+    type: EDownload.SET_DOWNLOAD_PERSISTENT_DATA,
+    persistentData
+  };
+};
+
 /**
  * Change the status of the downlaod process
  * @param {EDownloadStatus} downloadStatus - tells in which state is the download
  */
-
 export const changeDownloadStatus: ActionCreator<IChangeDownloadStatus> = (
   downloadStatus: EDownloadStatus
 ) => ({
@@ -43,11 +68,13 @@ export const changeDownloadStatus: ActionCreator<IChangeDownloadStatus> = (
 
 /**
  * Change the values of the downlod options
- * @param {IDownloadOpts} options
+ * @param {IDownloadType} options
  */
-export const changeDownloadOpts: ActionCreator<IChangeDownloadOpts> = (options: IDownloadOpts) => ({
-  type: EDownload.CHANGE_DOWNLOAD_OPTS,
-  options
+export const changeDownloadType: ActionCreator<IChangeDownloadOpts> = (
+  downloadType: IDownloadType
+) => ({
+  type: EDownload.CHANGE_DOWNLOAD_TYPE,
+  downloadType
 });
 
 /**
@@ -72,6 +99,7 @@ export const updateFileProgress: ActionCreator<IUpdateFileProgress> = (
 });
 
 export type IDownloadAction =
+  | ISetDownloadPersistentData
   | IChangeDownloadStatus
   | IChangeDownloadOpts
   | IUpdateMediaFile

@@ -10,15 +10,14 @@ import styles from './Application.css';
 
 import Home from './Home/Home';
 import SettingsContainer from '../containers/SettingsContainer';
-import { ThemeMode, EAppColor } from '../constants/persistent-data-store';
+import { ThemeMode } from '../constants/persistent-data-store';
 import {
   checkYtdlForUpdatesEvent,
   initDownloadEvents,
   clearDownloadEvents
 } from '../events/download-events';
-import { EDownloadStatus } from '../reducers/downloadReducer';
 
-import { IFileProgress, IFileInfo } from '../../shared/events-name/download-events-names';
+import { PropsFromRedux } from '../containers/ApplicationContainer';
 
 const appIcon = require('../../../assets/youtube-sk.png');
 
@@ -29,15 +28,7 @@ declare global {
 }
 window.less = window.less || {};
 
-type Props = {
-  themeMode: ThemeMode;
-  appColor: EAppColor;
-  downloadStatus: EDownloadStatus;
-  getAllPersistentData: () => void;
-  changeDownloadStatus: (downloadStatus: EDownloadStatus) => void;
-  updateMediaFiles: (mediaFile: Array<IFileInfo>) => void;
-  updateFileProgress: (fileProgress: IFileProgress) => void;
-};
+type Props = PropsFromRedux;
 
 const Application: React.FC<Props> = (props: Props) => {
   const {
@@ -55,10 +46,9 @@ const Application: React.FC<Props> = (props: Props) => {
     getAllPersistentData();
 
     // Check if yt-dl.exe has any updates
-    checkYtdlForUpdatesEvent();
-
+    // checkYtdlForUpdatesEvent();
     // Set the status to updating while the update checks takes place
-    changeDownloadStatus(EDownloadStatus.UPDATING);
+    // changeDownloadStatus(EDownloadStatus.UPDATING);
   }, []);
 
   // Listen to download events

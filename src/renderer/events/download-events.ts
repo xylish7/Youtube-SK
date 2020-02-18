@@ -5,18 +5,25 @@ import {
   IDownloadInfo
 } from '../../shared/events-name/download-events-names';
 import { ipcRenderer, IpcMessageEvent } from 'electron';
-import { EDownloadStatus } from '../reducers/downloadReducer';
+import { EDownloadStatus, IDownloadSettings } from '../reducers/downloadReducer';
 
 import systemNotifications from '../notifications/system-notifications';
 import inAppNotifications from '../notifications/in-app-notifications';
 import messages from '../notifications/messages';
+import { IDownloadType } from '../reducers/downloadReducer';
 
 /**
  * Event: emited when the download starts
- * @param url
+ * @param {string} url to file which will be downloaded
+ * @param {IDownloadSettings} downloadSettings related to quality, format, etc of the file
+ * @param {IDownloadType} downloadType what type of file to download (video | audio)
  */
-export const startDownloadEvent = (url: string) => {
-  ipcRenderer.send(EDownloadEventsName.START_DOWNLOAD, url);
+export const startDownloadEvent = (
+  url: string,
+  downloadSettings: IDownloadSettings,
+  downloadType: IDownloadType
+) => {
+  ipcRenderer.send(EDownloadEventsName.START_DOWNLOAD, { url, downloadSettings, downloadType });
 };
 
 /**
@@ -68,9 +75,12 @@ export const initDownloadEvents = (props: IinitDownloadEvents) => {
   ipcRenderer.on(
     EDownloadEventsName.DOWNLOAD_ERROR,
     (event: IpcMessageEvent, errorMessage: string) => {
+      // If error is to long, shorten it
+      const shortErrorMessage: string = `${errorMessage.substring(0, 400)} ...`;
+      console.log('TCL: initDownloadEvents -> errorMessage', errorMessage);
       changeDownloadStatus(EDownloadStatus.ERROR);
       systemNotifications.download.downloadError();
-      inAppNotifications.download.downloadError(errorMessage);
+      inAppNotifications.download.downloadError(shortErrorMessage);
     }
   );
 

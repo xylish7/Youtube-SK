@@ -8,7 +8,7 @@ const { Search } = Input;
 import { FaGlobe } from 'react-icons/fa';
 
 import { startDownloadEvent } from '../../../../events/download-events';
-import { EDownloadStatus, IDownloadOpts } from '../../../../reducers/downloadReducer';
+import { EDownloadStatus, IDownloadType } from '../../../../reducers/downloadReducer';
 import { IFileInfo } from '../../../../../shared/events-name/download-events-names';
 import messages from '../../../../notifications/messages';
 import {
@@ -24,26 +24,18 @@ import DownloadButton from './DownloadButton/DownloadButton';
 import { regExpressions } from '../../../../constants/globals';
 import styles from './Download.css';
 
-type Props = {
-  savePath: string;
-  downloadStatus: EDownloadStatus;
-  downloadOpts: IDownloadOpts;
-  appColor: EAppColor;
-  changePersistentValues: (changedValues: IChangedValues) => void;
-  changeDownloadStatus: (downloadStatus: EDownloadStatus) => void;
-  changeDownloadOpts: (downloadOpts: IDownloadOpts) => void;
-  updateMediaFiles: (mediaFile: Array<IFileInfo>) => void;
-};
+import { PropsFromRedux } from '../../../../containers/DownloadContainer';
+type Props = PropsFromRedux;
 
 const Download: React.FC<Props> = (props: Props) => {
   const {
     savePath,
     downloadStatus,
-    downloadOpts,
+    downloadType,
     appColor,
-    changePersistentValues,
+    setPersistentDownloadData,
     changeDownloadStatus,
-    changeDownloadOpts,
+    changeDownloadType,
     updateMediaFiles
   } = props;
 
@@ -60,9 +52,12 @@ const Download: React.FC<Props> = (props: Props) => {
     });
 
     if (path)
-      changePersistentValues({
-        [EUserPrefStore.DOWNLOAD_SAVE_PATH]: path[0]
-      });
+      setPersistentDownloadData(
+        { savePath: path[0] },
+        {
+          [EUserPrefStore.DOWNLOAD_SAVE_PATH]: path[0]
+        }
+      );
   };
 
   /**
@@ -76,7 +71,7 @@ const Download: React.FC<Props> = (props: Props) => {
    * Handle radio button selection
    */
   const handleDownloadType = (downloadType: 'audio' | 'video') => {
-    changeDownloadOpts({ downloadType });
+    changeDownloadType(downloadType);
 
     if (downloadStatus !== EDownloadStatus.WAITING && downloadStatus !== EDownloadStatus.UPDATING)
       changeDownloadStatus(EDownloadStatus.WAITING);
@@ -99,7 +94,7 @@ const Download: React.FC<Props> = (props: Props) => {
       if (isValid()) {
         changeDownloadStatus(EDownloadStatus.FETCHING);
         updateMediaFiles([]);
-        startDownloadEvent(downloadInput);
+        // startDownloadEvent(downloadInput);
       }
 
     if (downloadStatus === EDownloadStatus.DOWNLOADING)
@@ -154,7 +149,7 @@ const Download: React.FC<Props> = (props: Props) => {
       {/* CHECKBOX OPTIONS */}
       <div className={styles.options}>
         <Text style={{ marginRight: 20 }}>Select which type of file do you want to download </Text>
-        <Radio.Group value={downloadOpts.downloadType}>
+        <Radio.Group value={downloadType}>
           <Radio
             value="audio"
             disabled={

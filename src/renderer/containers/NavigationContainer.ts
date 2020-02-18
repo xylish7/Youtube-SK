@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import Navigation from '../components/Home/Navigation/Navigation';
@@ -8,7 +8,7 @@ import { ISelectedRoute } from '../reducers/routeReducer';
 import { RootState } from '../reducers';
 
 const mapStateToProps = (state: RootState) => ({
-  appColor: state.persistent.appColor,
+  appColor: state.generalSettings.appColor,
   settingsRoute: state.route.settingsRoute
 });
 
@@ -17,4 +17,7 @@ const mapDispatchToProps = (dispatch: Dispatch<IRouteAction>) => ({
     dispatch(changeSelectedRoute(route))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navigation);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(Navigation);

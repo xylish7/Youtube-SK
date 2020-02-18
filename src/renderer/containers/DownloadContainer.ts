@@ -1,42 +1,42 @@
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import Download from '../components/Home/Features/Download/Download';
 import { RootState } from '../reducers';
 import {
-  PersistentAction,
-  changePersistentValues,
-  IChangePersistentValues
-} from '../actions/persistentAction';
-import {
   IChangeDownloadStatus,
   changeDownloadStatus,
-  IDownloadAction,
   IChangeDownloadOpts,
-  changeDownloadOpts,
+  changeDownloadType,
   IUpdateMediaFile,
-  updateMediaFiles
+  updateMediaFiles,
+  setPersistentDownloadData,
+  IDownloadPersistentData
 } from '../actions/downloadAction';
-import { EDownloadStatus, IDownloadOpts } from '../reducers/downloadReducer';
+import { EDownloadStatus, IDownloadType } from '../reducers/downloadReducer';
 import { IChangedValues } from '../constants/persistent-data-store';
 import { IFileInfo } from '../../shared/events-name/download-events-names';
 
 const mapStateToProps = (state: RootState) => ({
-  savePath: state.persistent.downloadSavePath,
+  savePath: state.download.savePath,
   downloadStatus: state.download.status,
-  downloadOpts: state.download.options,
-  appColor: state.persistent.appColor
+  downloadType: state.download.type,
+  appColor: state.generalSettings.appColor
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<PersistentAction | IDownloadAction>) => ({
-  changePersistentValues: (changedValues: IChangedValues): IChangePersistentValues =>
-    dispatch(changePersistentValues(changedValues)),
+const mapDispatchToProps = (dispatch: any) => ({
+  setPersistentDownloadData: (
+    persistentData: IDownloadPersistentData,
+    changedValues: IChangedValues
+  ): IDownloadPersistentData => dispatch(setPersistentDownloadData(persistentData, changedValues)),
   changeDownloadStatus: (downloadStatus: EDownloadStatus): IChangeDownloadStatus =>
     dispatch(changeDownloadStatus(downloadStatus)),
-  changeDownloadOpts: (downloadOpts: IDownloadOpts): IChangeDownloadOpts =>
-    dispatch(changeDownloadOpts(downloadOpts)),
+  changeDownloadType: (downloadType: IDownloadType): IChangeDownloadOpts =>
+    dispatch(changeDownloadType(downloadType)),
   updateMediaFiles: (mediaFile: Array<IFileInfo>): IUpdateMediaFile =>
     dispatch(updateMediaFiles(mediaFile))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Download);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(Download);

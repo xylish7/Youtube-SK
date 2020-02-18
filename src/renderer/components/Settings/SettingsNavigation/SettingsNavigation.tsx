@@ -7,12 +7,10 @@ const { Sider } = Layout;
 
 import styles from './SettingsNavigation.css';
 import routes from '../../../constants/routes';
-import { ISelectedRoute } from '../../../reducers/routeReducer';
 
-type Props = {
-  settingsRoute: string;
-  changeSelectedRoute: (route: ISelectedRoute) => void;
-};
+import { PropsFromRedux } from '../../../containers/SettingsNavigationContainer';
+
+type Props = PropsFromRedux;
 
 const SettingsNavigation: React.FC<Props> = (props: Props) => {
   const { settingsRoute, changeSelectedRoute } = props;

@@ -3,9 +3,21 @@ import { Reducer } from 'redux';
 import { EDownload, IDownloadAction } from '../actions/downloadAction';
 import updateObject from '../utils/update-object';
 import { IFileInfo } from '../../shared/events-name/download-events-names';
+import {
+  IAudioQuality,
+  IAudioFormat,
+  IVideoQuality,
+  IVideoFormat
+} from '../constants/persistent-data-store';
+import isEmpty from '../utils/is-empty';
 
-export interface IDownloadOpts {
-  downloadType: 'video' | 'audio';
+export type IDownloadType = 'video' | 'audio';
+
+export interface IDownloadSettings {
+  audioQuality?: IAudioQuality;
+  audioFormat?: IAudioFormat;
+  videoQuality?: IVideoQuality;
+  videoFormat?: IVideoFormat;
 }
 
 export enum EDownloadStatus {
@@ -20,14 +32,23 @@ export enum EDownloadStatus {
 
 export interface IDownloadState {
   readonly status: EDownloadStatus;
-  readonly options: IDownloadOpts;
+  readonly savePath: string;
+  readonly type: IDownloadType;
+  readonly settings: IDownloadSettings;
   readonly mediaFiles: Array<IFileInfo>;
   readonly filesProgress: any;
 }
 
 const defaultState: IDownloadState = {
   status: EDownloadStatus.WAITING,
-  options: { downloadType: 'audio' },
+  savePath: '',
+  type: 'audio',
+  settings: {
+    audioQuality: 'best',
+    audioFormat: 'mp3',
+    videoQuality: 'best',
+    videoFormat: 'mp4'
+  },
   mediaFiles: [],
   filesProgress: {}
 };
@@ -37,15 +58,22 @@ export const downloadReducer: Reducer<IDownloadState, IDownloadAction> = (
   action: IDownloadAction
 ): IDownloadState => {
   switch (action.type) {
+    case EDownload.SET_DOWNLOAD_PERSISTENT_DATA:
+      return updateObject(state, {
+        savePath: !isEmpty(action.persistentData.savePath)
+          ? action.persistentData.savePath
+          : state.savePath,
+        settings: !isEmpty(action.persistentData.settings)
+          ? updateObject(state.settings, action.persistentData.settings)
+          : { ...state.settings }
+      });
+
     case EDownload.CHANGE_DOWNLOAD_STATUS:
       return updateObject(state, { status: action.downloadStatus });
 
-    case EDownload.CHANGE_DOWNLOAD_OPTS:
+    case EDownload.CHANGE_DOWNLOAD_TYPE:
       return updateObject(state, {
-        options: {
-          ...state.options,
-          ...action.options
-        }
+        type: action.downloadType
       });
 
     case EDownload.UPDATE_MEDIA_FILES:

@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import Settings from '../components/Settings/Settings';
 
@@ -8,4 +8,7 @@ const mapStateToProps = (state: RootState) => ({
   mainRoute: state.route.mainRoute
 });
 
-export default connect(mapStateToProps, null)(Settings);
+const connector = connect(mapStateToProps);
+export type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(Settings);

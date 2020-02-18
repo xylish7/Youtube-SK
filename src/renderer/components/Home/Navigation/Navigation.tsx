@@ -2,17 +2,13 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 import { Icon } from 'antd';
-import { ISelectedRoute } from '../../../reducers/routeReducer';
-import { EAppColor } from '../../../constants/persistent-data-store';
 
 import routes from '../../../constants/routes';
 import styles from './Navigation.css';
 
-type Props = {
-  appColor: EAppColor;
-  settingsRoute: string;
-  changeSelectedRoute: (route: ISelectedRoute) => void;
-};
+import { PropsFromRedux } from '../../../containers/NavigationContainer';
+
+type Props = PropsFromRedux;
 
 const Navigation: React.FC<Props> = (props: Props) => {
   const { appColor, settingsRoute, changeSelectedRoute } = props;
