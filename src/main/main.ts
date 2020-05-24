@@ -5,6 +5,7 @@ import * as url from 'url';
 import { EDownloadEventsName } from '../shared/events-name/download-events-names';
 import DownloadService from './services/DownloadService';
 import AppUpdater from './services/AppUpdater';
+import { IStartDownloadEParams } from '../renderer/events/download-events';
 
 let win: BrowserWindow | null;
 
@@ -61,15 +62,23 @@ app.on('ready', () => {
   createWindow();
 
   // Event which listen when user starts a download
-  ipcMain.on(EDownloadEventsName.START_DOWNLOAD, (event: IpcMessageEvent, downloadUrl: string) => {
-    const downloadService = new DownloadService(event);
-    downloadService.download(downloadUrl);
-  });
+  ipcMain.on(
+    EDownloadEventsName.START_DOWNLOAD,
+    (
+      event: IpcMessageEvent,
+      options: {
+        url: string;
+        startDownloadEParams: IStartDownloadEParams;
+      }
+    ) => {
+      const downloadService = new DownloadService(event, options.startDownloadEParams);
+      downloadService.download(options.url);
+    }
+  );
 
   // Event which triggers the update checks for yt-dl.exe
   ipcMain.on(EDownloadEventsName.CHECK_FOR_UPDATES, (event: IpcMessageEvent) => {
-    const downloadService = new DownloadService(event);
-    downloadService.checkForUpdates();
+    // DownloadService.checkForUpdates(event);
   });
 
   // Check for updates

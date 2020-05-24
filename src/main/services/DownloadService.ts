@@ -12,6 +12,8 @@ import {
   IFileInfo
 } from '../../shared/events-name/download-events-names';
 import { globalConst } from '../../renderer/constants/globals';
+import { IStartDownloadEParams } from '../../renderer/events/download-events';
+import { IDownloadType, IDownloadSettings } from '../../renderer/reducers/downloadReducer';
 
 /**
  * Class used to download video/audio files from youtube
@@ -21,16 +23,20 @@ export default class DownloadService {
   downloadSavePath: string;
   downloadInfo: IDownloadInfo;
   fileInfo: IFileInfo;
+  downloadType: IDownloadType;
+  downloadSettings: IDownloadSettings;
 
   /**
    * Initialize values
    * @param {IpcMessageEvent} event - message event used to send back data
    */
-  constructor(event: IpcMessageEvent) {
+  constructor(event: IpcMessageEvent, downloadParams: IStartDownloadEParams) {
     this.event = event;
     this.downloadSavePath = this.setDownloadPath();
     this.downloadInfo = {};
     this.fileInfo = {};
+    this.downloadType = downloadParams.downloadType;
+    this.downloadSettings = downloadParams.downloadSettings;
   }
 
   /**
@@ -43,6 +49,7 @@ export default class DownloadService {
       globalConst.FFMPEG_PATH,
       '-f',
       'bestaudio',
+      '--extract-audio',
       '--audio-format',
       'mp3'
     ]);
@@ -94,10 +101,10 @@ export default class DownloadService {
   /**
    * Check if there are new updates for yt-dl.exe file
    */
-  checkForUpdates = () => {
+  static checkForUpdates = (event: IpcMessageEvent) => {
     ytdlDownloader(`${globalConst.YT_DL_PATH}/../`, (err: any, done: any) => {
       if (err) throw err;
-      else this.event.sender.send(EDownloadEventsName.UPDATE_SUCCESS);
+      else event.sender.send(EDownloadEventsName.UPDATE_SUCCESS);
     });
   };
 
@@ -159,3 +166,4 @@ export default class DownloadService {
 }
 
 // ./youtube-dl.exe --ffmpeg-location 'C:\Users\FilipFrincu\Documents\personal_projects\YouTube-SK\bin' -f bestvideo['height>=1080']+bestaudio[ext=m4a] https://www.youtube.com/watch?v=9Yam5B_iasY
+// bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4

@@ -12,18 +12,18 @@ import inAppNotifications from '../notifications/in-app-notifications';
 import messages from '../notifications/messages';
 import { IDownloadType } from '../reducers/downloadReducer';
 
+export type IStartDownloadEParams = {
+  downloadSettings: IDownloadSettings;
+  downloadType: IDownloadType;
+};
+
 /**
  * Event: emited when the download starts
  * @param {string} url to file which will be downloaded
- * @param {IDownloadSettings} downloadSettings related to quality, format, etc of the file
- * @param {IDownloadType} downloadType what type of file to download (video | audio)
+ * @param {IStartDownloadEParams} startDownloadEParams related to quality, format, downloadType etc of the file
  */
-export const startDownloadEvent = (
-  url: string,
-  downloadSettings: IDownloadSettings,
-  downloadType: IDownloadType
-) => {
-  ipcRenderer.send(EDownloadEventsName.START_DOWNLOAD, { url, downloadSettings, downloadType });
+export const startDownloadEvent = (url: string, startDownloadEParams: IStartDownloadEParams) => {
+  ipcRenderer.send(EDownloadEventsName.START_DOWNLOAD, { url, startDownloadEParams });
 };
 
 /**

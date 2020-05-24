@@ -8,14 +8,9 @@ const { Search } = Input;
 import { FaGlobe } from 'react-icons/fa';
 
 import { startDownloadEvent } from '../../../../events/download-events';
-import { EDownloadStatus, IDownloadType } from '../../../../reducers/downloadReducer';
-import { IFileInfo } from '../../../../../shared/events-name/download-events-names';
+import { EDownloadStatus } from '../../../../reducers/downloadReducer';
 import messages from '../../../../notifications/messages';
-import {
-  EUserPrefStore,
-  IChangedValues,
-  EAppColor
-} from '../../../../constants/persistent-data-store';
+import { EUserPrefStore } from '../../../../constants/persistent-data-store';
 
 import DownloadListContainer from '../../../../containers/DownloadListContainer';
 import GeneralStatus from './GeneralStatus/GeneralStatus';
@@ -32,6 +27,7 @@ const Download: React.FC<Props> = (props: Props) => {
     savePath,
     downloadStatus,
     downloadType,
+    downloadSettings,
     appColor,
     setPersistentDownloadData,
     changeDownloadStatus,
@@ -39,7 +35,7 @@ const Download: React.FC<Props> = (props: Props) => {
     updateMediaFiles
   } = props;
 
-  const [downloadInput, setDownloadInput] = useState<string>('');
+  const [downloadUrl, setDownloadUrl] = useState<string>('');
 
   /**
    * Open a dialog to select the folder in which the files
@@ -83,7 +79,7 @@ const Download: React.FC<Props> = (props: Props) => {
   const copyUrlFromClipboard = async () => {
     const url: string = await navigator.clipboard.readText();
 
-    setDownloadInput(url);
+    setDownloadUrl(url);
   };
 
   /**
@@ -94,7 +90,7 @@ const Download: React.FC<Props> = (props: Props) => {
       if (isValid()) {
         changeDownloadStatus(EDownloadStatus.FETCHING);
         updateMediaFiles([]);
-        // startDownloadEvent(downloadInput);
+        startDownloadEvent(downloadUrl, { downloadSettings, downloadType });
       }
 
     if (downloadStatus === EDownloadStatus.DOWNLOADING)
@@ -113,11 +109,11 @@ const Download: React.FC<Props> = (props: Props) => {
       return false;
     }
 
-    if (downloadInput === '') {
+    if (downloadUrl === '') {
       messages.enterUrl();
       return false;
     }
-    if (!urlRegex.test(downloadInput.toString())) {
+    if (!urlRegex.test(downloadUrl.toString())) {
       messages.youtubeUrl();
       return false;
     }
@@ -183,7 +179,7 @@ const Download: React.FC<Props> = (props: Props) => {
         <div className={styles.inputContainer}>
           <Search
             onSearch={handleDownloadButton}
-            value={downloadInput}
+            value={downloadUrl}
             prefix={<Icon component={FaGlobe} style={{ color: '#cccccc' }} />}
             disabled={
               downloadStatus === EDownloadStatus.FETCHING ||
@@ -191,7 +187,7 @@ const Download: React.FC<Props> = (props: Props) => {
             }
             enterButton={<DownloadButton downloadStatus={downloadStatus} appColor={appColor} />}
             placeholder="Double click to paste the url"
-            onChange={e => setDownloadInput(e.target.value)}
+            onChange={e => setDownloadUrl(e.target.value)}
             onDoubleClick={copyUrlFromClipboard}
           />
         </div>

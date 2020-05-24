@@ -20,6 +20,7 @@ const mapStateToProps = (state: RootState) => ({
   savePath: state.download.savePath,
   downloadStatus: state.download.status,
   downloadType: state.download.type,
+  downloadSettings: state.download.settings,
   appColor: state.generalSettings.appColor
 });
 

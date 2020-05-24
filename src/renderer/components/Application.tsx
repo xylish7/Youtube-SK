@@ -18,6 +18,7 @@ import {
 } from '../events/download-events';
 
 import { PropsFromRedux } from '../containers/ApplicationContainer';
+import { EDownloadStatus } from '../reducers/downloadReducer';
 
 const appIcon = require('../../../assets/youtube-sk.png');
 
