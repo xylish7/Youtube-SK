@@ -2,7 +2,14 @@ import React from 'react';
 
 import { Link, useRouteMatch } from 'react-router-dom';
 
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu } from 'antd';
+import {
+  HighlightOutlined,
+  DownloadOutlined,
+  SyncOutlined,
+  ScissorOutlined,
+  PlayCircleOutlined,
+} from '@ant-design/icons';
 const { Sider } = Layout;
 
 import styles from './SettingsNavigation.css';
@@ -51,7 +58,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
               }
               to={`${url}${routes.INTERFACE_SETTINGS}`}
             >
-              <Icon type="highlight" />
+              <HighlightOutlined />
               <span>Interface</span>
             </Link>
           </Menu.Item>
@@ -62,7 +69,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
               onClick={() => changeSelectedRoute({ settingsRoute: `/settings${routes.DOWNLOAD}` })}
               to={`${url}${routes.DOWNLOAD}`}
             >
-              <Icon type="download" />
+              <DownloadOutlined />
               <span>Download</span>
             </Link>
           </Menu.Item>
@@ -73,7 +80,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
               onClick={() => changeSelectedRoute({ settingsRoute: `/settings${routes.CONVERT}` })}
               to={`${url}${routes.CONVERT}`}
             >
-              <Icon type="sync" />
+              <SyncOutlined />
               <span>Convert</span>
             </Link>
           </Menu.Item>
@@ -84,7 +91,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
               onClick={() => changeSelectedRoute({ settingsRoute: `/settings${routes.CUT}` })}
               to={`${url}${routes.CUT}`}
             >
-              <Icon type="scissor" />
+              <ScissorOutlined />
               <span>Cut</span>
             </Link>
           </Menu.Item>
@@ -95,7 +102,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
               onClick={() => changeSelectedRoute({ settingsRoute: `/settings${routes.PLAYER}` })}
               to={`${url}${routes.PLAYER}`}
             >
-              <Icon type="play-circle" />
+              <PlayCircleOutlined />
               <span>Player</span>
             </Link>
           </Menu.Item>

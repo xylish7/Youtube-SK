@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { remote, shell } from 'electron';
 const { dialog } = remote;
 
-import { Typography, Icon, Button, Input, Divider, Radio } from 'antd';
+import { Typography, Button, Input, Divider, Radio } from 'antd';
+import { FolderOutlined } from '@ant-design/icons';
 const { Text } = Typography;
 const { Search } = Input;
 import { FaGlobe } from 'react-icons/fa';
@@ -32,7 +33,7 @@ const Download: React.FC<Props> = (props: Props) => {
     setPersistentDownloadData,
     changeDownloadStatus,
     changeDownloadType,
-    updateMediaFiles
+    updateMediaFiles,
   } = props;
 
   const [downloadUrl, setDownloadUrl] = useState<string>('');
@@ -44,14 +45,14 @@ const Download: React.FC<Props> = (props: Props) => {
   const getSavePath = (): void => {
     const path: Array<string> = dialog.showOpenDialog({
       buttonLabel: 'Select folder',
-      properties: ['openDirectory']
+      properties: ['openDirectory'],
     });
 
     if (path)
       setPersistentDownloadData(
         { savePath: path[0] },
         {
-          [EUserPrefStore.DOWNLOAD_SAVE_PATH]: path[0]
+          [EUserPrefStore.DOWNLOAD_SAVE_PATH]: path[0],
         }
       );
   };
@@ -127,7 +128,7 @@ const Download: React.FC<Props> = (props: Props) => {
       <div className={styles.selectFolderContainer}>
         {/* SELECT FOLDER BUTTON */}
         <Button size="small" onClick={() => getSavePath()}>
-          <Icon type="folder" />
+          <FolderOutlined />
         </Button>
 
         {/* SAVE PATH LINK TEXT */}
@@ -180,14 +181,16 @@ const Download: React.FC<Props> = (props: Props) => {
           <Search
             onSearch={handleDownloadButton}
             value={downloadUrl}
-            prefix={<Icon component={FaGlobe} style={{ color: '#cccccc' }} />}
+            prefix={<FaGlobe style={{ color: '#cccccc' }} />}
             disabled={
               downloadStatus === EDownloadStatus.FETCHING ||
               downloadStatus === EDownloadStatus.UPDATING
             }
             enterButton={<DownloadButton downloadStatus={downloadStatus} appColor={appColor} />}
             placeholder="Double click to paste the url"
-            onChange={e => setDownloadUrl(e.target.value)}
+            onChange={(e: React.FormEvent<HTMLInputElement>) =>
+              setDownloadUrl(e.currentTarget.value)
+            }
             onDoubleClick={copyUrlFromClipboard}
           />
         </div>

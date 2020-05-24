@@ -4,6 +4,7 @@ import { Route, Redirect, useHistory, useRouteMatch } from 'react-router-dom';
 import { AnimatedSwitch } from 'react-router-transition';
 
 import { Layout, Button } from 'antd';
+import { CloseOutlined } from '@ant-design/icons';
 const { Content } = Layout;
 
 import SettingsNavigationContainer from '../../containers/SettingsNavigationContainer';
@@ -35,7 +36,7 @@ const Settings: React.FC<Props> = (props: Props) => {
         {/* CLOSE SETTINGS BUTTON */}
         <Button
           className={styles.closeButton}
-          icon="close"
+          icon={<CloseOutlined />}
           shape="circle"
           onClick={() => history.push(mainRoute)}
         />

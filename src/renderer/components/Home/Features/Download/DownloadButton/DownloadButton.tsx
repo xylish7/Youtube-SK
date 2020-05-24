@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Typography, Icon } from 'antd';
+import { Typography } from 'antd';
+import { DownloadOutlined, LoadingOutlined, CloseOutlined } from '@ant-design/icons';
 const { Text } = Typography;
 
 import { EDownloadStatus } from '../../../../../reducers/downloadReducer';
@@ -24,7 +25,7 @@ const DownloadButton: React.FC<Props> = (props: Props) => {
       case EDownloadStatus.STOPPED:
         return (
           <React.Fragment>
-            <Icon type="download" style={{ marginRight: 8 }} /> Download
+            <DownloadOutlined style={{ marginRight: 8 }} /> Download
           </React.Fragment>
         );
 
@@ -34,7 +35,7 @@ const DownloadButton: React.FC<Props> = (props: Props) => {
        */
       case EDownloadStatus.FETCHING:
       case EDownloadStatus.UPDATING:
-        return <Icon type="loading" style={{ color: appColor }} />;
+        return <LoadingOutlined style={{ color: appColor }} />;
 
       /**
        * Set the text of the butotn to "Stop" with a representative icon if
@@ -43,14 +44,14 @@ const DownloadButton: React.FC<Props> = (props: Props) => {
       case EDownloadStatus.DOWNLOADING:
         return (
           <React.Fragment>
-            <Icon type="close" style={{ marginRight: 8 }} /> Stop
+            <CloseOutlined style={{ marginRight: 8 }} /> Stop
           </React.Fragment>
         );
 
       default:
         return (
           <React.Fragment>
-            <Icon type="download" style={{ marginRight: 8 }} /> Download
+            <DownloadOutlined style={{ marginRight: 8 }} /> Download
           </React.Fragment>
         );
     }

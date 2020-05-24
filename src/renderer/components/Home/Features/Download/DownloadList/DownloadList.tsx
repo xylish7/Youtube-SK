@@ -1,12 +1,15 @@
 import React from 'react';
 
-import { Typography, Tag, Card, Progress, List, Spin, Result, Icon } from 'antd';
+import { Typography, Tag, Card, Progress, List, Spin, Result } from 'antd';
+import { SmileTwoTone, FrownTwoTone } from '@ant-design/icons';
+
 const { Text } = Typography;
 
 import styles from './DownloadList.css';
 import { EDownloadStatus } from '../../../../../reducers/downloadReducer';
 
 import { PropsFromRedux } from '../../../../../containers/DownloadListContainer';
+import { IFileInfo } from '../../../../../../shared/events-name/download-events-names';
 
 type Props = PropsFromRedux & {
   downloadStatus: EDownloadStatus;
@@ -38,7 +41,7 @@ const DownloadList: React.FC<Props> = (props: Props) => {
           <List
             itemLayout="horizontal"
             dataSource={mediaFiles}
-            renderItem={item => {
+            renderItem={(item: IFileInfo) => {
               const fileProgress = item.entry_nr ? filesProgress[item.entry_nr] : 0;
 
               return (
@@ -78,7 +81,7 @@ const DownloadList: React.FC<Props> = (props: Props) => {
   const _renderStartDownload = (): JSX.Element => (
     <Result
       className={styles.resultContainer}
-      icon={<Icon type="smile" theme="twoTone" twoToneColor={appColor} />}
+      icon={<SmileTwoTone twoToneColor={appColor} />}
       title={
         downloadStatus === EDownloadStatus.FETCHING
           ? 'Your download should start soon. Please wait...'
@@ -94,7 +97,7 @@ const DownloadList: React.FC<Props> = (props: Props) => {
   const _renderCheckUpdates = (): JSX.Element => (
     <Result
       className={styles.resultContainer}
-      icon={<Icon type="smile" theme="twoTone" twoToneColor={appColor} />}
+      icon={<SmileTwoTone twoToneColor={appColor} />}
       title="You should be able to start downloading in a blink of an eye"
     />
   );
@@ -106,7 +109,7 @@ const DownloadList: React.FC<Props> = (props: Props) => {
   const _renderDownloadFailed = (): JSX.Element => (
     <Result
       className={styles.resultContainer}
-      icon={<Icon type="frown" theme="twoTone" twoToneColor={appColor} />}
+      icon={<FrownTwoTone twoToneColor={appColor} />}
       status="error"
       title="Oops! It seems like your download has stopped"
     ></Result>

@@ -1,13 +1,14 @@
 import React from 'react';
 
-import { Typography, Divider, Icon, Select } from 'antd';
+import { Typography, Divider, Select } from 'antd';
+
 import { FaVideo, FaVolumeUp } from 'react-icons/fa';
 import {
   IAudioFormat,
   IAudioQuality,
   IVideoQuality,
   IVideoFormat,
-  EUserPrefStore
+  EUserPrefStore,
 } from '../../../constants/persistent-data-store';
 const { Title, Text, Paragraph } = Typography;
 
@@ -24,7 +25,7 @@ const DownloadSettings: React.FC<Props> = (props: Props) => {
     <React.Fragment>
       {/* AUDIO SETTINGS */}
       <Title level={4}>
-        <Icon component={FaVolumeUp} style={{ color: appColor }} /> Audio
+        <FaVolumeUp style={{ color: appColor }} /> Audio
       </Title>
       {/* AUDIO QUALITY SETTING */}
       <Paragraph>
@@ -44,8 +45,8 @@ const DownloadSettings: React.FC<Props> = (props: Props) => {
               setPersistentDownloadData(
                 {
                   settings: {
-                    audioQuality: value
-                  }
+                    audioQuality: value,
+                  },
                 },
                 { [EUserPrefStore.DOWNLOAD_AUDIO_QUALITY]: value }
               )
@@ -89,7 +90,7 @@ const DownloadSettings: React.FC<Props> = (props: Props) => {
 
       {/* VIDEO SETTINGS */}
       <Title level={4}>
-        <Icon component={FaVideo} style={{ color: appColor }} /> Video
+        <FaVideo style={{ color: appColor }} /> Video
       </Title>
       {/* VIDEO QUALITY SETTING */}
       <Paragraph>
@@ -143,8 +144,8 @@ const DownloadSettings: React.FC<Props> = (props: Props) => {
               setPersistentDownloadData(
                 {
                   settings: {
-                    videoFormat: value
-                  }
+                    videoFormat: value,
+                  },
                 },
                 { [EUserPrefStore.DOWNLOAD_VIDEO_FORMAT]: value }
               )

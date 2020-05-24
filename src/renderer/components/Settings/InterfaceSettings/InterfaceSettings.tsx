@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Typography, Button, Divider, Icon, Tooltip } from 'antd';
+import { Typography, Button, Divider, Tooltip } from 'antd';
+
 import { ThemeMode, EUserPrefStore, EAppColor } from '../../../constants/persistent-data-store';
 import ChangeColorButton from './ChangeColorButton/ChangeColorButton';
 const { Title, Paragraph, Text } = Typography;
@@ -26,27 +27,27 @@ const InterfaceSettings: React.FC<Props> = (props: Props) => {
   const changeThemeMode = (): void => {
     setPersistentGeneralSettingsData(
       {
-        themeMode: ThemeMode.LIGHT ? ThemeMode.DARK : ThemeMode.LIGHT
+        themeMode: ThemeMode.LIGHT ? ThemeMode.DARK : ThemeMode.LIGHT,
       },
       {
         [EUserPrefStore.THEME_MODE]:
-          themeMode === ThemeMode.LIGHT ? ThemeMode.DARK : ThemeMode.LIGHT
+          themeMode === ThemeMode.LIGHT ? ThemeMode.DARK : ThemeMode.LIGHT,
       }
     );
   };
 
   const changeAppColor = (colorCode: EAppColor): void => {
     window.less.modifyVars({
-      '@primary-color': colorCode
+      '@primary-color': colorCode,
     });
 
     setPersistentGeneralSettingsData(
       {
-        appColor: colorCode
+        appColor: colorCode,
       },
 
       {
-        [EUserPrefStore.APP_COLOR]: colorCode
+        [EUserPrefStore.APP_COLOR]: colorCode,
       }
     );
   };
@@ -54,10 +55,11 @@ const InterfaceSettings: React.FC<Props> = (props: Props) => {
   return (
     <React.Fragment>
       <Title level={4}>
-        <Icon
-          component={themeMode === ThemeMode.DARK ? FaMoon : FaSun}
-          style={{ color: '#fadb14' }}
-        />{' '}
+        {themeMode === ThemeMode.DARK ? (
+          <FaMoon style={{ color: '#fadb14' }} />
+        ) : (
+          <FaSun style={{ color: '#fadb14' }} />
+        )}
         Theme mode
       </Title>
       <Paragraph>
@@ -69,7 +71,7 @@ const InterfaceSettings: React.FC<Props> = (props: Props) => {
       </Button>
       <Divider />
       <Title level={4}>
-        <Icon component={FaTint} style={{ color: appColor }} /> Application color
+        <FaTint style={{ color: appColor }} /> Application color
       </Title>
       <Paragraph>Primary color of the application</Paragraph>
       <div className={styles.colorPaletteContainer}>

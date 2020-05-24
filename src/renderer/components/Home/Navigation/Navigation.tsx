@@ -1,7 +1,13 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
-import { Icon } from 'antd';
+import {
+  DownloadOutlined,
+  SyncOutlined,
+  ScissorOutlined,
+  PlayCircleOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
 
 import routes from '../../../constants/routes';
 import styles from './Navigation.css';
@@ -27,7 +33,7 @@ const Navigation: React.FC<Props> = (props: Props) => {
           className={`${styles.iconContainer} ${styles.ripple}`}
           title="Download"
         >
-          <Icon className={styles.icon} type="download" />
+          <DownloadOutlined className={styles.icon} />
         </div>
       </NavLink>
 
@@ -43,7 +49,7 @@ const Navigation: React.FC<Props> = (props: Props) => {
           className={`${styles.iconContainer} ${styles.ripple}`}
           title="Convert"
         >
-          <Icon className={styles.icon} type="sync" />
+          <SyncOutlined className={styles.icon} />
         </div>
       </NavLink>
 
@@ -56,7 +62,7 @@ const Navigation: React.FC<Props> = (props: Props) => {
         activeClassName={styles.isActive}
       >
         <div className={`${styles.iconContainer} ${styles.ripple}`} title="Cut">
-          <Icon className={styles.icon} type="scissor" />
+          <ScissorOutlined className={styles.icon} />
         </div>
       </NavLink>
 
@@ -69,7 +75,7 @@ const Navigation: React.FC<Props> = (props: Props) => {
         activeClassName={styles.isActive}
       >
         <div className={`${styles.iconContainer} ${styles.ripple}`} title="Player">
-          <Icon className={styles.icon} type="play-circle" />
+          <PlayCircleOutlined className={styles.icon} />
         </div>
       </NavLink>
 
@@ -79,7 +85,7 @@ const Navigation: React.FC<Props> = (props: Props) => {
       {/* SETTINGS LINK */}
       <Link style={{ color: '#555555' }} to={settingsRoute}>
         <div className={`${styles.iconContainer} ${styles.ripple}`} title="Settings">
-          <Icon className={styles.icon} type="setting" />
+          <SettingOutlined className={styles.icon} />
         </div>
       </Link>
 
