@@ -1,4 +1,4 @@
-declare namespace NavigationCssModule {
+declare namespace NavigationCssNamespace {
   export interface INavigationCss {
     container: string;
     icon: string;
@@ -8,9 +8,9 @@ declare namespace NavigationCssModule {
   }
 }
 
-declare const NavigationCssModule: NavigationCssModule.INavigationCss & {
+declare const NavigationCssModule: NavigationCssNamespace.INavigationCss & {
   /** WARNING: Only available when `css-loader` is used without `style-loader` or `mini-css-extract-plugin` */
-  locals: NavigationCssModule.INavigationCss;
+  locals: NavigationCssNamespace.INavigationCss;
 };
 
 export = NavigationCssModule;

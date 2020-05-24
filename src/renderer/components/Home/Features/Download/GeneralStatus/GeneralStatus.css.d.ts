@@ -1,13 +1,13 @@
-declare namespace GeneralStatusCssModule {
+declare namespace GeneralStatusCssNamespace {
   export interface IGeneralStatusCss {
     generalStatus: string;
     tag: string;
   }
 }
 
-declare const GeneralStatusCssModule: GeneralStatusCssModule.IGeneralStatusCss & {
+declare const GeneralStatusCssModule: GeneralStatusCssNamespace.IGeneralStatusCss & {
   /** WARNING: Only available when `css-loader` is used without `style-loader` or `mini-css-extract-plugin` */
-  locals: GeneralStatusCssModule.IGeneralStatusCss;
+  locals: GeneralStatusCssNamespace.IGeneralStatusCss;
 };
 
 export = GeneralStatusCssModule;

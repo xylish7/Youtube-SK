@@ -1,4 +1,4 @@
-declare namespace DownloadListCssModule {
+declare namespace DownloadListCssNamespace {
   export interface IDownloadListCss {
     convertProgress: string;
     listContainer: string;
@@ -13,9 +13,9 @@ declare namespace DownloadListCssModule {
   }
 }
 
-declare const DownloadListCssModule: DownloadListCssModule.IDownloadListCss & {
+declare const DownloadListCssModule: DownloadListCssNamespace.IDownloadListCss & {
   /** WARNING: Only available when `css-loader` is used without `style-loader` or `mini-css-extract-plugin` */
-  locals: DownloadListCssModule.IDownloadListCss;
+  locals: DownloadListCssNamespace.IDownloadListCss;
 };
 
 export = DownloadListCssModule;

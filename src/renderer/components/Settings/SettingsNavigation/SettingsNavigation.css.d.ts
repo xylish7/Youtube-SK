@@ -1,12 +1,12 @@
-declare namespace SettingsNavigationCssModule {
+declare namespace SettingsNavigationCssNamespace {
   export interface ISettingsNavigationCss {
     menuContainer: string;
   }
 }
 
-declare const SettingsNavigationCssModule: SettingsNavigationCssModule.ISettingsNavigationCss & {
+declare const SettingsNavigationCssModule: SettingsNavigationCssNamespace.ISettingsNavigationCss & {
   /** WARNING: Only available when `css-loader` is used without `style-loader` or `mini-css-extract-plugin` */
-  locals: SettingsNavigationCssModule.ISettingsNavigationCss;
+  locals: SettingsNavigationCssNamespace.ISettingsNavigationCss;
 };
 
 export = SettingsNavigationCssModule;

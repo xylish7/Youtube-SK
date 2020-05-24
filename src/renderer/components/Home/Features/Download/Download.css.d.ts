@@ -1,4 +1,4 @@
-declare namespace DownloadCssModule {
+declare namespace DownloadCssNamespace {
   export interface IDownloadCss {
     inputContainer: string;
     options: string;
@@ -7,9 +7,9 @@ declare namespace DownloadCssModule {
   }
 }
 
-declare const DownloadCssModule: DownloadCssModule.IDownloadCss & {
+declare const DownloadCssModule: DownloadCssNamespace.IDownloadCss & {
   /** WARNING: Only available when `css-loader` is used without `style-loader` or `mini-css-extract-plugin` */
-  locals: DownloadCssModule.IDownloadCss;
+  locals: DownloadCssNamespace.IDownloadCss;
 };
 
 export = DownloadCssModule;
