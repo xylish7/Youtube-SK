@@ -3,13 +3,13 @@ import {
   ThemeMode,
   EAppColor,
   IChangedValues,
-  USER_PREFERENCES
+  USER_PREFERENCES,
 } from '../constants/persistent-data-store';
 import isEmpty from '../utils/is-empty';
 import LocalStore from '../utils/local-store';
 
 export enum EGeneralSettings {
-  SET_GENERAL_SETTINGS_PERSISTENT_DATA = 'SET_GENERAL_SETTINGS_PERSISTENT_DATA'
+  SET_GENERAL_SETTINGS_PERSISTENT_DATA = 'SET_GENERAL_SETTINGS_PERSISTENT_DATA',
 }
 
 export type IGeneralSettingsPersistentData = {
@@ -30,7 +30,7 @@ export const setPersistentGeneralSettingsData: ActionCreator<ISetGeneralSettings
 
   return {
     type: EGeneralSettings.SET_GENERAL_SETTINGS_PERSISTENT_DATA,
-    persistentData
+    persistentData,
   };
 };
 

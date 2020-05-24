@@ -27,7 +27,7 @@ const InterfaceSettings: React.FC<Props> = (props: Props) => {
   const changeThemeMode = (): void => {
     setPersistentGeneralSettingsData(
       {
-        themeMode: ThemeMode.LIGHT ? ThemeMode.DARK : ThemeMode.LIGHT,
+        themeMode: themeMode === ThemeMode.LIGHT ? ThemeMode.DARK : ThemeMode.LIGHT,
       },
       {
         [EUserPrefStore.THEME_MODE]:
