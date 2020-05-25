@@ -5,11 +5,11 @@ import * as fs from 'fs';
 import isEmpty from '../../renderer/utils/is-empty';
 import LocalStore from '../../renderer/utils/local-store';
 import { USER_PREFERENCES, EUserPrefStore } from '../../renderer/constants/persistent-data-store';
-import { IpcMessageEvent } from 'electron';
+import { IpcMainEvent } from 'electron';
 import {
   EDownloadEventsName,
   IDownloadInfo,
-  IFileInfo
+  IFileInfo,
 } from '../../shared/events-name/download-events-names';
 import { globalConst } from '../../renderer/constants/globals';
 import { IStartDownloadEParams } from '../../renderer/events/download-events';
@@ -19,7 +19,7 @@ import { IDownloadType, IDownloadSettings } from '../../renderer/reducers/downlo
  * Class used to download video/audio files from youtube
  */
 export default class DownloadService {
-  event: IpcMessageEvent;
+  event: IpcMainEvent;
   downloadSavePath: string;
   downloadInfo: IDownloadInfo;
   fileInfo: IFileInfo;
@@ -28,9 +28,9 @@ export default class DownloadService {
 
   /**
    * Initialize values
-   * @param {IpcMessageEvent} event - message event used to send back data
+   * @param {IpcMainEvent} event - message event used to send back data
    */
-  constructor(event: IpcMessageEvent, downloadParams: IStartDownloadEParams) {
+  constructor(event: IpcMainEvent, downloadParams: IStartDownloadEParams) {
     this.event = event;
     this.downloadSavePath = this.setDownloadPath();
     this.downloadInfo = {};
@@ -51,7 +51,7 @@ export default class DownloadService {
       'bestaudio',
       '--extract-audio',
       '--audio-format',
-      'mp3'
+      'mp3',
     ]);
 
     // Handle errors on download of the file
@@ -83,7 +83,7 @@ export default class DownloadService {
           lastPercentValue = percent;
           this.event.sender.send(EDownloadEventsName.DOWNLOAD_PROGRESS, {
             entry_nr: this.fileInfo.entry_nr,
-            progress: percent
+            progress: percent,
           });
         }
       }
@@ -101,7 +101,7 @@ export default class DownloadService {
   /**
    * Check if there are new updates for yt-dl.exe file
    */
-  static checkForUpdates = (event: IpcMessageEvent) => {
+  static checkForUpdates = (event: IpcMainEvent) => {
     ytdlDownloader(`${globalConst.YT_DL_PATH}/../`, (err: any, done: any) => {
       if (err) throw err;
       else event.sender.send(EDownloadEventsName.UPDATE_SUCCESS);
@@ -127,7 +127,7 @@ export default class DownloadService {
     if (isEmpty(this.downloadInfo)) {
       this.downloadInfo = {
         isPlaylist: info.playlist ? true : false,
-        nr_entries: info.playlist ? info.n_entries : 1
+        nr_entries: info.playlist ? info.n_entries : 1,
       };
       this.event.sender.send(EDownloadEventsName.DOWNLOAD_INFO, this.downloadInfo);
     }
@@ -136,7 +136,7 @@ export default class DownloadService {
     this.fileInfo = {
       title: info.title,
       duration: info.duration,
-      entry_nr: info.playlist ? info.playlist_index : 1
+      entry_nr: info.playlist ? info.playlist_index : 1,
     };
     this.event.sender.send(EDownloadEventsName.FILE_INFO, this.fileInfo);
   };

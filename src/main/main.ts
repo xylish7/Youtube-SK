@@ -1,5 +1,5 @@
 require('hazardous');
-import { app, BrowserWindow, ipcMain, IpcMessageEvent } from 'electron';
+import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import { EDownloadEventsName } from '../shared/events-name/download-events-names';
@@ -9,13 +9,15 @@ import { IStartDownloadEParams } from '../renderer/events/download-events';
 
 let win: BrowserWindow | null;
 
+app.allowRendererProcessReuse = true;
+
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
   return Promise.all(
-    extensions.map(name => installer.default(installer[name], forceDownload))
+    extensions.map((name) => installer.default(installer[name], forceDownload))
   ).catch(console.log);
 };
 
@@ -29,7 +31,10 @@ const createWindow = async () => {
     height: 600,
     resizable: false,
     frame: false,
-    icon: path.join(__dirname, 'assets/youtube-sk.ico')
+    icon: path.join(__dirname, 'assets/youtube-sk.ico'),
+    webPreferences: {
+      nodeIntegration: true,
+    },
   });
 
   if (process.env.NODE_ENV !== 'production') {
@@ -40,7 +45,7 @@ const createWindow = async () => {
       url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
-        slashes: true
+        slashes: true,
       })
     );
   }
@@ -65,7 +70,7 @@ app.on('ready', () => {
   ipcMain.on(
     EDownloadEventsName.START_DOWNLOAD,
     (
-      event: IpcMessageEvent,
+      event: IpcMainEvent,
       options: {
         url: string;
         startDownloadEParams: IStartDownloadEParams;
@@ -77,7 +82,7 @@ app.on('ready', () => {
   );
 
   // Event which triggers the update checks for yt-dl.exe
-  ipcMain.on(EDownloadEventsName.CHECK_FOR_UPDATES, (event: IpcMessageEvent) => {
+  ipcMain.on(EDownloadEventsName.CHECK_FOR_UPDATES, (event: IpcMainEvent) => {
     // DownloadService.checkForUpdates(event);
   });
 

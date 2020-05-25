@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { remote, shell } from 'electron';
+import { remote, shell, OpenDialogReturnValue } from 'electron';
 const { dialog } = remote;
 
 import { Typography, Button, Input, Divider, Radio } from 'antd';
@@ -42,17 +42,17 @@ const Download: React.FC<Props> = (props: Props) => {
    * Open a dialog to select the folder in which the files
    * will be saved
    */
-  const getSavePath = (): void => {
-    const path: Array<string> = dialog.showOpenDialog({
+  const getSavePath = async (): Promise<void> => {
+    const path: OpenDialogReturnValue = await dialog.showOpenDialog({
       buttonLabel: 'Select folder',
       properties: ['openDirectory'],
     });
 
-    if (path)
+    if (path.filePaths.length)
       setPersistentDownloadData(
-        { savePath: path[0] },
+        { savePath: path.filePaths[0] },
         {
-          [EUserPrefStore.DOWNLOAD_SAVE_PATH]: path[0],
+          [EUserPrefStore.DOWNLOAD_SAVE_PATH]: path.filePaths[0],
         }
       );
   };

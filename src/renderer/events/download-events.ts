@@ -2,9 +2,9 @@ import {
   IFileInfo,
   EDownloadEventsName,
   IFileProgress,
-  IDownloadInfo
+  IDownloadInfo,
 } from '../../shared/events-name/download-events-names';
-import { ipcRenderer, IpcMessageEvent } from 'electron';
+import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { EDownloadStatus, IDownloadSettings } from '../reducers/downloadReducer';
 
 import systemNotifications from '../notifications/system-notifications';
@@ -49,7 +49,7 @@ export const initDownloadEvents = (props: IinitDownloadEvents) => {
 
   ipcRenderer.on(
     EDownloadEventsName.DOWNLOAD_PROGRESS,
-    (event: IpcMessageEvent, fileProgress: IFileProgress) => {
+    (event: IpcRendererEvent, fileProgress: IFileProgress) => {
       if (downloadStatus !== EDownloadStatus.DOWNLOADING)
         changeDownloadStatus(EDownloadStatus.DOWNLOADING);
       updateFileProgress(fileProgress);
@@ -63,18 +63,18 @@ export const initDownloadEvents = (props: IinitDownloadEvents) => {
 
   ipcRenderer.on(
     EDownloadEventsName.DOWNLOAD_INFO,
-    (event: IpcMessageEvent, downloadInfo: IDownloadInfo) => {
+    (event: IpcRendererEvent, downloadInfo: IDownloadInfo) => {
       console.log(downloadInfo);
     }
   );
 
-  ipcRenderer.on(EDownloadEventsName.FILE_INFO, (event: IpcMessageEvent, fileInfo: IFileInfo) => {
+  ipcRenderer.on(EDownloadEventsName.FILE_INFO, (event: IpcRendererEvent, fileInfo: IFileInfo) => {
     updateMediaFiles([fileInfo]);
   });
 
   ipcRenderer.on(
     EDownloadEventsName.DOWNLOAD_ERROR,
-    (event: IpcMessageEvent, errorMessage: string) => {
+    (event: IpcRendererEvent, errorMessage: string) => {
       // If error is to long, shorten it
       const shortErrorMessage: string = `${errorMessage.substring(0, 400)} ...`;
       console.log('TCL: initDownloadEvents -> errorMessage', errorMessage);
@@ -84,7 +84,7 @@ export const initDownloadEvents = (props: IinitDownloadEvents) => {
     }
   );
 
-  ipcRenderer.on(EDownloadEventsName.UPDATE_SUCCESS, (event: IpcMessageEvent) => {
+  ipcRenderer.on(EDownloadEventsName.UPDATE_SUCCESS, (event: IpcRendererEvent) => {
     changeDownloadStatus(EDownloadStatus.WAITING);
     messages.downloadUpdateComplete();
   });
