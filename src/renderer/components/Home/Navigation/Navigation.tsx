@@ -38,7 +38,7 @@ const Navigation: React.FC<Props> = (props: Props) => {
       </NavLink>
 
       {/* CONVERT LINK */}
-      <NavLink
+      {/* <NavLink
         style={{ color: '#555555' }}
         activeStyle={{ color: appColor }}
         to={routes.CONVERT}
@@ -51,10 +51,10 @@ const Navigation: React.FC<Props> = (props: Props) => {
         >
           <SyncOutlined className={styles.icon} />
         </div>
-      </NavLink>
+      </NavLink> */}
 
       {/* CUT LINK */}
-      <NavLink
+      {/* <NavLink
         style={{ color: '#555555' }}
         activeStyle={{ color: appColor }}
         onClick={() => changeSelectedRoute({ mainRoute: routes.CUT })}
@@ -64,10 +64,10 @@ const Navigation: React.FC<Props> = (props: Props) => {
         <div className={`${styles.iconContainer} ${styles.ripple}`} title="Cut">
           <ScissorOutlined className={styles.icon} />
         </div>
-      </NavLink>
+      </NavLink> */}
 
       {/* PLAYER LINK */}
-      <NavLink
+      {/* <NavLink
         style={{ color: '#555555' }}
         activeStyle={{ color: appColor }}
         onClick={() => changeSelectedRoute({ mainRoute: routes.PLAYER })}
@@ -77,7 +77,7 @@ const Navigation: React.FC<Props> = (props: Props) => {
         <div className={`${styles.iconContainer} ${styles.ripple}`} title="Player">
           <PlayCircleOutlined className={styles.icon} />
         </div>
-      </NavLink>
+      </NavLink> */}
 
       {/* Spacer between other links and settings link */}
       <div style={{ height: '100%' }} />

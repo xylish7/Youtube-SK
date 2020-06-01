@@ -75,7 +75,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
           </Menu.Item>
 
           {/* CONVERT SETTINGS */}
-          <Menu.Item key="3">
+          {/* <Menu.Item key="3">
             <Link
               onClick={() => changeSelectedRoute({ settingsRoute: `/settings${routes.CONVERT}` })}
               to={`${url}${routes.CONVERT}`}
@@ -83,10 +83,10 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
               <SyncOutlined />
               <span>Convert</span>
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
 
           {/* CUT SETTINGS */}
-          <Menu.Item key="4">
+          {/* <Menu.Item key="4">
             <Link
               onClick={() => changeSelectedRoute({ settingsRoute: `/settings${routes.CUT}` })}
               to={`${url}${routes.CUT}`}
@@ -94,10 +94,10 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
               <ScissorOutlined />
               <span>Cut</span>
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
 
           {/* PLAYER SETTINGS */}
-          <Menu.Item key="5">
+          {/* <Menu.Item key="5">
             <Link
               onClick={() => changeSelectedRoute({ settingsRoute: `/settings${routes.PLAYER}` })}
               to={`${url}${routes.PLAYER}`}
@@ -105,7 +105,7 @@ const SettingsNavigation: React.FC<Props> = (props: Props) => {
               <PlayCircleOutlined />
               <span>Player</span>
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
       </div>
     </Sider>
