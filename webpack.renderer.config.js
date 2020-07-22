@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
@@ -37,15 +37,15 @@ const options = {
     '@badge-text-color',
     '@card-actions-background',
     '@card-shadow',
-    '@avatar-bg'
+    '@avatar-bg',
   ],
-  indexFileName: 'index.html'
+  indexFileName: 'index.html',
 };
 
-module.exports = merge.smart(baseConfig, {
+module.exports = merge(baseConfig, {
   target: 'electron-renderer',
   entry: {
-    app: ['@babel/polyfill', './src/renderer/app.tsx']
+    app: ['@babel/polyfill', './src/renderer/app.tsx'],
   },
   module: {
     rules: [
@@ -59,10 +59,10 @@ module.exports = merge.smart(baseConfig, {
           presets: [
             ['@babel/preset-env', { targets: { browsers: 'last 2 versions ' } }],
             '@babel/preset-typescript',
-            '@babel/preset-react'
+            '@babel/preset-react',
           ],
-          plugins: [['@babel/plugin-proposal-class-properties', { loose: true }]]
-        }
+          plugins: [['@babel/plugin-proposal-class-properties', { loose: true }]],
+        },
       },
       {
         test: /\.css$/,
@@ -73,17 +73,17 @@ module.exports = merge.smart(baseConfig, {
             loader: 'css-loader',
             options: {
               modules: {
-                localIdentName: '[name]__[local]--[hash:base64:5]'
+                localIdentName: '[name]__[local]--[hash:base64:5]',
               },
-              localsConvention: 'camelCaseOnly'
-            }
-          }
+              localsConvention: 'camelCaseOnly',
+            },
+          },
         ],
-        exclude: /\.global\.css$/
+        exclude: /\.global\.css$/,
       },
       {
         test: /\.global\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(gif|png|jpe?g|svg|eot|ttf|woff|woff2)$/,
@@ -92,28 +92,26 @@ module.exports = merge.smart(baseConfig, {
           {
             loader: 'image-webpack-loader',
             options: {
-              disable: true
-            }
-          }
-        ]
+              disable: true,
+            },
+          },
+        ],
       },
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
       {
         enforce: 'pre',
         test: /\.js$/,
-        loader: 'source-map-loader'
-      }
-    ]
+        loader: 'source-map-loader',
+      },
+    ],
   },
   plugins: [
-    new ForkTsCheckerWebpackPlugin({
-      reportFiles: ['src/renderer/**/*']
-    }),
+    new ForkTsCheckerWebpackPlugin(),
     new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin(),
     new AntDesignThemePlugin(options),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
-    })
-  ]
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+    }),
+  ],
 });
