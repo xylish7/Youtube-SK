@@ -14,6 +14,7 @@ import {
 import { globalConst } from '../../renderer/constants/globals';
 import { IStartDownloadEParams } from '../../renderer/events/download-events';
 import { IDownloadType, IDownloadSettings } from '../../renderer/reducers/downloadReducer';
+import parseQuery from '../../renderer/utils/query-variable';
 
 /**
  * Class used to download video/audio files from youtube
@@ -44,36 +45,31 @@ export default class DownloadService {
    * @param {string} url - url to file
    */
   download = (url: string) => {
-    const video = youtubedl(url, [
-      '--ffmpeg-location',
-      globalConst.FFMPEG_PATH,
+    const currentDownload = youtubedl(url, [
       '-f',
-      'bestaudio',
-      '--extract-audio',
-      '--audio-format',
-      'mp3',
+      `${this.downloadSettings.videoQuality}[ext=${this.downloadSettings.videoFormat}]`,
     ]);
 
     // Handle errors on download of the file
-    video.on('error', (err: any) => {
+    currentDownload.on('error', (err: any) => {
       this.event.sender.send(EDownloadEventsName.DOWNLOAD_ERROR, err.stderr);
     });
 
     // Handle video information at the start of the file download
     let size: number = 0;
-    video.on('info', (info: any) => {
+    currentDownload.on('info', (info: any) => {
       this.sendDownloadAndFileInfo(info);
 
       size = info.size;
       const filePath = `${this.downloadSavePath}/${this.trimBadChars(info.title)}.mp4`;
-      video.pipe(fs.createWriteStream(filePath));
+      currentDownload.pipe(fs.createWriteStream(filePath));
     });
 
     // Handle downloaded chunks from file
     let pos: number = 0;
     let lastPercentValue: number = 0;
 
-    video.on('data', (chunk: any) => {
+    currentDownload.on('data', (chunk: any) => {
       pos += chunk.length;
       if (size) {
         // Convert percentage to rounded number. Ex: 24%
@@ -90,22 +86,12 @@ export default class DownloadService {
     });
 
     // Handle download finished
-    video.on('end', () => {
+    currentDownload.on('end', () => {
       this.downloadFinished();
     });
 
     // Downlaod next file if a playlist is downloaded
-    video.on('next', this.download);
-  };
-
-  /**
-   * Check if there are new updates for yt-dl.exe file
-   */
-  static checkForUpdates = (event: IpcMainEvent) => {
-    ytdlDownloader(`${globalConst.YT_DL_PATH}/../`, (err: any, done: any) => {
-      if (err) throw err;
-      else event.sender.send(EDownloadEventsName.UPDATE_SUCCESS);
-    });
+    currentDownload.on('next', this.download);
   };
 
   /**
@@ -163,6 +149,33 @@ export default class DownloadService {
   private trimBadChars = (title: string): string => {
     return title.replace(/[\\/|":*?<>']/g, '');
   };
+
+  /**
+   * Check if there are new updates for yt-dl.exe file
+   */
+  static checkForUpdates = (event: IpcMainEvent) => {
+    ytdlDownloader(`${globalConst.YT_DL_PATH}/../`, (err: any, done: any) => {
+      if (err) throw err;
+      else event.sender.send(EDownloadEventsName.UPDATE_SUCCESS);
+    });
+  };
+
+  /**
+   * Check if the provided url points to a playlist. If it does then
+   * it returns an url which will be treated by youtube-dl as a playlist.
+   * If it's not a playlist url then the original url will be returned.
+   *
+   * Represents a workaround for a bug in youtube-dl package
+   *
+   * @param url
+   */
+  static transformPlaylistUrl(url: string): string {
+    const parsedUrl = parseQuery(url);
+
+    if (parsedUrl.list) return `https://www.youtube.com/playlist?list=${parsedUrl.list}`;
+
+    return url;
+  }
 }
 
 // ./youtube-dl.exe --ffmpeg-location 'C:\Users\FilipFrincu\Documents\personal_projects\YouTube-SK\bin' -f bestvideo['height>=1080']+bestaudio[ext=m4a] https://www.youtube.com/watch?v=9Yam5B_iasY

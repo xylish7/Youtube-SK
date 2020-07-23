@@ -59,7 +59,7 @@ const InterfaceSettings: React.FC<Props> = (props: Props) => {
           <FaMoon style={{ color: '#fadb14' }} />
         ) : (
           <FaSun style={{ color: '#fadb14' }} />
-        )}
+        )}{' '}
         Theme mode
       </Title>
       <Paragraph>

@@ -76,8 +76,11 @@ app.on('ready', () => {
         startDownloadEParams: IStartDownloadEParams;
       }
     ) => {
-      const downloadService = new DownloadService(event, options.startDownloadEParams);
-      downloadService.download(options.url);
+      if (options.startDownloadEParams.downloadType === 'video') {
+        const downloadService = new DownloadService(event, options.startDownloadEParams);
+        const url = DownloadService.transformPlaylistUrl(options.url);
+        downloadService.download(url);
+      }
     }
   );
 
