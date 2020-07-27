@@ -20,12 +20,14 @@ import parseQuery from '../../renderer/utils/query-variable';
  * Class used to download video/audio files from youtube
  */
 export default class DownloadService {
-  event: IpcMainEvent;
-  downloadSavePath: string;
-  downloadInfo: IDownloadInfo;
-  fileInfo: IFileInfo;
-  downloadType: IDownloadType;
-  downloadSettings: IDownloadSettings;
+  private event: IpcMainEvent;
+  private downloadSavePath: string;
+  private downloadInfo: IDownloadInfo;
+  private fileInfo: IFileInfo;
+  private downloadType: IDownloadType;
+  private downloadSettings: IDownloadSettings;
+  private writeStream: any;
+  private currentDownload: any;
 
   /**
    * Initialize values
@@ -38,38 +40,40 @@ export default class DownloadService {
     this.fileInfo = {};
     this.downloadType = downloadParams.downloadType;
     this.downloadSettings = downloadParams.downloadSettings;
+    this.writeStream = null;
   }
 
   /**
    * Download video/audio by providing the link to it
    * @param {string} url - url to file
    */
-  download = (url: string) => {
-    const currentDownload = youtubedl(url, [
+  startDownload = (url: string) => {
+    this.currentDownload = youtubedl(url, [
       '-f',
       `${this.downloadSettings.videoQuality}[ext=${this.downloadSettings.videoFormat}]`,
     ]);
 
     // Handle errors on download of the file
-    currentDownload.on('error', (err: any) => {
+    this.currentDownload.on('error', (err: any) => {
       this.event.sender.send(EDownloadEventsName.DOWNLOAD_ERROR, err.stderr);
     });
 
     // Handle video information at the start of the file download
     let size: number = 0;
-    currentDownload.on('info', (info: any) => {
+    this.currentDownload.on('info', (info: any) => {
       this.sendDownloadAndFileInfo(info);
 
       size = info.size;
       const filePath = `${this.downloadSavePath}/${this.trimBadChars(info.title)}.mp4`;
-      currentDownload.pipe(fs.createWriteStream(filePath));
+      this.writeStream = fs.createWriteStream(filePath);
+      this.currentDownload.pipe(this.writeStream);
     });
 
     // Handle downloaded chunks from file
     let pos: number = 0;
     let lastPercentValue: number = 0;
 
-    currentDownload.on('data', (chunk: any) => {
+    this.currentDownload.on('data', (chunk: any) => {
       pos += chunk.length;
       if (size) {
         // Convert percentage to rounded number. Ex: 24%
@@ -86,12 +90,12 @@ export default class DownloadService {
     });
 
     // Handle download finished
-    currentDownload.on('end', () => {
+    this.currentDownload.on('end', () => {
       this.downloadFinished();
     });
 
     // Downlaod next file if a playlist is downloaded
-    currentDownload.on('next', this.download);
+    this.currentDownload.on('next', this.startDownload);
   };
 
   /**
@@ -139,6 +143,16 @@ export default class DownloadService {
     //  files is equal to the number of files of the playlist
     else if (this.downloadInfo.nr_entries === this.fileInfo.entry_nr)
       this.event.sender.send(EDownloadEventsName.DOWNLOAD_FINISHED);
+  };
+
+  /**
+   * Intrerupt download
+   */
+  stopDownload = () => {
+    if (this.writeStream) {
+      this.writeStream.destroy();
+      this.currentDownload.pause();
+    }
   };
 
   /**

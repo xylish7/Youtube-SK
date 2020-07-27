@@ -8,7 +8,7 @@ const { Text } = Typography;
 const { Search } = Input;
 import { FaGlobe } from 'react-icons/fa';
 
-import { startDownloadEvent } from '../../../../events/download-events';
+import { startDownloadEvent, stopDownloadEvent } from '../../../../events/download-events';
 import { EDownloadStatus } from '../../../../reducers/downloadReducer';
 import messages from '../../../../notifications/messages';
 import { EUserPrefStore } from '../../../../constants/persistent-data-store';
@@ -94,8 +94,10 @@ const Download: React.FC<Props> = (props: Props) => {
         startDownloadEvent(downloadUrl, { downloadSettings, downloadType });
       }
 
-    if (downloadStatus === EDownloadStatus.DOWNLOADING)
+    if (downloadStatus === EDownloadStatus.DOWNLOADING) {
       changeDownloadStatus(EDownloadStatus.STOPPED);
+      stopDownloadEvent();
+    }
   };
 
   /**

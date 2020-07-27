@@ -27,6 +27,13 @@ export const startDownloadEvent = (url: string, startDownloadEParams: IStartDown
 };
 
 /**
+ * Event: emited when the stop button is pressed
+ */
+export const stopDownloadEvent = () => {
+  ipcRenderer.send(EDownloadEventsName.STOP_DOWNLOAD);
+};
+
+/**
  * Event: emited when cheking updates for youtube-dl
  */
 export const checkYtdlForUpdatesEvent = () => {
@@ -44,7 +51,7 @@ type IinitDownloadEvents = {
  * Initialize all events used for receiving the data from the main
  * @param props
  */
-export const initDownloadEvents = (props: IinitDownloadEvents) => {
+export const initRendererDownloadEvents = (props: IinitDownloadEvents) => {
   const { downloadStatus, changeDownloadStatus, updateMediaFiles, updateFileProgress } = props;
 
   ipcRenderer.on(

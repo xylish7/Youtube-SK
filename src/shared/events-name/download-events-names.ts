@@ -1,12 +1,13 @@
 export enum EDownloadEventsName {
   START_DOWNLOAD = 'start-download',
+  STOP_DOWNLOAD = 'stop-download',
   DOWNLOAD_INFO = 'download-info',
   FILE_INFO = 'file-info',
   DOWNLOAD_PROGRESS = 'download-progress',
   DOWNLOAD_FINISHED = 'download-finished',
   DOWNLOAD_ERROR = 'download-error',
   CHECK_FOR_UPDATES = 'check-for-updates',
-  UPDATE_SUCCESS = 'update-success'
+  UPDATE_SUCCESS = 'update-success',
 }
 
 export interface IDownloadInfo {

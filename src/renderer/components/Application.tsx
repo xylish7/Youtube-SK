@@ -13,8 +13,8 @@ import SettingsContainer from '../containers/SettingsContainer';
 import { ThemeMode } from '../constants/persistent-data-store';
 import {
   checkYtdlForUpdatesEvent,
-  initDownloadEvents,
-  clearDownloadEvents
+  initRendererDownloadEvents,
+  clearDownloadEvents,
 } from '../events/download-events';
 
 import { PropsFromRedux } from '../containers/ApplicationContainer';
@@ -39,7 +39,7 @@ const Application: React.FC<Props> = (props: Props) => {
     getAllPersistentData,
     changeDownloadStatus,
     updateMediaFiles,
-    updateFileProgress
+    updateFileProgress,
   } = props;
 
   useEffect(() => {
@@ -54,11 +54,11 @@ const Application: React.FC<Props> = (props: Props) => {
 
   // Listen to download events
   useEffect(() => {
-    initDownloadEvents({
+    initRendererDownloadEvents({
       downloadStatus,
       changeDownloadStatus,
       updateMediaFiles,
-      updateFileProgress
+      updateFileProgress,
     });
 
     return () => {
@@ -71,12 +71,12 @@ const Application: React.FC<Props> = (props: Props) => {
     const titlebar = new Titlebar({
       backgroundColor: Color.fromHex(themeMode === ThemeMode.LIGHT ? '#e8e8e8' : '#000000'),
       maximizable: false,
-      icon: appIcon
+      icon: appIcon,
     });
 
     // Set app color
     window.less.modifyVars({
-      '@primary-color': appColor
+      '@primary-color': appColor,
     });
     return () => {
       titlebar.dispose();

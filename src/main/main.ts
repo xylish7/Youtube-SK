@@ -76,10 +76,15 @@ app.on('ready', () => {
         startDownloadEParams: IStartDownloadEParams;
       }
     ) => {
+      const downloadService = new DownloadService(event, options.startDownloadEParams);
+      const url = DownloadService.transformPlaylistUrl(options.url);
+
       if (options.startDownloadEParams.downloadType === 'video') {
-        const downloadService = new DownloadService(event, options.startDownloadEParams);
-        const url = DownloadService.transformPlaylistUrl(options.url);
-        downloadService.download(url);
+        downloadService.startDownload(url);
+
+        ipcMain.on(EDownloadEventsName.STOP_DOWNLOAD, () => {
+          downloadService.stopDownload();
+        });
       }
     }
   );
