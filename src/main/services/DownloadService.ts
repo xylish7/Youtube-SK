@@ -1,11 +1,10 @@
 import youtubedl from 'youtube-dl';
 import ytdlDownloader from 'youtube-dl/lib/downloader';
-import * as path from 'path';
 import * as fs from 'fs';
 import isEmpty from '../../renderer/utils/is-empty';
 import LocalStore from '../../renderer/utils/local-store';
 import { USER_PREFERENCES, EUserPrefStore } from '../../renderer/constants/persistent-data-store';
-import { IpcMainEvent } from 'electron';
+import { IpcMainEvent, ipcMain } from 'electron';
 import {
   EDownloadEventsName,
   IDownloadInfo,
@@ -13,7 +12,7 @@ import {
 } from '../../shared/events-name/download-events-names';
 import { globalConst } from '../../renderer/constants/globals';
 import { IStartDownloadEParams } from '../../renderer/events/download-events';
-import { IDownloadType, IDownloadSettings } from '../../renderer/reducers/downloadReducer';
+import { IDownloadSettings } from '../../renderer/reducers/downloadReducer';
 import parseQuery from '../../renderer/utils/query-variable';
 
 /**
@@ -24,7 +23,6 @@ export default class DownloadService {
   private downloadSavePath: string;
   private downloadInfo: IDownloadInfo;
   private fileInfo: IFileInfo;
-  private downloadType: IDownloadType;
   private downloadSettings: IDownloadSettings;
   private writeStream: any;
   private currentDownload: any;
@@ -38,9 +36,12 @@ export default class DownloadService {
     this.downloadSavePath = this.setDownloadPath();
     this.downloadInfo = {};
     this.fileInfo = {};
-    this.downloadType = downloadParams.downloadType;
     this.downloadSettings = downloadParams.downloadSettings;
     this.writeStream = null;
+
+    ipcMain.on(EDownloadEventsName.STOP_DOWNLOAD, () => {
+      this.stopDownload();
+    });
   }
 
   /**
@@ -86,6 +87,10 @@ export default class DownloadService {
             progress: percent,
           });
         }
+
+        // Send the file index when the file is downloaded
+        if (percent === 100)
+          this.event.sender.send(EDownloadEventsName.DOWNLOADED_FILE_INDEX, this.fileInfo.entry_nr);
       }
     });
 
@@ -117,7 +122,7 @@ export default class DownloadService {
     if (isEmpty(this.downloadInfo)) {
       this.downloadInfo = {
         isPlaylist: info.playlist ? true : false,
-        nr_entries: info.playlist ? info.n_entries : 1,
+        nrOfEntries: info.playlist ? info.n_entries : 1,
       };
       this.event.sender.send(EDownloadEventsName.DOWNLOAD_INFO, this.downloadInfo);
     }
@@ -141,14 +146,14 @@ export default class DownloadService {
       this.event.sender.send(EDownloadEventsName.DOWNLOAD_FINISHED);
     // if the url is a playlist send the event when the number of downloaded
     //  files is equal to the number of files of the playlist
-    else if (this.downloadInfo.nr_entries === this.fileInfo.entry_nr)
+    else if (this.downloadInfo.nrOfEntries === this.fileInfo.entry_nr)
       this.event.sender.send(EDownloadEventsName.DOWNLOAD_FINISHED);
   };
 
   /**
    * Intrerupt download
    */
-  stopDownload = () => {
+  private stopDownload = () => {
     if (this.writeStream) {
       this.writeStream.destroy();
       this.currentDownload.pause();

@@ -10,18 +10,25 @@ import {
   IUpdateMediaFile,
   updateMediaFiles,
   setPersistentDownloadData,
-  IDownloadPersistentData
+  IDownloadPersistentData,
+  IUpdateFileProgress,
+  updateFilesProgress,
+  setDownloadedFileIndex,
+  ISetDownloadedFileIndex,
 } from '../actions/downloadAction';
 import { EDownloadStatus, IDownloadType } from '../reducers/downloadReducer';
 import { IChangedValues } from '../constants/persistent-data-store';
-import { IFileInfo } from '../../shared/events-name/download-events-names';
+import { IFileInfo, IFilesProgress } from '../../shared/events-name/download-events-names';
 
 const mapStateToProps = (state: RootState) => ({
   savePath: state.download.savePath,
   downloadStatus: state.download.status,
   downloadType: state.download.type,
   downloadSettings: state.download.settings,
-  appColor: state.generalSettings.appColor
+  downloadInfo: state.download.info,
+  filesProgress: state.download.filesProgress,
+  appColor: state.generalSettings.appColor,
+  downloadedFileIndex: state.download.downloadedFileIndex,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -34,7 +41,11 @@ const mapDispatchToProps = (dispatch: any) => ({
   changeDownloadType: (downloadType: IDownloadType): IChangeDownloadOpts =>
     dispatch(changeDownloadType(downloadType)),
   updateMediaFiles: (mediaFile: Array<IFileInfo>): IUpdateMediaFile =>
-    dispatch(updateMediaFiles(mediaFile))
+    dispatch(updateMediaFiles(mediaFile)),
+  updateFilesProgress: (filesProgress: IFilesProgress | {}): IUpdateFileProgress =>
+    dispatch(updateFilesProgress(filesProgress)),
+  setDownloadedFileIndex: (downloadedFileIndex: number): ISetDownloadedFileIndex =>
+    dispatch(setDownloadedFileIndex(downloadedFileIndex)),
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

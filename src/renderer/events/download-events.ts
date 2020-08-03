@@ -1,7 +1,7 @@
 import {
   IFileInfo,
   EDownloadEventsName,
-  IFileProgress,
+  IFilesProgress,
   IDownloadInfo,
 } from '../../shared/events-name/download-events-names';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
@@ -44,7 +44,9 @@ type IinitDownloadEvents = {
   downloadStatus: EDownloadStatus;
   changeDownloadStatus: (downloadStatus: EDownloadStatus) => void;
   updateMediaFiles: (mediaFile: Array<IFileInfo>) => void;
-  updateFileProgress: (fileProgress: IFileProgress) => void;
+  updateFilesProgress: (filesProgress: IFilesProgress) => void;
+  setDownloadInfo: (downloadDetails: IDownloadInfo) => void;
+  setDownloadedFileIndex: (downloadedFileIndex: number) => void;
 };
 
 /**
@@ -52,14 +54,21 @@ type IinitDownloadEvents = {
  * @param props
  */
 export const initRendererDownloadEvents = (props: IinitDownloadEvents) => {
-  const { downloadStatus, changeDownloadStatus, updateMediaFiles, updateFileProgress } = props;
+  const {
+    downloadStatus,
+    changeDownloadStatus,
+    updateMediaFiles,
+    updateFilesProgress,
+    setDownloadInfo,
+    setDownloadedFileIndex,
+  } = props;
 
   ipcRenderer.on(
     EDownloadEventsName.DOWNLOAD_PROGRESS,
-    (event: IpcRendererEvent, fileProgress: IFileProgress) => {
+    (event: IpcRendererEvent, filesProgress: IFilesProgress) => {
       if (downloadStatus !== EDownloadStatus.DOWNLOADING)
         changeDownloadStatus(EDownloadStatus.DOWNLOADING);
-      updateFileProgress(fileProgress);
+      updateFilesProgress(filesProgress);
     }
   );
 
@@ -71,7 +80,7 @@ export const initRendererDownloadEvents = (props: IinitDownloadEvents) => {
   ipcRenderer.on(
     EDownloadEventsName.DOWNLOAD_INFO,
     (event: IpcRendererEvent, downloadInfo: IDownloadInfo) => {
-      console.log(downloadInfo);
+      setDownloadInfo(downloadInfo);
     }
   );
 
@@ -83,18 +92,26 @@ export const initRendererDownloadEvents = (props: IinitDownloadEvents) => {
     EDownloadEventsName.DOWNLOAD_ERROR,
     (event: IpcRendererEvent, errorMessage: string) => {
       // If error is to long, shorten it
-      const shortErrorMessage: string = `${errorMessage.substring(0, 400)} ...`;
-      console.log('TCL: initDownloadEvents -> errorMessage', errorMessage);
-      changeDownloadStatus(EDownloadStatus.ERROR);
-      systemNotifications.download.downloadError();
-      inAppNotifications.download.downloadError(shortErrorMessage);
+      if (errorMessage) {
+        const shortErrorMessage: string = `${errorMessage.substring(0, 400)} ...`;
+        changeDownloadStatus(EDownloadStatus.ERROR);
+        systemNotifications.download.downloadError();
+        inAppNotifications.download.downloadError(shortErrorMessage);
+      }
     }
   );
 
-  ipcRenderer.on(EDownloadEventsName.UPDATE_SUCCESS, (event: IpcRendererEvent) => {
+  ipcRenderer.on(EDownloadEventsName.UPDATE_SUCCESS, () => {
     changeDownloadStatus(EDownloadStatus.WAITING);
     messages.downloadUpdateComplete();
   });
+
+  ipcRenderer.on(
+    EDownloadEventsName.DOWNLOADED_FILE_INDEX,
+    (event: IpcRendererEvent, downloadedFileIndex: number) => {
+      setDownloadedFileIndex(downloadedFileIndex);
+    }
+  );
 };
 
 /**

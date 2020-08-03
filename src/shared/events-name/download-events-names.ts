@@ -6,13 +6,14 @@ export enum EDownloadEventsName {
   DOWNLOAD_PROGRESS = 'download-progress',
   DOWNLOAD_FINISHED = 'download-finished',
   DOWNLOAD_ERROR = 'download-error',
+  DOWNLOADED_FILE_INDEX = 'file-index',
   CHECK_FOR_UPDATES = 'check-for-updates',
   UPDATE_SUCCESS = 'update-success',
 }
 
 export interface IDownloadInfo {
   isPlaylist?: boolean;
-  nr_entries?: number;
+  nrOfEntries?: number;
 }
 
 export interface IFileInfo {
@@ -21,7 +22,7 @@ export interface IFileInfo {
   duration?: string;
 }
 
-export interface IFileProgress {
+export interface IFilesProgress {
   entry_nr: number;
   progress: number;
 }

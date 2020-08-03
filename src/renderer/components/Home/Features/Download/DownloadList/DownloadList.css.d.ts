@@ -1,6 +1,5 @@
 declare namespace DownloadListCssNamespace {
   export interface IDownloadListCss {
-    convertProgress: string;
     listContainer: string;
     listLoadingSpinner: string;
     listStatus: string;

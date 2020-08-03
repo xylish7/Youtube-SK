@@ -81,10 +81,6 @@ app.on('ready', () => {
 
       if (options.startDownloadEParams.downloadType === 'video') {
         downloadService.startDownload(url);
-
-        ipcMain.on(EDownloadEventsName.STOP_DOWNLOAD, () => {
-          downloadService.stopDownload();
-        });
       }
     }
   );

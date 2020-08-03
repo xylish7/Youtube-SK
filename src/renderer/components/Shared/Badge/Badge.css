@@ -1,0 +1,20 @@
+.badge {
+  display: inline-block;
+  position: relative;
+}
+
+.badge-text {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  right: -7px;
+  top: -7px;
+  color: white;
+  border: 1px solid white;
+  background-color: #333333;
+}

@@ -39,7 +39,9 @@ const Application: React.FC<Props> = (props: Props) => {
     getAllPersistentData,
     changeDownloadStatus,
     updateMediaFiles,
-    updateFileProgress,
+    updateFilesProgress,
+    setDownloadInfo,
+    setDownloadedFileIndex,
   } = props;
 
   useEffect(() => {
@@ -58,7 +60,9 @@ const Application: React.FC<Props> = (props: Props) => {
       downloadStatus,
       changeDownloadStatus,
       updateMediaFiles,
-      updateFileProgress,
+      updateFilesProgress,
+      setDownloadInfo,
+      setDownloadedFileIndex,
     });
 
     return () => {

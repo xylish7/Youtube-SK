@@ -1,7 +1,6 @@
 /* Download list */
 .list-titlebar {
   display: flex;
-  /* justify-content: flex-end; */
   margin: 15px 0 5px 0;
 }
 
@@ -36,10 +35,6 @@
 
 .progress-container {
   margin-left: 30px;
-}
-
-.convert-progress {
-  margin-right: 10px;
 }
 
 /* Result */

@@ -21,6 +21,8 @@ import { regExpressions } from '../../../../constants/globals';
 import styles from './Download.css';
 
 import { PropsFromRedux } from '../../../../containers/DownloadContainer';
+import Badge from '../../../Shared/Badge/Badge';
+
 type Props = PropsFromRedux;
 
 const Download: React.FC<Props> = (props: Props) => {
@@ -29,11 +31,15 @@ const Download: React.FC<Props> = (props: Props) => {
     downloadStatus,
     downloadType,
     downloadSettings,
+    downloadInfo,
+    downloadedFileIndex,
     appColor,
     setPersistentDownloadData,
     changeDownloadStatus,
     changeDownloadType,
     updateMediaFiles,
+    updateFilesProgress,
+    setDownloadedFileIndex,
   } = props;
 
   const [downloadUrl, setDownloadUrl] = useState<string>('');
@@ -87,10 +93,13 @@ const Download: React.FC<Props> = (props: Props) => {
    * Handle the press of the download button
    */
   const handleDownloadButton = (): void => {
+    updateFilesProgress({});
+    setDownloadedFileIndex(0);
+
     if (downloadStatus !== EDownloadStatus.DOWNLOADING)
       if (isValid()) {
-        changeDownloadStatus(EDownloadStatus.FETCHING);
         updateMediaFiles([]);
+        changeDownloadStatus(EDownloadStatus.FETCHING);
         startDownloadEvent(downloadUrl, { downloadSettings, downloadType });
       }
 
@@ -188,7 +197,21 @@ const Download: React.FC<Props> = (props: Props) => {
               downloadStatus === EDownloadStatus.FETCHING ||
               downloadStatus === EDownloadStatus.UPDATING
             }
-            enterButton={<DownloadButton downloadStatus={downloadStatus} appColor={appColor} />}
+            enterButton={
+              <Badge
+                color={appColor}
+                showBadge={
+                  downloadInfo.isPlaylist &&
+                  (downloadStatus === EDownloadStatus.DOWNLOADING ||
+                    downloadStatus === EDownloadStatus.DONE)
+                }
+                currentNumber={downloadedFileIndex}
+                totalNumber={downloadInfo.nrOfEntries}
+                style={{ right: -31, top: -15 }}
+              >
+                <DownloadButton downloadStatus={downloadStatus} appColor={appColor} />
+              </Badge>
+            }
             placeholder="Double click to paste the url"
             onChange={(e: React.FormEvent<HTMLInputElement>) =>
               setDownloadUrl(e.currentTarget.value)

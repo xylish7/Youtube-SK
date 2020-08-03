@@ -1,6 +1,10 @@
 import { Action, ActionCreator } from 'redux';
 import { EDownloadStatus, IDownloadSettings, IDownloadType } from '../reducers/downloadReducer';
-import { IFileInfo, IFileProgress } from '../../shared/events-name/download-events-names';
+import {
+  IFileInfo,
+  IFilesProgress,
+  IDownloadInfo,
+} from '../../shared/events-name/download-events-names';
 import LocalStore from '../utils/local-store';
 import { USER_PREFERENCES, IChangedValues } from '../constants/persistent-data-store';
 import isEmpty from '../utils/is-empty';
@@ -10,7 +14,9 @@ export enum EDownload {
   CHANGE_DOWNLOAD_STATUS = 'CHANGE_DOWNLOAD_STATUS',
   CHANGE_DOWNLOAD_TYPE = 'CHANGE_DOWNLOAD_TYPE',
   UPDATE_MEDIA_FILES = 'UPDATE_MEDIA_FILES',
-  UPDATE_FILE_PROGRESS = 'UPDATE_FILE_PROGRESS'
+  UPDATE_FILE_PROGRESS = 'UPDATE_FILE_PROGRESS',
+  SET_DOWNLOAD_INFO = 'SET_DOWNLOAD_INFO',
+  SET_DOWNLOADED_FILE_INDEX = 'SET_DOWNLOADED_FILE_INDEX',
 }
 
 export type IDownloadPersistentData = {
@@ -40,7 +46,17 @@ export interface IUpdateMediaFile extends Action {
 
 export interface IUpdateFileProgress extends Action {
   type: EDownload.UPDATE_FILE_PROGRESS;
-  fileProgress: IFileProgress;
+  filesProgress: IFilesProgress;
+}
+
+export interface ISetDownloadInfo extends Action {
+  type: EDownload.SET_DOWNLOAD_INFO;
+  downloadInfo: IDownloadInfo;
+}
+
+export interface ISetDownloadedFileIndex extends Action {
+  type: EDownload.SET_DOWNLOADED_FILE_INDEX;
+  downloadedFileIndex: number;
 }
 
 export const setPersistentDownloadData: ActionCreator<ISetDownloadPersistentData> = (
@@ -51,7 +67,7 @@ export const setPersistentDownloadData: ActionCreator<ISetDownloadPersistentData
 
   return {
     type: EDownload.SET_DOWNLOAD_PERSISTENT_DATA,
-    persistentData
+    persistentData,
   };
 };
 
@@ -63,7 +79,7 @@ export const changeDownloadStatus: ActionCreator<IChangeDownloadStatus> = (
   downloadStatus: EDownloadStatus
 ) => ({
   type: EDownload.CHANGE_DOWNLOAD_STATUS,
-  downloadStatus
+  downloadStatus,
 });
 
 /**
@@ -74,7 +90,7 @@ export const changeDownloadType: ActionCreator<IChangeDownloadOpts> = (
   downloadType: IDownloadType
 ) => ({
   type: EDownload.CHANGE_DOWNLOAD_TYPE,
-  downloadType
+  downloadType,
 });
 
 /**
@@ -85,17 +101,32 @@ export const changeDownloadType: ActionCreator<IChangeDownloadOpts> = (
  */
 export const updateMediaFiles: ActionCreator<IUpdateMediaFile> = (mediaFile: Array<IFileInfo>) => ({
   type: EDownload.UPDATE_MEDIA_FILES,
-  mediaFile
+  mediaFile,
 });
 
 /**
  * Update the progres of the file being downloaded
  */
-export const updateFileProgress: ActionCreator<IUpdateFileProgress> = (
-  fileProgress: IFileProgress
+export const updateFilesProgress: ActionCreator<IUpdateFileProgress> = (
+  filesProgress: IFilesProgress
 ) => ({
   type: EDownload.UPDATE_FILE_PROGRESS,
-  fileProgress
+  filesProgress,
+});
+
+export const setDownloadInfo: ActionCreator<ISetDownloadInfo> = (downloadInfo: IDownloadInfo) => ({
+  type: EDownload.SET_DOWNLOAD_INFO,
+  downloadInfo,
+});
+
+/**
+ * Set downloaded file index
+ */
+export const setDownloadedFileIndex: ActionCreator<ISetDownloadedFileIndex> = (
+  downloadedFileIndex: number
+) => ({
+  type: EDownload.SET_DOWNLOADED_FILE_INDEX,
+  downloadedFileIndex,
 });
 
 export type IDownloadAction =
@@ -103,4 +134,6 @@ export type IDownloadAction =
   | IChangeDownloadStatus
   | IChangeDownloadOpts
   | IUpdateMediaFile
-  | IUpdateFileProgress;
+  | IUpdateFileProgress
+  | ISetDownloadInfo
+  | ISetDownloadedFileIndex;

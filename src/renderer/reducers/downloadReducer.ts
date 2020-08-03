@@ -2,12 +2,12 @@ import { Reducer } from 'redux';
 
 import { EDownload, IDownloadAction } from '../actions/downloadAction';
 import updateObject from '../utils/update-object';
-import { IFileInfo } from '../../shared/events-name/download-events-names';
+import { IFileInfo, IDownloadInfo } from '../../shared/events-name/download-events-names';
 import {
   IAudioQuality,
   IAudioFormat,
   IVideoQuality,
-  IVideoFormat
+  IVideoFormat,
 } from '../constants/persistent-data-store';
 import isEmpty from '../utils/is-empty';
 
@@ -27,7 +27,7 @@ export enum EDownloadStatus {
   DONE = 'DONE',
   STOPPED = 'STOPPED',
   ERROR = 'ERROR',
-  UPDATING = 'UPDATING'
+  UPDATING = 'UPDATING',
 }
 
 export interface IDownloadState {
@@ -37,6 +37,8 @@ export interface IDownloadState {
   readonly settings: IDownloadSettings;
   readonly mediaFiles: Array<IFileInfo>;
   readonly filesProgress: any;
+  readonly info: IDownloadInfo;
+  readonly downloadedFileIndex: number;
 }
 
 const defaultState: IDownloadState = {
@@ -47,10 +49,12 @@ const defaultState: IDownloadState = {
     audioQuality: 'best',
     audioFormat: 'mp3',
     videoQuality: 'best',
-    videoFormat: 'mp4'
+    videoFormat: 'mp4',
   },
   mediaFiles: [],
-  filesProgress: {}
+  filesProgress: {},
+  info: {},
+  downloadedFileIndex: 0,
 };
 
 export const downloadReducer: Reducer<IDownloadState, IDownloadAction> = (
@@ -65,7 +69,7 @@ export const downloadReducer: Reducer<IDownloadState, IDownloadAction> = (
           : state.savePath,
         settings: !isEmpty(action.persistentData.settings)
           ? updateObject(state.settings, action.persistentData.settings)
-          : { ...state.settings }
+          : { ...state.settings },
       });
 
     case EDownload.CHANGE_DOWNLOAD_STATUS:
@@ -73,21 +77,38 @@ export const downloadReducer: Reducer<IDownloadState, IDownloadAction> = (
 
     case EDownload.CHANGE_DOWNLOAD_TYPE:
       return updateObject(state, {
-        type: action.downloadType
+        type: action.downloadType,
       });
 
     case EDownload.UPDATE_MEDIA_FILES:
       return updateObject(state, {
-        mediaFiles: action.mediaFile.length === 0 ? [] : [...state.mediaFiles, ...action.mediaFile]
+        mediaFiles: action.mediaFile.length === 0 ? [] : [...state.mediaFiles, ...action.mediaFile],
       });
 
     case EDownload.UPDATE_FILE_PROGRESS:
-      const entryNr: number = action.fileProgress.entry_nr;
+      const entryNr: number = action.filesProgress.entry_nr;
+      console.log(action.filesProgress);
+      // If files progress is empty object set it to an empty object in the store
+      if (
+        Object.keys(action.filesProgress).length === 0 &&
+        action.filesProgress.constructor === Object
+      )
+        return updateObject(state, { filesProgress: {} });
+
+      // Update the files progress with the current progress
       return updateObject(state, {
         filesProgress: {
           ...state.filesProgress,
-          [entryNr]: action.fileProgress.progress
-        }
+          [entryNr]: action.filesProgress.progress,
+        },
+      });
+    case EDownload.SET_DOWNLOAD_INFO:
+      return updateObject(state, {
+        info: action.downloadInfo,
+      });
+    case EDownload.SET_DOWNLOADED_FILE_INDEX:
+      return updateObject(state, {
+        downloadedFileIndex: action.downloadedFileIndex,
       });
     default:
       return state;
