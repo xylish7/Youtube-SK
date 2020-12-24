@@ -7,7 +7,7 @@ const appIcon = require('../../../assets/youtube-sk-72X72.png');
 const downloadFinished = (): void => {
   new Notification('Youtube-SK', {
     body: 'Download Finished!',
-    icon: appIcon
+    icon: appIcon,
   });
 };
 
@@ -18,13 +18,27 @@ const downloadFinished = (): void => {
 const downloadError = (): void => {
   new Notification('Youtube-SK', {
     body: 'An error was encountered while trying to download your files',
-    icon: appIcon
+    icon: appIcon,
+  });
+};
+
+/**
+ * Notification which tells the user the the app encountered a problem
+ * while trying to convert the files
+ */
+const convertError = (): void => {
+  new Notification('Youtube-SK', {
+    body: 'An error was encountered while trying to convert your files',
+    icon: appIcon,
   });
 };
 
 export default {
   download: {
     downloadFinished,
-    downloadError
-  }
+    downloadError,
+  },
+  convert: {
+    convertError,
+  },
 };

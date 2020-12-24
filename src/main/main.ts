@@ -6,6 +6,8 @@ import { EDownloadEventsName } from '../shared/events-name/download-events-names
 import DownloadService from './services/DownloadService';
 import AppUpdater from './services/AppUpdater';
 import { IStartDownloadEParams } from '../renderer/events/download-events';
+import { EConvertEventsName } from '../shared/events-name/convert-events-names';
+import ConvertService from './services/ConvertService';
 
 let win: BrowserWindow | null;
 
@@ -81,6 +83,11 @@ app.on('ready', () => {
 
       if (options.startDownloadEParams.downloadType === 'video') {
         downloadService.startDownload(url);
+      }
+
+      if (options.startDownloadEParams.downloadType === 'audio') {
+        const convertService = new ConvertService(event, options.startDownloadEParams);
+        convertService.convert();
       }
     }
   );

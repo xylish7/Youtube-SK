@@ -11,12 +11,29 @@ const downloadError = (errorMessage: string): void => {
     message: 'Download error',
     description: errorMessage,
     placement: globalConst.NOTIFICATION_PLACEMENT,
-    duration: globalConst.NOTIFICATION_DURATION
+    duration: globalConst.NOTIFICATION_DURATION,
+  });
+};
+
+/**
+ * Show a notification which tells that the app encountered
+ * an error while trying to convert a file
+ * @param errorMessage the message to be displayed on error
+ */
+const convertError = (errorMessage: string): void => {
+  notification['error']({
+    message: 'Convert error',
+    description: errorMessage,
+    placement: globalConst.NOTIFICATION_PLACEMENT,
+    duration: globalConst.NOTIFICATION_DURATION,
   });
 };
 
 export default {
   download: {
-    downloadError
-  }
+    downloadError,
+  },
+  convert: {
+    convertError,
+  },
 };
